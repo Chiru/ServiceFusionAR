@@ -79,7 +79,7 @@ public class ModelLoaderSetup extends DefaultARSetup {
 			@Override
 			public void modelLoaded(MeshComponent gdxMesh) {
 				final Obj o = new Obj();
-				gdxMesh.setRotation(new Vec(60.0f,-90.0f,0.0f));
+				gdxMesh.setRotation(new Vec(240.0f,-90.0f,0.0f));
 				o.setComp(gdxMesh);
 				world.add(o);
 				o.setComp(new MoveComp(1));

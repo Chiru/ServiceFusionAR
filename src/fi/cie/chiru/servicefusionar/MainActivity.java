@@ -36,10 +36,8 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		LinearLayout l = new LinearLayout(this);
-//		l.addView(newButton("ninja.mesh.xml", null));
-		l.addView(newButton("boy.dae", "boy.png"));
-//		l.addView(newButton("boy_low.g3dt", "boy_lowpoly_color.png"));
-//		l.addView(newButton("knight.md2", "knight.jpg"));
+//		l.addView(newButton("boy.dae", "boy.png"));
+		l.addView(newButton("firefox_medium_617.dae", "firefox-logo-full.jpg"));
 		l.addView(newButton("skype_medium_330.dae", "skype.jpg"));
 		l.addView(newButton("twitter_medium_397.dae", "twitter2.jpg"));
 

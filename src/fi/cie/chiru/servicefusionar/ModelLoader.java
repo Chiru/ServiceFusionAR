@@ -69,50 +69,8 @@ public abstract class ModelLoader implements gl.Renderable {
 					+ textureFileName);
 			e.printStackTrace();
 		}
-
-		//if (fileName.endsWith(".dae"))
-		Log.d(LOGTAG, "collada loader begins");
 		model = ColladaLoader.loadStillModel(Gdx.files.internal(fileName));
 		Log.d(LOGTAG, "collada loader ends");
-//		else if (fileName.endsWith(".obj"))
-//			model = new ObjLoader().loadObj(Gdx.files.internal(fileName), true);
-//		else if (fileName.endsWith(".g3d"))
-//			model = G3dLoader.loadStillModel(Gdx.files.internal(fileName));
-//
-//		else if (fileName.endsWith(".md2")) {
-//			keyFramedModel = new MD2Loader().load(Gdx.files.internal(fileName),
-//					1 / 7f);
-//			if (texture != null) {
-//				Material material = new Material("materialTODO", // TODO
-//						new TextureAttribute(texture, 0, "a_tex0"));
-//				if (keyFramedModel != null)
-//					keyFramedModel.setMaterial(material);
-//			}
-//		}
-//
-//		else if (fileName.endsWith(".xml")) {
-//			FileHandle skeletonFile = Gdx.files.internal(fileName.replace(
-//					"mesh.xml", "skeleton.xml"));
-//			skeletonModel = new OgreXmlLoader().load(
-//					Gdx.files.internal(fileName), skeletonFile);
-//			model = new OgreXmlLoader().load(Gdx.files.internal(fileName));
-//			skeletonModel = new OgreXmlLoader().load(Gdx.files.internal(fileName), null);
-//			if (texture != null) {
-//				Material mat = new Material("mat", new TextureAttribute(
-//						texture, 0, "s_tex"));
-//				skeletonModel.setMaterial(mat);
-//			}
-//		}
-//
-//		else if (fileName.endsWith(".g3dt")) {
-//			keyFramedModel = G3dtLoader.loadKeyframedModel(
-//					Gdx.files.internal(fileName), false);
-//			Material material = new Material("material", new TextureAttribute(
-//					texture, 0, "s_tex"));
-//			keyFramedModel.setMaterial(material);
-//
-//		}
-//
 	}
 
 	public MeshComponent getGDXShape() {
@@ -135,17 +93,11 @@ public abstract class ModelLoader implements gl.Renderable {
 
 		if (model != null)
 			modelLoaded(new GDXMesh(model, texture));
-		else if (keyFramedModel != null)
-			modelLoaded(new GDXMesh(keyFramedModel, texture));
-		else if (skeletonModel != null)
-			modelLoaded(new GDXMesh(skeletonModel, texture));
 
 		Log.d(LOGTAG, "Result of trying is:");
 		Log.d(LOGTAG, "fileName=" + fileName);
 		Log.d(LOGTAG, "textureFileName=" + textureFileName);
 		Log.d(LOGTAG, "model=" + model);
-		Log.d(LOGTAG, "keyFramedModel=" + keyFramedModel);
-		Log.d(LOGTAG, "skeletonModel=" + skeletonModel);
 		Log.d(LOGTAG, "texture=" + texture);
 
 		renderer.removeRenderElement(this);
