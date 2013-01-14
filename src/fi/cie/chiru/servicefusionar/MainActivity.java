@@ -1,20 +1,64 @@
+//package fi.cie.chiru.servicefusionar;
+//
+//import android.os.Bundle;
+//import android.app.Activity;
+//import android.view.Menu;
+//
+//public class MainActivity extends Activity {
+//
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//    }
+//
+//    
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.activity_main, menu);
+//        return true;
+//    }
+//}
+
 package fi.cie.chiru.servicefusionar;
 
-import android.os.Bundle;
+import system.ArActivity;
 import android.app.Activity;
-import android.view.Menu;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 public class MainActivity extends Activity {
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		LinearLayout l = new LinearLayout(this);
+//		l.addView(newButton("ninja.mesh.xml", null));
+		l.addView(newButton("boy.dae", "boy.png"));
+//		l.addView(newButton("boy_low.g3dt", "boy_lowpoly_color.png"));
+//		l.addView(newButton("knight.md2", "knight.jpg"));
+		l.addView(newButton("skype_medium_330.dae", "skype.jpg"));
+		l.addView(newButton("twitter_medium_397.dae", "twitter2.jpg"));
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
+		l.setOrientation(LinearLayout.VERTICAL);
+		setContentView(l);
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
+	private View newButton(final String fileName, final String textureName) {
+		Button b = new Button(this);
+		b.setText("Load " + fileName);
+		b.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ArActivity.startWithSetup(MainActivity.this, new ModelLoaderSetup(
+						fileName, textureName));
+			}
+		});
+		return b;
+	}
+
 }
