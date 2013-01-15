@@ -14,15 +14,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.model.still.StillModel;
 import com.badlogic.gdx.graphics.g3d.model.keyframe.KeyframedAnimation;
 
-public class GDXMesh extends MeshComponent {
+public class GDXMesh extends MeshComponent 
+{
 
 	private static final String LOGTAG = "GDXShape";
 	private StillModel model;
 	private Texture texture;
-	private KeyframedAnimation anim;
-	private float animTime;
 
-	public GDXMesh(StillModel model, Texture texture) {
+	public GDXMesh(StillModel model, Texture texture) 
+	{
 		super(null);
 		this.model = model;
 		this.texture = texture;
@@ -30,37 +30,39 @@ public class GDXMesh extends MeshComponent {
 	}
 
 	@Override
-	public boolean accept(Visitor visitor) {
+	public boolean accept(Visitor visitor) 
+	{
 		return false;
 	}
 
 	@Override
-	public void draw(GL10 gl, Renderable parent) {
+	public void draw(GL10 gl, Renderable parent) 
+	{
 
 		gl.glEnable(GL10.GL_CULL_FACE);
 
-		if (model != null) {
-			if (!ObjectPicker.readyToDrawWithColor && texture != null) {
+		if (model != null) 
+		{
+			if (!ObjectPicker.readyToDrawWithColor && texture != null) 
+			{
 				gl.glEnable(GL10.GL_TEXTURE_2D);
 				texture.bind();
 				model.render();
 				gl.glDisable(GL10.GL_TEXTURE_2D);
-			} else {
+			} 
+			else 
+			{
 				model.render();
 			}
-		} else
+		} 
+		else
 			Log.e(LOGTAG, "No model object existend");
 	}
 
 	@Override
-	public synchronized boolean update(float timeDelta, Updateable parent) {
+	public synchronized boolean update(float timeDelta, Updateable parent) 
+	{
 		super.update(timeDelta, parent);
-//		if (anim != null) {
-//			animTime += timeDelta;
-//			if (animTime > anim.totalDuration - anim.frameDuration) {
-//				animTime = 0;
-//			}
-//		}
 		return true;
 	}
 

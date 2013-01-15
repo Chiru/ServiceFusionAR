@@ -33,7 +33,8 @@ import android.widget.LinearLayout;
 public class MainActivity extends Activity {
 	/** Called when the activity is first created. */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
 		LinearLayout l = new LinearLayout(this);
 //		l.addView(newButton("boy.dae", "boy.png"));
@@ -45,14 +46,17 @@ public class MainActivity extends Activity {
 		setContentView(l);
 	}
 
-	private View newButton(final String fileName, final String textureName) {
+	private View newButton(final String fileName, final String textureName) 
+	{
 		Button b = new Button(this);
 		b.setText("Load " + fileName);
-		b.setOnClickListener(new OnClickListener() {
+		b.setOnClickListener(new OnClickListener() 
+		{
 
 			@Override
-			public void onClick(View v) {
-				ArActivity.startWithSetup(MainActivity.this, new ModelLoaderSetup(
+			public void onClick(View v) 
+			{
+				ArActivity.startWithSetup(MainActivity.this, new ServiceFusionSetup(
 						fileName, textureName));
 			}
 		});
