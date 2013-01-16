@@ -6,6 +6,5 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/gdx-backend-android"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/gdx"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/model-loaders"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
