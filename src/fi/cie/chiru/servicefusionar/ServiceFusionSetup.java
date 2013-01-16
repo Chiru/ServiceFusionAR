@@ -97,15 +97,15 @@ public class ServiceFusionSetup extends Setup
 				o.setComp(gdxMesh);
 				world.add(o);
 //				o.setComp(new MoveComp(1));
-				o.setOnClickCommand(new Command() {
-
-					@Override
-					public boolean execute() 
-					{
-						targetMoveWrapper.setTo(o);
-						return true;
-					}
-				});
+//				o.setOnClickCommand(new Command() {
+//
+//					@Override
+//					public boolean execute() 
+//					{
+//						targetMoveWrapper.setTo(o);
+//						return true;
+//					}
+//				});
 			}
 		};
 
