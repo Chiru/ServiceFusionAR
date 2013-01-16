@@ -167,22 +167,23 @@ public class ServiceFusionSetup extends Setup
 
 //		guiSetup.addViewToTop(minAccuracyAction.getView());
 
-		guiSetup.addImangeButtonToRightView(R.drawable.arrow_up_float,
-				new Command() {
-					@Override
-					public boolean execute() {
-						camera.changeZPositionBuffered(+delta);
-						return false;
-					}
-				});
-		guiSetup.addImangeButtonToRightView(R.drawable.arrow_down_float,
-				new Command() {
-					@Override
-					public boolean execute() {
-						camera.changeZPositionBuffered(-delta);
-						return false;
-					}
-				});
-
+		guiSetup.addImangeButtonToRightView(R.drawable.arrow_up_float, new Command() 
+		{
+			@Override
+			public boolean execute() 
+			{
+				camera.changeZPositionBuffered(+delta);
+				return false;
+			}
+		});
+		guiSetup.addImangeButtonToRightView(R.drawable.arrow_down_float, new Command() 
+		{
+			@Override
+			public boolean execute() 
+			{
+				camera.changeZPositionBuffered(-delta);
+				return false;
+			}
+		});
 	}
 }
