@@ -12,7 +12,6 @@ import android.util.Log;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.model.still.StillModel;
-import com.badlogic.gdx.graphics.g3d.model.keyframe.KeyframedAnimation;
 
 public class GDXMesh extends MeshComponent 
 {
@@ -39,7 +38,7 @@ public class GDXMesh extends MeshComponent
 	public void draw(GL10 gl, Renderable parent) 
 	{
 
-		gl.glEnable(GL10.GL_CULL_FACE);
+//		gl.glEnable(GL10.GL_CULL_FACE);
 
 		if (model != null) 
 		{

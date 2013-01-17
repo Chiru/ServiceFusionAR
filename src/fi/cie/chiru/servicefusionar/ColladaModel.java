@@ -9,18 +9,8 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.loaders.collada.ColladaLoader;
-//import com.badlogic.gdx.graphics.g3d.loaders.g3d.G3dLoader;
-//import com.badlogic.gdx.graphics.g3d.loaders.g3d.G3dtLoader;
-//import com.badlogic.gdx.graphics.g3d.loaders.md2.MD2Loader;
-//import com.badlogic.gdx.graphics.g3d.loaders.ogre.OgreXmlLoader;
-//import com.badlogic.gdx.graphics.g3d.loaders.wavefront.ObjLoader;
-import com.badlogic.gdx.graphics.g3d.materials.Material;
-import com.badlogic.gdx.graphics.g3d.materials.TextureAttribute;
-import com.badlogic.gdx.graphics.g3d.model.keyframe.KeyframedModel;
-import com.badlogic.gdx.graphics.g3d.model.skeleton.SkeletonModel;
 import com.badlogic.gdx.graphics.g3d.model.still.StillModel;
 
 /**
@@ -65,8 +55,7 @@ public abstract class ColladaModel implements gl.Renderable
 		} 
 		catch (Exception e) 
 		{
-			Log.e(LOGTAG, "Could not load the specified texture: "
-					+ textureFileName);
+			Log.e(LOGTAG, "Could not load the specified texture: " + textureFileName);
 			e.printStackTrace();
 		}
 		model = ColladaLoader.loadStillModel(Gdx.files.internal(fileName));
@@ -79,8 +68,7 @@ public abstract class ColladaModel implements gl.Renderable
 	}
 
 	@Override
-	public void render(javax.microedition.khronos.opengles.GL10 gl,
-			gl.Renderable parent) 
+	public void render(javax.microedition.khronos.opengles.GL10 gl, gl.Renderable parent) 
 	{
 
 		Log.d(LOGTAG, "Trying to load " + fileName);
