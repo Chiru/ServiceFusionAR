@@ -15,6 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
 import system.Setup;
 import system.EventManager;
 import util.EfficientList;
+import util.IO;
 import util.Log;
 import util.Vec;
 import util.Wrapper;
@@ -30,9 +31,14 @@ import actions.ActionRotateCameraBuffered;
 import actions.ActionWaitForAccuracy;
 import android.R;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Location;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import commands.Command;
+import commands.logic.CommandSetWrapperToValue2;
 
 public class ServiceFusionSetup extends Setup 
 {
@@ -43,6 +49,7 @@ public class ServiceFusionSetup extends Setup
 	private String textureName;
 	private LightSource spotLight;
 	private Wrapper targetMoveWrapper;
+	private Wrapper selection;
 	private GL1Renderer renderer;
 	public GLCamera camera;
 	public World world;
@@ -55,12 +62,13 @@ public class ServiceFusionSetup extends Setup
 		this.fileName = fileName;
 		this.textureName = textureName;
 		targetMoveWrapper = new Wrapper();
+		selection = new Wrapper();
 	}
 	
 	@Override
 	public void _a_initFieldsIfNecessary() 
 	{
-		camera = new GLCamera(new Vec(0, 0, 2));
+		camera = new GLCamera(new Vec(0, 0, 0));
 		world = new World(camera);
 	}
 
@@ -77,7 +85,7 @@ public class ServiceFusionSetup extends Setup
 	@Override
 	public boolean _a2_initLightning(EfficientList<LightSource> lights) 
 	{
-		spotLight = LightSource.newDefaultDefuseLight(GL10.GL_LIGHT1, new Vec(0, 0, 0));
+		spotLight = LightSource.newDefaultDefuseLight(GL10.GL_LIGHT1, new Vec(0, 10, 0));
 		lights.add(spotLight);
 		return true;
 	}
@@ -93,19 +101,13 @@ public class ServiceFusionSetup extends Setup
 			public void modelLoaded(MeshComponent gdxMesh) 
 			{
 				final Obj o = new Obj();
-				gdxMesh.setRotation(new Vec(240.0f,-90.0f,0.0f));
+				gdxMesh.setRotation(new Vec(-90.0f,0.0f,0.0f));
+				gdxMesh.enableMeshPicking();
 				o.setComp(gdxMesh);
 				world.add(o);
-//				o.setComp(new MoveComp(1));
-//				o.setOnClickCommand(new Command() {
-//
-//					@Override
-//					public boolean execute() 
-//					{
-//						targetMoveWrapper.setTo(o);
-//						return true;
-//					}
-//				});
+				Vec TextPos = new Vec(gdxMesh.getPosition());
+				TextPos.add(0, 2, 0);
+				o.setOnClickCommand(new TextPopUp("   test   ", TextPos));
 			}
 		};
 
@@ -122,24 +124,24 @@ public class ServiceFusionSetup extends Setup
 	public void _c_addActionsToEvents(final EventManager eventManager, CustomGLSurfaceView arView, SystemUpdater updater) 
 	{
 //		wasdAction = new ActionWASDMovement(camera, 25, 50, 20);
-		rotateGLCameraAction = new ActionRotateCameraBuffered(camera);
+//		rotateGLCameraAction = new ActionRotateCameraBuffered(camera);
 
 //		arView.addOnTouchMoveListener(wasdAction);
-		eventManager.addOnOrientationChangedAction(rotateGLCameraAction);
-		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera, 5, 25));
-		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(world, camera));
-		minAccuracyAction = new ActionWaitForAccuracy(getActivity(), 24.0f, 10) {
-			@Override
-			public void minAccuracyReachedFirstTime(Location l, ActionWaitForAccuracy a) 
-			{
-				callAddObjectsToWorldIfNotCalledAlready();
+//		eventManager.addOnOrientationChangedAction(rotateGLCameraAction);
+//		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera, 5, 25));
+//		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(world, camera));
+//		minAccuracyAction = new ActionWaitForAccuracy(getActivity(), 24.0f, 10) {
+//			@Override
+//			public void minAccuracyReachedFirstTime(Location l, ActionWaitForAccuracy a) 
+//			{
+		callAddObjectsToWorldIfNotCalledAlready();
 			
-				if (!eventManager.getOnLocationChangedAction().remove(a)) {
-					Log.e(LOG_TAG, "Could not remove minAccuracyAction from the onLocationChangedAction list");
-				}
-			}
-		};
-		eventManager.addOnLocationChangedAction(minAccuracyAction);
+//				if (!eventManager.getOnLocationChangedAction().remove(a)) {
+//					Log.e(LOG_TAG, "Could not remove minAccuracyAction from the onLocationChangedAction list");
+//				}
+//			}
+//		};
+//		eventManager.addOnLocationChangedAction(minAccuracyAction);
 	}
 
 	protected void callAddObjectsToWorldIfNotCalledAlready() 
@@ -185,5 +187,61 @@ public class ServiceFusionSetup extends Setup
 				return false;
 			}
 		});
+	}
+	
+	private class TextPopUp extends Command 
+	{
+
+		private String text;
+		private Vec location;
+		private boolean textVisible;
+		private boolean textCreated;
+		private MeshComponent textComponent;
+
+		public TextPopUp(String text, Vec location) 
+		{
+			this.text = text;
+			this.location = location;
+			this.location.add(0.0f, 1.5f, 0.0f);
+			textVisible = false;
+			textCreated = false;
+		}
+
+		@Override
+		public boolean execute() 
+		{
+			if(!textCreated)
+			{
+				createTextComponent();
+				textCreated = true;
+			}
+			
+			if(!textVisible)
+			{	
+				world.add(textComponent);
+				renderer.setUseLightning(true);
+				textVisible = true;
+			}
+			else
+			{
+				world.remove(textComponent);
+				textVisible = false;
+			}
+			
+			return true;
+		}
+		
+		private void createTextComponent()
+		{
+			TextView tv = new TextView(myTargetActivity);
+			tv.setTextColor(Color.BLACK);
+			tv.setBackgroundColor(Color.WHITE);
+			tv.setTextSize(20);
+		    tv.setText(this.text);
+		    textComponent = GLFactory.getInstance().newTexturedSquare("TextView", IO.loadBitmapFromView(tv));
+		    textComponent.setPosition(new Vec(this.location));
+		    textComponent.setRotation(new Vec(90.0f, 0.0f, 180.0f));
+		}
+
 	}
 }
