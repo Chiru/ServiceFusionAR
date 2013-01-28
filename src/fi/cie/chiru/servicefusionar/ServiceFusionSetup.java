@@ -1,5 +1,7 @@
 package fi.cie.chiru.servicefusionar;
 
+import java.util.Vector;
+
 import geo.GeoObj;
 import gl.CustomGLSurfaceView;
 import gl.GL1Renderer;
@@ -31,13 +33,19 @@ import actions.ActionRotateCameraBuffered;
 import actions.ActionWaitForAccuracy;
 import android.R;
 import android.app.Activity;
+import android.content.ClipData;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.location.Location;
+import android.view.View;
+import android.view.View.DragShadowBuilder;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import commands.Command;
+import commands.ui.CommandInUiThread;
 import commands.logic.CommandSetWrapperToValue2;
 
 public class ServiceFusionSetup extends Setup 
@@ -56,13 +64,19 @@ public class ServiceFusionSetup extends Setup
 	private Action rotateGLCameraAction;
 	private boolean addObjCalledOneTieme;
 	private ActionWaitForAccuracy minAccuracyAction;
+	private GDXLoader gdxLoader;
+	private GDXConnection gdxConnection;
+	private Vector<ServiceApplication> serviceApplications;
 
-	public ServiceFusionSetup(String fileName, String textureName) 
+	public ServiceFusionSetup() 
 	{
-		this.fileName = fileName;
-		this.textureName = textureName;
+//		this.fileName = fileName;
+//		this.textureName = textureName;
 		targetMoveWrapper = new Wrapper();
 		selection = new Wrapper();
+		gdxLoader = new GDXLoader();
+		gdxConnection = new GDXConnection();
+		serviceApplications = new Vector<ServiceApplication>();
 	}
 	
 	@Override
@@ -93,24 +107,9 @@ public class ServiceFusionSetup extends Setup
 	public void addObjectsTo(GL1Renderer renderer, final World world, GLFactory objectFactory) 
 	{
 		this.renderer = renderer;
-		GDXConnection.init(myTargetActivity, renderer);
-
-		new ColladaModel(renderer, fileName, textureName) 
-		{
-			@Override
-			public void modelLoaded(MeshComponent gdxMesh) 
-			{
-				final Obj o = new Obj();
-				gdxMesh.setRotation(new Vec(-90.0f,0.0f,0.0f));
-				gdxMesh.enableMeshPicking();
-				o.setComp(gdxMesh);
-				world.add(o);
-				Vec TextPos = new Vec(gdxMesh.getPosition());
-				TextPos.add(0, 2, 0);
-				o.setOnClickCommand(new TextPopUp("   test   ", TextPos));
-			}
-		};
-
+	    gdxConnection.open(myTargetActivity, renderer);
+		CreateApplications();
+		addApplicationsToWorld(world); 
 	}
 	
 	@Override
@@ -123,6 +122,7 @@ public class ServiceFusionSetup extends Setup
 	@Override
 	public void _c_addActionsToEvents(final EventManager eventManager, CustomGLSurfaceView arView, SystemUpdater updater) 
 	{
+		addObjectsTo(renderer, world, GLFactory.getInstance());
 //		wasdAction = new ActionWASDMovement(camera, 25, 50, 20);
 //		rotateGLCameraAction = new ActionRotateCameraBuffered(camera);
 
@@ -134,7 +134,7 @@ public class ServiceFusionSetup extends Setup
 //			@Override
 //			public void minAccuracyReachedFirstTime(Location l, ActionWaitForAccuracy a) 
 //			{
-		callAddObjectsToWorldIfNotCalledAlready();
+//		callAddObjectsToWorldIfNotCalledAlready();
 			
 //				if (!eventManager.getOnLocationChangedAction().remove(a)) {
 //					Log.e(LOG_TAG, "Could not remove minAccuracyAction from the onLocationChangedAction list");
@@ -144,15 +144,15 @@ public class ServiceFusionSetup extends Setup
 //		eventManager.addOnLocationChangedAction(minAccuracyAction);
 	}
 
-	protected void callAddObjectsToWorldIfNotCalledAlready() 
-	{
-		if (!addObjCalledOneTieme)
-			addObjectsTo(renderer, world, GLFactory.getInstance());
-		else
-			Log.w(LOG_TAG, "callAddObjectsToWorldIfNotCalledAlready() " + "called more then one time!");
-		
-		addObjCalledOneTieme = true;
-	}
+//	protected void callAddObjectsToWorldIfNotCalledAlready() 
+//	{
+//		if (!addObjCalledOneTieme)
+//			addObjectsTo(renderer, world, GLFactory.getInstance());
+//		else
+//			Log.w(LOG_TAG, "callAddObjectsToWorldIfNotCalledAlready() " + "called more then one time!");
+//		
+//		addObjCalledOneTieme = true;
+//	}
 
 	@Override
 	public void _d_addElementsToUpdateThread(SystemUpdater updater) 
@@ -189,7 +189,33 @@ public class ServiceFusionSetup extends Setup
 		});
 	}
 	
-	private class TextPopUp extends Command 
+	private void AddServiceApplication(String name, String fileName, String textureName)
+	{
+		ServiceApplication serviceApp = new ServiceApplication(name);
+		
+		if(fileName!=null && textureName!=null)
+		{
+		    GDXMesh gdxMesh = gdxLoader.loadModelFromFile(fileName, textureName);
+//		    gdxMesh.enableMeshPicking();
+		    serviceApp.setMesh(gdxMesh);
+		}
+		
+		serviceApplications.add(serviceApp);
+	}
+	
+	private void CreateApplications()
+	{
+		AddServiceApplication("Twitter", "twitter_medium_397.dae", "twitter2.jpg");
+		AddServiceApplication("Firefox", "firefox_medium_617.dae", "firefox-logo-full.jpg");
+	}
+	
+	private void addApplicationsToWorld(final World world)
+	{
+		for(int i=0; i<serviceApplications.size(); i++)
+		    world.add(serviceApplications.elementAt(i).getMesh());
+	}
+	
+	private class TextPopUp extends CommandInUiThread 
 	{
 
 		private String text;
@@ -207,8 +233,8 @@ public class ServiceFusionSetup extends Setup
 			textCreated = false;
 		}
 
-		@Override
-		public boolean execute() 
+//		@Override
+		public void executeInUiThread() 
 		{
 			if(!textCreated)
 			{
@@ -219,7 +245,6 @@ public class ServiceFusionSetup extends Setup
 			if(!textVisible)
 			{	
 				world.add(textComponent);
-				renderer.setUseLightning(true);
 				textVisible = true;
 			}
 			else
@@ -228,7 +253,7 @@ public class ServiceFusionSetup extends Setup
 				textVisible = false;
 			}
 			
-			return true;
+//			return true;
 		}
 		
 		private void createTextComponent()
@@ -241,7 +266,52 @@ public class ServiceFusionSetup extends Setup
 		    textComponent = GLFactory.getInstance().newTexturedSquare("TextView", IO.loadBitmapFromView(tv));
 		    textComponent.setPosition(new Vec(this.location));
 		    textComponent.setRotation(new Vec(90.0f, 0.0f, 180.0f));
+		    textComponent.setOnLongClickCommand(new DragObject(tv));
 		}
 
+	}
+	
+	private class DragObject extends CommandInUiThread 
+	{
+		View v;
+		//View.DragShadowBuilder shadow;
+		
+		public DragObject(View DraggedItem)
+		{
+		    v = DraggedItem;
+		    //shadow = new DragShadowBuilder(v);
+		}
+		
+//		@Override
+		public void executeInUiThread()
+		{
+			TextView tv = (TextView)v;
+			String text = (String)tv.getText();
+			View.DragShadowBuilder shadow = new DragShadowBuilder(v){
+			
+				@Override
+				public void onDrawShadow (Canvas canvas)
+				{
+					Log.d(LOG_TAG, "Start onDrawShadow.................. ");
+					super.onDrawShadow(canvas);
+					Log.d(LOG_TAG, "end onDrawShadow.................. ");
+					
+				}
+				@Override
+				public void onProvideShadowMetrics (Point shadowSize, Point shadowTouchPoint)
+				{
+					Log.d(LOG_TAG, "start onProvideShadowMetrics.................. ");
+					Log.d(LOG_TAG, "Point shadowSize " + shadowSize + "  Point shadowTouchPoint" + shadowTouchPoint);
+					super.onProvideShadowMetrics(shadowSize, shadowTouchPoint);
+					Log.d(LOG_TAG, "end onProvideShadowMetrics.................. ");
+				}
+			};
+			
+			ClipData data = ClipData.newPlainText("DragData", text);
+			boolean dragInProcess = v.startDrag(data, shadow, null, 0);
+			Log.d(LOG_TAG, "Dragging started for " + text + " " + dragInProcess);
+//			return true;
+		}
+		
 	}
 }
