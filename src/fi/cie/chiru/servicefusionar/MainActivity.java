@@ -23,10 +23,10 @@ public class MainActivity extends Activity {
 	{
 		super.onCreate(savedInstanceState);
 		LinearLayout l = new LinearLayout(this);
-//		l.addView(newButton("boy.dae", "boy.png"));
-		l.addView(newButton("firefox_medium_617.dae", "firefox-logo-full.jpg"));
-		l.addView(newButton("skype_medium_330.dae", "skype.jpg"));
-		l.addView(newButton("twitter_medium_397.dae", "twitter2.jpg"));
+		l.addView(newButton());
+//		l.addView(newButton("firefox_medium_617.dae", "firefox-logo-full.jpg"));
+//		l.addView(newButton("skype_medium_330.dae", "skype.jpg"));
+//		l.addView(newButton("twitter_medium_397.dae", "twitter2.jpg"));
 
 		l.setOrientation(LinearLayout.VERTICAL);
 		setContentView(l);
@@ -47,18 +47,17 @@ public class MainActivity extends Activity {
         //startActivity(intent);
 	}
 
-	private View newButton(final String fileName, final String textureName) 
+	private View newButton() 
 	{
 		Button b = new Button(this);
-		b.setText("Load " + fileName);
+//		b.setText("Load " + fileName);
 		b.setOnClickListener(new OnClickListener() 
 		{
 
 			@Override
 			public void onClick(View v) 
 			{
-				ArActivity.startWithSetup(MainActivity.this, new ServiceFusionSetup(
-						fileName, textureName));
+				ArActivity.startWithSetup(MainActivity.this, new ServiceFusionSetup());
 			}
 		});
 		return b;
