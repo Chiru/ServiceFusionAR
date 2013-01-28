@@ -3,6 +3,8 @@ package fi.cie.chiru.servicefusionar;
 import gl.GL1Renderer;
 import gl.Renderable;
 
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
@@ -20,15 +22,16 @@ import com.badlogic.gdx.graphics.GLCommon;
 import com.badlogic.gdx.graphics.GLU;
 //import com.badlogic.gdx.graphics.Pixmap;
 
-public class GDXConnection implements Renderable 
+public class GDXConnection //implements Renderable 
 {
-	private static boolean initGLStuff;
+	public boolean GLInitialized;
 	private GL1Renderer myRenderer;
 
-	public GDXConnection(GL1Renderer renderer) 
+	public GDXConnection() 
 	{
 		Gdx.app = new AndroidApplication();
-		myRenderer = renderer;
+		GLInitialized = false;
+//		myRenderer = renderer;
 
 	}
 
@@ -258,22 +261,25 @@ public class GDXConnection implements Renderable
 
 	}
 
-	@Override
-	public void render(javax.microedition.khronos.opengles.GL10 gl,
-			gl.Renderable parent) 
-	{
-		if (!initGLStuff) 
-		{
-			setupGL(gl);
-			initGLStuff = true;
-			myRenderer.removeRenderElement(this);
-		}
-	}
+//	@Override
+//	public void render(javax.microedition.khronos.opengles.GL10 gl,
+//			gl.Renderable parent) 
+//	{
+//		if (!GLInitialized) 
+//		{
+//			setupGL(gl);
+//			GLInitialized = true;
+////			myRenderer.removeRenderElement(this);
+//		}
+//	}
 
-	public static void init(Activity activity, GL1Renderer renderer) 
+	public void open(Activity activity, GL1Renderer renderer) 
 	{
 		Gdx.files = new AndroidFiles(activity.getAssets());
-		renderer.addRenderElement(new GDXConnection(renderer));
+		//renderer.addRenderElement(new GDXConnection(renderer));
+		EGL10 egl = (EGL10)EGLContext.getEGL(); 
+		GL10 gl = (GL10)egl.eglGetCurrentContext().getGL();
+		setupGL(gl);
 	}
 
 }
