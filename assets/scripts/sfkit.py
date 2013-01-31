@@ -91,7 +91,7 @@ def src_lookup(service_name):
         
 
 def serve(cnx, service_name):
-    cnx.subscribe_action(service_name, "SetQuery")
+    #cnx.subscribe_action(service_name, "SetQuery")
     src = src_lookup(service_name)
     print 'looked up', service_name
     first_iter = True
@@ -137,14 +137,16 @@ class json_client(asynchat.async_chat):
         raise
 
     def push_service_info(self, sname, info):
-        self.encode_and_send(op="action", exectype="local", scene=None, entity=sname, action="ServiceInfo", params=[json.dumps(info), None, []])
+        self.encode_and_send(info)
+        #self.encode_and_send(params=json.dumps(info))
+        #self.encode_and_send(op="action", exectype="local", scene=None, entity=sname, action="ServiceInfo", params=[json.dumps(info), None, []])
 
     def subscribe_action(self, sname, aname):
         self.encode_and_send(op="subscribe_action", entity_name=sname, action_name=aname)
 
-    def encode_and_send(self, **kw):
-        if 'op' not in kw:
-            raise ValueError("missing op field in message")
+    def encode_and_send(self, kw):
+        #if 'op' not in kw:
+        #    raise ValueError("missing op field in message")
         data = json.dumps(kw)
         self.push(data)
         self.push("\r\n")

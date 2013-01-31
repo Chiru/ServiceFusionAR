@@ -1,5 +1,7 @@
 package fi.cie.chiru.servicefusionar;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.Vector;
 
 import geo.GeoObj;
@@ -39,6 +41,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.widget.LinearLayout;
@@ -51,7 +54,11 @@ import commands.logic.CommandSetWrapperToValue2;
 public class ServiceFusionSetup extends Setup 
 {
 
+	public GLCamera camera;
+	public World world;
+	
 	protected static final int delta = 5;
+	
 	private static final String LOG_TAG = "ServiceFusionSetup";
 	private String fileName;
 	private String textureName;
@@ -59,24 +66,41 @@ public class ServiceFusionSetup extends Setup
 	private Wrapper targetMoveWrapper;
 	private Wrapper selection;
 	private GL1Renderer renderer;
-	public GLCamera camera;
-	public World world;
 	private Action rotateGLCameraAction;
 	private boolean addObjCalledOneTieme;
 	private ActionWaitForAccuracy minAccuracyAction;
 	private GDXLoader gdxLoader;
 	private GDXConnection gdxConnection;
 	private Vector<ServiceApplication> serviceApplications;
+	
+	private SFSocketService socketService;
+    private Handler handler;
+    private ServerSocket serverSocket;
 
 	public ServiceFusionSetup() 
 	{
-//		this.fileName = fileName;
-//		this.textureName = textureName;
+		//private Thread socketThread;
+
 		targetMoveWrapper = new Wrapper();
 		selection = new Wrapper();
 		gdxLoader = new GDXLoader();
 		gdxConnection = new GDXConnection();
 		serviceApplications = new Vector<ServiceApplication>();
+		
+		handler = new Handler();
+		try {
+			serverSocket = new ServerSocket();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		socketService = new SFSocketService(handler, serverSocket);
+		socketService.run();
+		final Thread socketThread = new Thread(/*new SFSocketService(handler, serverSocket)*/socketService);
+        socketThread.start();
+
+		//socketService.run();
 	}
 	
 	@Override
@@ -107,9 +131,11 @@ public class ServiceFusionSetup extends Setup
 	public void addObjectsTo(GL1Renderer renderer, final World world, GLFactory objectFactory) 
 	{
 		this.renderer = renderer;
+
 	    gdxConnection.open(myTargetActivity, renderer);
 		CreateApplications();
 		addApplicationsToWorld(world); 
+
 	}
 	
 	@Override
@@ -189,6 +215,13 @@ public class ServiceFusionSetup extends Setup
 		});
 	}
 	
+	public void stopServer()
+	{
+		Log.d(LOG_TAG, "ServiceFusionSetup stopServer");
+		socketService.stopSocket();
+	}
+	
+
 	private void AddServiceApplication(String name, String fileName, String textureName)
 	{
 		ServiceApplication serviceApp = new ServiceApplication(name);
@@ -254,6 +287,11 @@ public class ServiceFusionSetup extends Setup
 			}
 			
 //			return true;
+		}
+		
+		public void SetText(String text)
+		{
+			this.text = text;
 		}
 		
 		private void createTextComponent()
