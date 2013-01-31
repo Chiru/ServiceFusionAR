@@ -48,7 +48,7 @@ public class GDXMesh extends MeshComponent
 	public void draw(GL10 gl, Renderable parent) 
 	{
 
-		gl.glEnable(GL10.GL_CULL_FACE);
+//		gl.glEnable(GL10.GL_CULL_FACE);
 		if (model != null) 
 		{
 			if (!ObjectPicker.readyToDrawWithColor && texture != null) 
