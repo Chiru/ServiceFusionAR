@@ -23,6 +23,7 @@ import util.IO;
 import util.Log;
 import util.Vec;
 import util.Wrapper;
+import v2.simpleUi.util.DragAndDropListener;
 import worldData.MoveComp;
 import worldData.Obj;
 import worldData.SystemUpdater;
@@ -36,15 +37,22 @@ import actions.ActionWaitForAccuracy;
 import android.R;
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Handler;
+import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
+import android.view.View.OnDragListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import commands.Command;
@@ -229,8 +237,9 @@ public class ServiceFusionSetup extends Setup
 		if(fileName!=null && textureName!=null)
 		{
 		    GDXMesh gdxMesh = gdxLoader.loadModelFromFile(fileName, textureName);
-//		    gdxMesh.enableMeshPicking();
+		    gdxMesh.enableMeshPicking();
 		    serviceApp.setMesh(gdxMesh);
+		    serviceApp.setOnClickCommand(new CommandTextPopUp("Test", new Vec(serviceApp.getPosition()), this));
 		}
 		
 		serviceApplications.add(serviceApp);
@@ -239,116 +248,42 @@ public class ServiceFusionSetup extends Setup
 	private void CreateApplications()
 	{
 		AddServiceApplication("Twitter", "twitter_medium_397.dae", "twitter2.jpg");
-		AddServiceApplication("Firefox", "firefox_medium_617.dae", "firefox-logo-full.jpg");
+//		AddServiceApplication("Firefox", "firefox_medium_617.dae", "firefox-logo-full.jpg");
 	}
 	
 	private void addApplicationsToWorld(final World world)
 	{
 		for(int i=0; i<serviceApplications.size(); i++)
-		    world.add(serviceApplications.elementAt(i).getMesh());
+			world.add(serviceApplications.elementAt(i));//world.add(serviceApplications.elementAt(i).getMesh());
 	}
 	
-	private class TextPopUp extends CommandInUiThread 
+	protected class myDragEventListener implements OnDragListener 
 	{
-
-		private String text;
-		private Vec location;
-		private boolean textVisible;
-		private boolean textCreated;
-		private MeshComponent textComponent;
-
-		public TextPopUp(String text, Vec location) 
-		{
-			this.text = text;
-			this.location = location;
-			this.location.add(0.0f, 1.5f, 0.0f);
-			textVisible = false;
-			textCreated = false;
-		}
-
-//		@Override
-		public void executeInUiThread() 
-		{
-			if(!textCreated)
-			{
-				createTextComponent();
-				textCreated = true;
-			}
-			
-			if(!textVisible)
-			{	
-				world.add(textComponent);
-				textVisible = true;
-			}
-			else
-			{
-				world.remove(textComponent);
-				textVisible = false;
-			}
-			
-//			return true;
-		}
+		RelativeLayout root;
 		
-		public void SetText(String text)
+		@Override
+		public boolean onDrag(View v, DragEvent event) 
 		{
-			this.text = text;
-		}
-		
-		private void createTextComponent()
-		{
-			TextView tv = new TextView(myTargetActivity);
-			tv.setTextColor(Color.BLACK);
-			tv.setBackgroundColor(Color.WHITE);
-			tv.setTextSize(20);
-		    tv.setText(this.text);
-		    textComponent = GLFactory.getInstance().newTexturedSquare("TextView", IO.loadBitmapFromView(tv));
-		    textComponent.setPosition(new Vec(this.location));
-		    textComponent.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-		    textComponent.setOnLongClickCommand(new DragObject(tv));
-		}
+			
+			 final int action = event.getAction();
+//			 View view = (View) event.getLocalState();
 
-	}
-	
-	private class DragObject extends CommandInUiThread 
-	{
-		View v;
-		//View.DragShadowBuilder shadow;
-		
-		public DragObject(View DraggedItem)
-		{
-		    v = DraggedItem;
-		    //shadow = new DragShadowBuilder(v);
-		}
-		
-//		@Override
-		public void executeInUiThread()
-		{
-			TextView tv = (TextView)v;
-			String text = (String)tv.getText();
-			View.DragShadowBuilder shadow = new DragShadowBuilder(v){
-			
-				@Override
-				public void onDrawShadow (Canvas canvas)
-				{
-					Log.d(LOG_TAG, "Start onDrawShadow.................. ");
-					super.onDrawShadow(canvas);
-					Log.d(LOG_TAG, "end onDrawShadow.................. ");
-					
-				}
-				@Override
-				public void onProvideShadowMetrics (Point shadowSize, Point shadowTouchPoint)
-				{
-					Log.d(LOG_TAG, "start onProvideShadowMetrics.................. ");
-					Log.d(LOG_TAG, "Point shadowSize " + shadowSize + "  Point shadowTouchPoint" + shadowTouchPoint);
-					super.onProvideShadowMetrics(shadowSize, shadowTouchPoint);
-					Log.d(LOG_TAG, "end onProvideShadowMetrics.................. ");
-				}
-			};
-			
-			ClipData data = ClipData.newPlainText("DragData", text);
-			boolean dragInProcess = v.startDrag(data, shadow, null, 0);
-			Log.d(LOG_TAG, "Dragging started for " + text + " " + dragInProcess);
-//			return true;
+			 switch(action) 
+			 {
+//			     case DragEvent.ACTION_DRAG_EXITED:
+//				     root = (RelativeLayout)v.getParent();
+//				     root.removeView(view);
+//                     break;
+
+			     case DragEvent.ACTION_DROP:
+			    	 Log.d(LOG_TAG, "Dropped:  x=" + event.getX() + " y=" + event.getY());
+//			    	 root = (RelativeLayout)v.getParent();
+//				     root.removeView(view);
+                     break;
+                 
+			 }				 
+			 
+			return true;
 		}
 		
 	}
