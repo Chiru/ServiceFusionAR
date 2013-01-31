@@ -1,9 +1,18 @@
 package fi.cie.chiru.servicefusionar;
 
+import gl.Renderable;
+
+import javax.microedition.khronos.opengles.GL10;
+
+import commands.Command;
+
 import util.Log;
 import util.Vec;
+import worldData.AbstractObj;
+import worldData.Updateable;
+import worldData.Visitor;
 
-public class ServiceApplication 
+public class ServiceApplication extends AbstractObj 
 {
 	private static final String LOG_TAG = "ServiceApplication";
 	private GDXMesh gdxMesh;
@@ -57,6 +66,39 @@ public class ServiceApplication
 	public Vec getScale() 
 	{
 		return gdxMesh.getScale();
-	}  
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent) 
+	{
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean accept(Visitor visitor) 
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void render(GL10 gl, Renderable parent) 
+	{
+		gdxMesh.render(gl, parent);
+		
+	}
+
+	@Override
+	public Command getOnClickCommand() 
+	{
+        return gdxMesh.getOnClickCommand();
+	}
+
+	@Override
+	public void setOnClickCommand(Command c) 
+	{
+        gdxMesh.setOnClickCommand(c);
+	}
 	
 }
