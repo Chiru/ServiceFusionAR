@@ -88,13 +88,55 @@ public class MainActivity extends Activity {
     return intent;
     } // buildStartInTerminalIntent
     
-   
+	@Override
+	protected void onRestart() 
+	{
+		if (serviceFusionSetup != null)
+			serviceFusionSetup.onRestart(this);
+		super.onRestart();
+	}
+
+	@Override
+	protected void onResume() 
+	{
+		if (serviceFusionSetup != null)
+			serviceFusionSetup.onResume(this);
+		super.onResume();
+	}
+
+	@Override
+	protected void onStart() 
+	{
+		if (serviceFusionSetup != null)
+			serviceFusionSetup.onStart(this);
+		super.onStart();
+	}
+
+	@Override
+	protected void onStop() 
+	{
+		if (serviceFusionSetup != null)
+			serviceFusionSetup.onStop(this);
+		super.onStop();
+	}
+
+	@Override
+	protected void onPause() 
+	{
+		if (serviceFusionSetup != null)
+			serviceFusionSetup.onPause(this);
+		super.onPause();
+	}
     
     @Override
     protected void onDestroy() 
     {
-        super.onStop();
-        serviceFusionSetup.stopServer();
+    	if (serviceFusionSetup != null)
+    	{
+	    	serviceFusionSetup.stopServer();
+			serviceFusionSetup.onDestroy(this);
+    	}
+        super.onDestroy();
     }
     
     
