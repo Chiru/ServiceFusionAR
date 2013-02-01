@@ -50,7 +50,7 @@ public class ServiceApplication extends AbstractObj
 
 	public void setRotation(Vec rotation) 
 	{
-		this.gdxMesh.setScale(rotation);
+		this.gdxMesh.setRotation(rotation);
 	}
 	
 	public Vec getRotation() 
