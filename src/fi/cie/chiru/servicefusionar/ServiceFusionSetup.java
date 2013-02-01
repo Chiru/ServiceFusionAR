@@ -237,7 +237,9 @@ public class ServiceFusionSetup extends Setup
 	
 	private void CreateApplications()
 	{
-		AddServiceApplication("Twitter", "twitter_medium_397.dae", "twitter2.jpg");
+		SceneParser parser = new SceneParser();
+		serviceApplications = parser.parseFile(myTargetActivity, "serviceFusion.txt");
+//		AddServiceApplication("Twitter", "twitter_medium_397.dae", "twitter2.jpg");
 //		AddServiceApplication("Firefox", "firefox_medium_617.dae", "firefox-logo-full.jpg");
 	}
 	
