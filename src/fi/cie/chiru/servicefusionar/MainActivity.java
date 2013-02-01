@@ -21,6 +21,7 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 	private static final String TAG = "fi.cie.chiru.servicefusionar";
 	private ServiceFusionSetup serviceFusionSetup;
+	private Intent scriptIntent;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -37,8 +38,11 @@ public class MainActivity extends Activity {
 		f = extractScript("scripts", "sfkit.py");
 		f = extractScript("scripts", "sftest_ylenews.py");
         
-        Intent intent = buildStartInTerminalIntent(f); // /mnt/sdcard/sl4a/scripts/hello_world.py")); //scripts/sftest_ylenews.py")); //
-        startActivity(intent);
+		if (scriptIntent == null)
+		{
+	        scriptIntent = buildStartInTerminalIntent(f); // /mnt/sdcard/sl4a/scripts/hello_world.py")); //scripts/sftest_ylenews.py")); //
+	        startActivity(scriptIntent);
+		}
 
 	}
    
@@ -47,11 +51,11 @@ public class MainActivity extends Activity {
     	File f = new File("/mnt/sdcard/" + TAG + "/" + filename); // getCacheDir()+"/script.py"); new FileOutputStream(f); //
     	try
     	{
-    		if (f.exists())
-    		{
-    			f.delete();
-    			Log.d(TAG, "tiedosto poistettu");
-    		}
+    		//if (f.exists())
+    		//{
+    		//	f.delete();
+    		//	Log.d(TAG, "tiedosto poistettu");
+    		//}
     		/*else
     		{
     			f.createNewFile();
@@ -136,6 +140,7 @@ public class MainActivity extends Activity {
 	    	serviceFusionSetup.stopServer();
 			serviceFusionSetup.onDestroy(this);
     	}
+
         super.onDestroy();
     }
     

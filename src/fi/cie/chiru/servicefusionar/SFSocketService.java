@@ -40,9 +40,15 @@ public class SFSocketService implements Runnable
 	int serverPort = 4242;
 	String serverIp = "localhost";
 	
-	public SFSocketService(Handler handler, ServerSocket socket)
+	public SFSocketService(Handler handler/*, ServerSocket socket*/)
 	{
-		serverSocket = socket;
+//		serverSocket = socket;
+		try {
+			serverSocket = new ServerSocket(SERVERPORT);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.handler = handler;
 	}
 	
@@ -57,6 +63,7 @@ public class SFSocketService implements Runnable
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+                    	Log.d(TAG, "Script connected to the socket!");
                         //serverStatus.setText("Connected.");
                     }
                 });
