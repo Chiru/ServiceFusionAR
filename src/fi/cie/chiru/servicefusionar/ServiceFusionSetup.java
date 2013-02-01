@@ -83,7 +83,6 @@ public class ServiceFusionSetup extends Setup
 	
 	private SFSocketService socketService;
     private Handler handler;
-    private ServerSocket serverSocket;
 
 	public ServiceFusionSetup() 
 	{
@@ -96,19 +95,10 @@ public class ServiceFusionSetup extends Setup
 		serviceApplications = new Vector<ServiceApplication>();
 		
 		handler = new Handler();
-		try {
-			serverSocket = new ServerSocket();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		socketService = new SFSocketService(handler, serverSocket);
-		socketService.run();
-		final Thread socketThread = new Thread(/*new SFSocketService(handler, serverSocket)*/socketService);
+		socketService = new SFSocketService(handler);
+		final Thread socketThread = new Thread(socketService);
         socketThread.start();
-
-		//socketService.run();
 	}
 	
 	@Override
