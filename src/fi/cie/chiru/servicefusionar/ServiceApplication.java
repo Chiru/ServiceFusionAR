@@ -101,4 +101,16 @@ public class ServiceApplication extends AbstractObj
         gdxMesh.setOnClickCommand(c);
 	}
 	
+	@Override
+	public Command getOnDoubleClickCommand() 
+	{
+        return gdxMesh.getOnDoubleClickCommand();
+	}
+
+	@Override
+	public void setOnDoubleClickCommand(Command c) 
+	{
+        gdxMesh.setOnDoubleClickCommand(c);
+	}
+	
 }
