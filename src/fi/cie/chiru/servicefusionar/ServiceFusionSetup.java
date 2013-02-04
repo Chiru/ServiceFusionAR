@@ -10,6 +10,7 @@ import gl.GL1Renderer;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.LightSource;
+import gl.ObjectPicker;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
 import gui.GuiSetup;
@@ -121,8 +122,9 @@ public class ServiceFusionSetup extends Setup
 	@Override
 	public boolean _a2_initLightning(EfficientList<LightSource> lights) 
 	{
-		spotLight = LightSource.newDefaultDefuseLight(GL10.GL_LIGHT1, new Vec(0, 10, 0));
-		lights.add(spotLight);
+		lights.add(LightSource.newDefaultAmbientLight(GL10.GL_LIGHT0));
+		//spotLight = LightSource.newDefaultDefuseLight(GL10.GL_LIGHT1, new Vec(0, 10, 0));
+		//lights.add(spotLight);
 		return true;
 	}
 
@@ -149,7 +151,6 @@ public class ServiceFusionSetup extends Setup
 		addObjectsTo(renderer, world, GLFactory.getInstance());
 //		wasdAction = new ActionWASDMovement(camera, 25, 50, 20);
 //		rotateGLCameraAction = new ActionRotateCameraBuffered(camera);
-
 //		arView.addOnTouchMoveListener(wasdAction);
 //		eventManager.addOnOrientationChangedAction(rotateGLCameraAction);
 //		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera, 5, 25));
@@ -211,6 +212,8 @@ public class ServiceFusionSetup extends Setup
 				return false;
 			}
 		});
+		
+		guiSetup.getMainContainerView().setOnDragListener(new CustomDragEventListener(getScreenHeigth()));
 	}
 	
 	public void stopServer()
@@ -220,20 +223,20 @@ public class ServiceFusionSetup extends Setup
 	}
 	
 
-	private void AddServiceApplication(String name, String fileName, String textureName)
-	{
-		ServiceApplication serviceApp = new ServiceApplication(name);
-		
-		if(fileName!=null && textureName!=null)
-		{
-		    GDXMesh gdxMesh = gdxLoader.loadModelFromFile(fileName, textureName);
-		    gdxMesh.enableMeshPicking();
-		    serviceApp.setMesh(gdxMesh);
-		    serviceApp.setOnClickCommand(new CommandTextPopUp("Test", new Vec(serviceApp.getPosition()), this));
-		}
-		
-		serviceApplications.add(serviceApp);
-	}
+//	private void AddServiceApplication(String name, String fileName, String textureName)
+//	{
+//		ServiceApplication serviceApp = new ServiceApplication(name);
+//		
+//		if(fileName!=null && textureName!=null)
+//		{
+//		    GDXMesh gdxMesh = gdxLoader.loadModelFromFile(fileName, textureName);
+//		    gdxMesh.enableMeshPicking();
+//		    serviceApp.setMesh(gdxMesh);
+//		    serviceApp.setOnClickCommand(new CommandTextPopUp("Test", new Vec(serviceApp.getPosition()), this));
+//		}
+//		
+//		serviceApplications.add(serviceApp);
+//	}
 	
 	private void CreateApplications()
 	{
@@ -246,35 +249,21 @@ public class ServiceFusionSetup extends Setup
 	private void addApplicationsToWorld(final World world)
 	{
 		for(int i=0; i<serviceApplications.size(); i++)
-			world.add(serviceApplications.elementAt(i));//world.add(serviceApplications.elementAt(i).getMesh());
+		{
+			ServiceApplication serviceApp = serviceApplications.elementAt(i);
+			world.add(serviceApp);//world.add(serviceApplications.elementAt(i).getMesh());
+			serviceApp.setOnClickCommand(new CommandTextPopUp("Test", new Vec(serviceApp.getPosition()), this));
+		    serviceApp.setOnDoubleClickCommand(new CommandTestDrag());
+		}
 	}
 	
-	protected class myDragEventListener implements OnDragListener 
+	private class CommandTestDrag extends Command
 	{
-		RelativeLayout root;
-		
+
 		@Override
-		public boolean onDrag(View v, DragEvent event) 
+		public boolean execute() 
 		{
-			
-			 final int action = event.getAction();
-//			 View view = (View) event.getLocalState();
-
-			 switch(action) 
-			 {
-//			     case DragEvent.ACTION_DRAG_EXITED:
-//				     root = (RelativeLayout)v.getParent();
-//				     root.removeView(view);
-//                     break;
-
-			     case DragEvent.ACTION_DROP:
-			    	 Log.d(LOG_TAG, "Dropped:  x=" + event.getX() + " y=" + event.getY());
-//			    	 root = (RelativeLayout)v.getParent();
-//				     root.removeView(view);
-                     break;
-                 
-			 }				 
-			 
+			Log.d(LOG_TAG, "---------------------executed-----------------------");
 			return true;
 		}
 		
