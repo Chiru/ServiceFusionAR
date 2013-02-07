@@ -5,7 +5,6 @@
             "name" : "Firefox",
             "meshRef" : "firefox_medium_617.dae",
             "textRef" : "firefox-logo-full.jpg",
-            "scriptRef" : "",
             "position" : 
             {
                 "x" : "5.0", 
@@ -23,13 +22,18 @@
                 "x" : "0.4", 
                 "y" : "0.5", 
                 "z" : "0.5"
+            },
+            "commands" :
+            {
+                "CLICK" : "ShowMovieInfo",
+                "DROP" : "", 
+                "LONG_CLICK" : ""
             }
         },
         {
             "name" : "Twitter",
             "meshRef" : "twitter_medium_397.dae",
             "textRef" : "twitter2.jpg",
-            "scriptRef" : "",
             "position" : 
             {
                 "x" : "-5.0", 
@@ -47,13 +51,18 @@
                 "x" : "1.5", 
                 "y" : "1.5", 
                 "z" : "1.5"
+            },
+            "commands" :
+            {
+                "CLICK" : "",
+                "DROP" : "MovieLogin", 
+                "LONG_CLICK" : ""
             }
         },
         {
             "name" : "Skype",
             "meshRef" : "skype_medium_330.dae",
             "textRef" : "skype.jpg",
-            "scriptRef" : "",
             "position" : 
             {
                 "x" : "-5.0", 
@@ -71,6 +80,12 @@
                 "x" : "1.5", 
                 "y" : "1.5", 
                 "z" : "1.5"
+            },
+            "commands" :
+            {
+                "CLICK" : "",
+                "DROP" : "", 
+                "LONG_CLICK" : ""
             }
         }
     ]
