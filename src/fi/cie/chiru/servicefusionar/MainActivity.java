@@ -1,22 +1,12 @@
 package fi.cie.chiru.servicefusionar;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.app.Activity;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-
 
 public class MainActivity extends Activity {
 	private static final String TAG = "fi.cie.chiru.servicefusionar";
