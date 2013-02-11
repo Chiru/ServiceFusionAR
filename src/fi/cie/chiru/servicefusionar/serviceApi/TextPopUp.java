@@ -1,14 +1,17 @@
 package fi.cie.chiru.servicefusionar.serviceApi;
 
-import fi.cie.chiru.servicefusionar.ServiceFusionSetup;
 import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
 import util.IO;
+import util.Log;
 import util.Vec;
 import android.content.ClipData;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import commands.ui.CommandInUiThread;
@@ -16,24 +19,32 @@ import commands.ui.CommandInUiThread;
 public class TextPopUp
 {
 
-	private static final String LOG_TAG = "CommandTextPopUp";
+	private static final String LOG_TAG = "TextPopUp";
 	private String text;
-	private ServiceFusionSetup setup;
-	private Vec location;
+	private TextView tv;
+	private ServiceManager serviceManager;
+	private Vec position;
 	private boolean textVisible;
 	private boolean textCreated;
 	private MeshComponent textComponent;
 
-	public TextPopUp(String text, Vec location, ServiceFusionSetup setup) 
+	public TextPopUp(ServiceManager serviceManager) 
 	{
-		this.text = text;
-		this.location = location;
-		this.setup = setup;
-		this.location.add(2.0f, 3.0f, 0.0f);
+		this.serviceManager = serviceManager;
 		textVisible = false;
 		textCreated = false;
 	}
-
+	
+	public void  setDragText(String text)
+	{
+		this.text = text;
+	}
+	
+	public void setPosition(Vec position)
+	{
+		this.position = position;
+	}
+	
 	public void visible() 
 	{
 		if(!textCreated)
@@ -44,36 +55,36 @@ public class TextPopUp
 		
 		if(!textVisible)
 		{	
-			setup.world.add(textComponent);
+			serviceManager.getSetup().world.add(textComponent);
 			textVisible = true;
 		}
 		else
 		{
-			setup.world.remove(textComponent);
+			serviceManager.getSetup().world.remove(textComponent);
 			textVisible = false;
 		}
 	}
 	
 	private void createTextComponent()
 	{
-		TextView tv = new TextView(setup.myTargetActivity);
-		tv.setId(generateUniqueId());
-		tv.setTextColor(Color.BLACK);
-		tv.setBackgroundColor(Color.WHITE);
-		tv.setTextSize(45);
+	    tv = new TextView(serviceManager.getSetup().myTargetActivity);
+	    tv.setId(generateUniqueId());
 	    tv.setText(this.text);
-	    textComponent = GLFactory.getInstance().newTexturedSquare("TextView", IO.loadBitmapFromView(tv));
-	    setup.world.add(textComponent);
-	    textComponent.setPosition(new Vec(this.location));
+	    tv.setTextColor(Color.BLACK);
+	    tv.setBackgroundColor(Color.WHITE);
+	    tv.setTextSize(25);
+	    tv.setTypeface(Typeface.MONOSPACE);
+	    textComponent = GLFactory.getInstance().newTexturedSquare(this.text, IO.loadBitmapFromView(tv));
+	    serviceManager.getSetup().world.add(textComponent);
+	    textComponent.setPosition(new Vec(this.position));
 	    textComponent.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-	    textComponent.setScale(new Vec(0.8f,0.8f,0.8f));
 	    textComponent.setOnLongClickCommand(new DragTextPopUpObject(tv));
 	}
 	
 	private int generateUniqueId()
 	{
 		int id = 0;
-		RelativeLayout root = (RelativeLayout) setup.getGuiSetup().getMainContainerView();
+		RelativeLayout root = (RelativeLayout) serviceManager.getSetup().getGuiSetup().getMainContainerView();
 		
 		while(root.findViewById(++id) != null );
 		    return id;
@@ -81,9 +92,9 @@ public class TextPopUp
 
 	private class DragTextPopUpObject extends CommandInUiThread 
 	{
-		View v;
+		private TextView v;
 		
-		public DragTextPopUpObject(View DraggedItem)
+		public DragTextPopUpObject(TextView DraggedItem)
 		{
 		    v = DraggedItem;
 		}
@@ -91,17 +102,25 @@ public class TextPopUp
 	//	@Override
 		public void executeInUiThread()
 		{
-			TextView tv = (TextView)v;
-			RelativeLayout root = (RelativeLayout) setup.getGuiSetup().getMainContainerView();
-			 
-			if(root.findViewById(tv.getId())==null)
-			    root.addView(tv);
 
-		    tv.setVisibility(View.GONE);
-			String text = (String)tv.getText();
-			View.DragShadowBuilder shadow = new DragShadowBuilder(tv);
+			RelativeLayout root = (RelativeLayout) serviceManager.getSetup().getGuiSetup().getMainContainerView();
+			 
+//			if(root.findViewById(v.getId())== null)
+//			    root.addView(v);
+			
+			root.removeView(v);
+			root.addView(v);
+
+		    v.setVisibility(View.GONE);
+		    
+//		    if(text.isEmpty())
+//		    {
+		    	text = (String)v.getText();
+//		    }
+			
+			View.DragShadowBuilder shadow = new DragShadowBuilder(v);
 			ClipData data = ClipData.newPlainText("DragData", text);
-			tv.startDrag(data, shadow, null, 0);
+			v.startDrag(data, shadow, null, 0);
 		}
 		
 	}
