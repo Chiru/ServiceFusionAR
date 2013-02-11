@@ -21,7 +21,7 @@ public class ServiceManager
 	{
 		this.setup = setup;
 		serviceApplications = new Vector<ServiceApplication>();
-		movieManager = new MovieManager();
+		movieManager = new MovieManager(this);
 	}
 	
 	public ServiceFusionSetup getSetup()
