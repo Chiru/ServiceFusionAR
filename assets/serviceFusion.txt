@@ -7,8 +7,8 @@
             "textRef" : "firefox-logo-full.jpg",
             "position" : 
             {
-                "x" : "5.0", 
-                "y" : "0.0", 
+                "x" : "-15.0", 
+                "y" : "15.0", 
                 "z" : "-15.0"
             },
             "rotation" : 
@@ -25,10 +25,11 @@
             },
             "commands" :
             {
-                "CLICK" : "ShowMovieInfo",
+                "CLICK" : "",
                 "DROP" : "", 
                 "LONG_CLICK" : ""
-            }
+            },
+            "visible" : "true" 
         },
         {
             "name" : "Twitter",
@@ -57,7 +58,8 @@
                 "CLICK" : "",
                 "DROP" : "MovieLogin", 
                 "LONG_CLICK" : ""
-            }
+            },
+            "visible" : "true" 
         },
         {
             "name" : "Skype",
@@ -86,7 +88,98 @@
                 "CLICK" : "",
                 "DROP" : "", 
                 "LONG_CLICK" : ""
-            }
+            },
+            "visible" : "true" 
+        },
+        {
+            "name" : "Radio",
+            "meshRef" : "radio.dae",
+            "textRef" : "radio.png",
+            "position" : 
+            {
+                "x" : "-5.0", 
+                "y" : "-10.0", 
+                "z" : "-15.0"
+            },
+            "rotation" : 
+            {
+                "x" : "270.0", 
+                "y" : "0.0", 
+                "z" : "0.0"
+            },
+             "scale" : 
+            {
+                "x" : "1.5", 
+                "y" : "1.5", 
+                "z" : "1.5"
+            },
+            "commands" :
+            {
+                "CLICK" : "",
+                "DROP" : "", 
+                "LONG_CLICK" : ""
+            },
+            "visible" : "true" 
+        },
+        {
+            "name" : "MusicInfobubble",
+            "meshRef" : "infobuble.dae",
+            "textRef" : "lightgreytex.jpg",
+            "position" : 
+            {
+                "x" : "5.0", 
+                "y" : "5.0", 
+                "z" : "-15.0"
+            },
+            "rotation" : 
+            {
+                "x" : "270.0", 
+                "y" : "0.0", 
+                "z" : "0.0"
+            },
+             "scale" : 
+            {
+                "x" : "2.0", 
+                "y" : "2.0", 
+                "z" : "2.0"
+            },
+            "commands" :
+            {
+                "CLICK" : "",
+                "DROP" : "", 
+                "LONG_CLICK" : ""
+            },
+            "visible" : "false" 
+        },
+         {
+            "name" : "MovieIcon",
+            "meshRef" : "movieicon.dae",
+            "textRef" : "movie_icon_colorCompleteMap.png",
+            "position" : 
+            {
+                "x" : "0.0", 
+                "y" : "-5.0", 
+                "z" : "-15.0"
+            },
+            "rotation" : 
+            {
+                "x" : "270.0", 
+                "y" : "0.0", 
+                "z" : "0.0"
+            },
+             "scale" : 
+            {
+                "x" : "2.0", 
+                "y" : "2.0", 
+                "z" : "2.0"
+            },
+            "commands" :
+            {
+                "CLICK" : "ShowMovieInfo",
+                "DROP" : "", 
+                "LONG_CLICK" : ""
+            },
+            "visible" : "true" 
         }
     ]
 }
