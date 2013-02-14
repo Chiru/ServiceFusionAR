@@ -3,15 +3,13 @@ package fi.cie.chiru.servicefusionar.serviceApi;
 import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
 import util.IO;
-import util.Log;
 import util.Vec;
 import android.content.ClipData;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import commands.ui.CommandInUiThread;
@@ -71,13 +69,14 @@ public class TextPopUp
 	    tv.setId(generateUniqueId());
 	    tv.setText(this.text);
 	    tv.setTextColor(Color.BLACK);
-	    tv.setBackgroundColor(Color.WHITE);
+	    tv.setBackgroundColor(Color.LTGRAY);
 	    tv.setTextSize(25);
 	    tv.setTypeface(Typeface.MONOSPACE);
 	    textComponent = GLFactory.getInstance().newTexturedSquare(this.text, IO.loadBitmapFromView(tv));
 	    serviceManager.getSetup().world.add(textComponent);
 	    textComponent.setPosition(new Vec(this.position));
 	    textComponent.setRotation(new Vec(90.0f, 0.0f, 180.0f));
+	    textComponent.setScale(new Vec(0.47f, 1.0f, 1.0f));
 	    textComponent.setOnLongClickCommand(new DragTextPopUpObject(tv));
 	}
 	
@@ -104,7 +103,6 @@ public class TextPopUp
 		{
 
 			RelativeLayout root = (RelativeLayout) serviceManager.getSetup().getGuiSetup().getMainContainerView();
-			 
 //			if(root.findViewById(v.getId())== null)
 //			    root.addView(v);
 			
