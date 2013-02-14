@@ -11,7 +11,7 @@ import android.util.Log;
 public class MainActivity extends Activity {
 	private static final String TAG = "fi.cie.chiru.servicefusionar";
 	private ServiceFusionSetup serviceFusionSetup;
-	private Intent scriptIntent;
+//	private Intent scriptIntent;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -22,17 +22,17 @@ public class MainActivity extends Activity {
         serviceFusionSetup = new ServiceFusionSetup();
         serviceFusionSetup.run(this);
         
-		File f = extractScript("scripts", "feedparser.py");
-        //f = extractScript("scripts", "hello.py");
-		
-		f = extractScript("scripts", "sfkit.py");
-		f = extractScript("scripts", "sftest_ylenews.py");
-        
-		if (scriptIntent == null)
-		{
-	        scriptIntent = buildStartInTerminalIntent(f); // /mnt/sdcard/sl4a/scripts/hello_world.py")); //scripts/sftest_ylenews.py")); //
-	        startActivity(scriptIntent);
-		}
+//		File f = extractScript("scripts", "feedparser.py");
+//        //f = extractScript("scripts", "hello.py");
+//		
+//		f = extractScript("scripts", "sfkit.py");
+//		f = extractScript("scripts", "sftest_ylenews.py");
+//        
+//		if (scriptIntent == null)
+//		{
+//	        scriptIntent = buildStartInTerminalIntent(f); // /mnt/sdcard/sl4a/scripts/hello_world.py")); //scripts/sftest_ylenews.py")); //
+//	        startActivity(scriptIntent);
+//		}
 
 	}
    
@@ -72,14 +72,15 @@ public class MainActivity extends Activity {
     	return f;
     }
     
-    public static Intent buildStartInTerminalIntent(File script) {
-	final ComponentName componentName = Constants.SL4A_SERVICE_LAUNCHER_COMPONENT_NAME;
-    Intent intent = new Intent();
-    intent.setComponent(componentName);
-    intent.setAction(Constants.ACTION_LAUNCH_BACKGROUND_SCRIPT); //
-    intent.putExtra(Constants.EXTRA_SCRIPT_PATH, script.getAbsolutePath());
-    
-    return intent;
+    public static Intent buildStartInTerminalIntent(File script) 
+    {
+    	final ComponentName componentName = Constants.SL4A_SERVICE_LAUNCHER_COMPONENT_NAME;
+	    Intent intent = new Intent();
+	    intent.setComponent(componentName);
+	    intent.setAction(Constants.ACTION_LAUNCH_BACKGROUND_SCRIPT); //
+	    intent.putExtra(Constants.EXTRA_SCRIPT_PATH, script.getAbsolutePath());
+	    
+	    return intent;
     } // buildStartInTerminalIntent
     
 	@Override
