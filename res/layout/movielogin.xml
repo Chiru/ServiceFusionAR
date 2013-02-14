@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="300dip"
+    android:background="#DDDDDD">
+    
+     <TextView
+         android:id="@+id/otsikko"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerHorizontal="true"
+         android:text="Ostoskori"
+         android:textSize="8pt" />
+     
+     <TextView
+         android:id="@+id/elokuva"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerHorizontal="true"
+         android:layout_below="@+id/otsikko"
+         android:text="elokuva"
+         android:textSize="6pt"
+         android:layout_marginTop="5dip"
+         android:textColor="#444444" />
+    
+    <TextView
+        android:id="@+id/etunimi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="6pt"
+        android:textColor="#444444"
+        android:layout_below="@id/elokuva"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="9dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="10dip"
+        android:text="Etunimi:"/>
+
+    <EditText
+        android:id="@+id/et_etunimi"
+        android:layout_width="150dip"
+        android:layout_height="fill_parent"
+        android:layout_alignBottom="@id/etunimi"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/etunimi"
+        android:layout_toRightOf="@+id/synaika"
+        android:background="@android:drawable/editbox_background" />
+
+     <TextView
+        android:id="@+id/sukunimi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="6pt"
+        android:textColor="#444444"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/etunimi"
+        android:layout_marginRight="9dip"
+        android:layout_marginTop="4dip"
+        android:layout_marginLeft="10dip"
+        android:text="Sukunimi:"/>
+
+    <EditText
+        android:id="@+id/et_sukunimi"
+        android:layout_width="150dip"
+        android:layout_height="fill_parent"
+        android:layout_alignBottom="@id/sukunimi"
+        android:layout_alignLeft="@+id/et_synaika"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/sukunimi"
+        android:layout_below="@id/et_etunimi"
+        android:layout_gravity="right"
+        android:background="@android:drawable/editbox_background" />
+
+    <TextView
+        android:id="@+id/synaika"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="6pt"
+        android:textColor="#444444"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/sukunimi"
+        android:layout_marginRight="9dip"
+        android:layout_marginTop="4dip"
+        android:layout_marginLeft="10dip"
+        android:text="Syntymäaika(pp/kk/vvvv):"/>
+    
+    <EditText
+        android:id="@+id/et_synaika"
+        android:layout_width="150dip"
+        android:layout_height="fill_parent"
+        android:gravity="right"
+        android:background="@android:drawable/editbox_background"
+        android:layout_toRightOf="@id/synaika"
+        android:layout_alignTop="@id/synaika"
+        android:layout_alignBottom ="@id/synaika"/>
+    
+     <TextView
+        android:id="@+id/sukupuoli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="6pt"
+        android:textColor="#444444"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/synaika"
+        android:layout_marginRight="9dip"
+        android:layout_marginTop="6dip"
+        android:layout_marginLeft="10dip"
+        android:text="Sukupuoli:"/>
+
+     <RadioButton
+         android:id="@+id/radioNainen"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentRight="true"
+         android:layout_below="@+id/et_synaika"
+         android:textColor="#444444"
+         android:textSize="6pt"
+         android:text="Nainen" />
+     
+     <RadioButton
+         android:id="@+id/radioMies"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/et_synaika"
+         android:layout_toLeftOf="@+id/radioNainen"
+         android:text="Mies"
+         android:textColor="#444444"
+         android:textSize="6pt" />
+     
+     <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#444444"
+        android:textSize="6pt"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/radioMies"
+        android:layout_marginRight="9dip"
+        android:layout_marginTop="4dip"
+        android:layout_marginLeft="10dip"
+        android:text="Sähköposti:"/>
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="150dip"
+        android:layout_height="fill_parent"
+        android:layout_alignBottom="@+id/email"
+        android:layout_alignLeft="@+id/et_synaika"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/email"
+        android:layout_below="@+id/radioMies"
+        android:layout_gravity="right"
+        android:background="@android:drawable/editbox_background" />
+    
+     <TextView
+        android:id="@+id/puh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#444444"
+        android:textSize="6pt"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/email"
+        android:layout_marginRight="9dip"
+        android:layout_marginTop="4dip"
+        android:layout_marginLeft="10dip"
+        android:text="Puhelinnumero:"/>
+
+    <EditText
+        android:id="@+id/et_puh"
+        android:layout_width="150dip"
+        android:layout_height="fill_parent"
+        android:layout_alignBottom="@+id/puh"
+        android:layout_alignLeft="@+id/et_synaika"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/puh"
+        android:layout_below="@+id/email"
+        android:layout_gravity="right"
+        android:background="@android:drawable/editbox_background" />
+    
+      <Button
+         android:id="@+id/peruuta"
+         android:layout_width="150dip"
+         android:layout_height="30dip"
+         android:layout_below="@+id/et_puh" 
+         android:layout_alignParentLeft="true"
+         android:layout_centerVertical="true"
+         android:layout_marginTop="15dip"
+         android:textColor="#444444"
+         android:textSize="6pt"
+         android:text="Peruuta" />
+
+     <Button
+         android:id="@+id/ok"
+         android:layout_width="150dip"
+         android:layout_height="30dip"
+         android:layout_alignBaseline="@+id/peruuta"
+         android:layout_alignBottom="@+id/peruuta"
+         android:layout_alignParentRight="true"
+         android:layout_marginTop="15dip"
+         android:textColor="#444444"
+         android:textSize="6pt"
+         android:text="Ok" />
+
+</RelativeLayout>
