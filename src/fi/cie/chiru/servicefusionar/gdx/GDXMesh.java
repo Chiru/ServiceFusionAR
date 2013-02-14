@@ -10,6 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import worldData.Updateable;
 import worldData.Visitor;
+import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -25,13 +26,15 @@ public class GDXMesh extends MeshComponent
 	private StillModel model;
 	private Texture texture;
 	private boolean reload;
+	private boolean visible;
 	
 	public GDXMesh(StillModel model, Texture texture) 
 	{
 		super(null);
 		this.model = model;
 		this.texture = texture;
-		reload=false;
+		reload = false;
+		visible = true;
 	}
 
 	@Override
@@ -44,6 +47,9 @@ public class GDXMesh extends MeshComponent
 	public void draw(GL10 gl, Renderable parent) 
 	{
 
+		if(!visible)
+			return;
+		
 //		gl.glEnable(GL10.GL_CULL_FACE);
 		if (model != null) 
 		{
@@ -54,7 +60,7 @@ public class GDXMesh extends MeshComponent
 				    this.texture.load(this.texture.getTextureData());
 				    reload = true;
 				}
-				
+
 				gl.glEnable(GL10.GL_TEXTURE_2D);
 				this.texture.bind();
 				this.model.render();
@@ -67,5 +73,10 @@ public class GDXMesh extends MeshComponent
 		} 
 		else
 			Log.e(LOG_TAG, "No model object existend");
+	}
+	
+	public void setVisible(boolean visible)
+	{
+		this.visible = visible;
 	}
 }

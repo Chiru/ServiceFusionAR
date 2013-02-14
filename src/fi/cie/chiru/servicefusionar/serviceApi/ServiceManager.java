@@ -38,7 +38,6 @@ public class ServiceManager
 	{
 		SceneParser parser = new SceneParser();
 		serviceApplications = parser.parseFile(this, "serviceFusion.txt");
-		addApplicationsToDroidAR(setup.world);
 	}
 	
 	public ServiceApplication getApplication(String appName)
@@ -49,7 +48,7 @@ public class ServiceManager
 		{
 		    serviceApp = serviceApplications.elementAt(i);
 		    
-			if(serviceApplications.elementAt(i).getName() == appName)
+			if(serviceApplications.elementAt(i).getName().compareTo(appName)==0)
 		        return serviceApp;
 			else
 				serviceApp = null;
@@ -57,14 +56,12 @@ public class ServiceManager
 		return serviceApp;
 	}
 	
-	private void addApplicationsToDroidAR(final World world)
+	public void setVisibilityToAllApplications(boolean visible)
 	{
-		ServiceApplication serviceApp; 
-		
 		for(int i=0; i<serviceApplications.size(); i++)
 		{
-			serviceApp = serviceApplications.elementAt(i);
-			world.add(serviceApp);
+			serviceApplications.elementAt(i).setvisible(visible);
 		}
-	}	
+	
+	}
 }

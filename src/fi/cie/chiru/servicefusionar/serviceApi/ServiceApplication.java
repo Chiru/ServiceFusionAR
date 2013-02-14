@@ -68,6 +68,10 @@ public class ServiceApplication extends AbstractObj
 	{
 		return gdxMesh.getScale();
 	}
+	public void  setvisible(boolean visible)
+	{
+		gdxMesh.setVisible(visible);
+	}
 
 	@Override
 	public boolean update(float timeDelta, Updateable parent) 
