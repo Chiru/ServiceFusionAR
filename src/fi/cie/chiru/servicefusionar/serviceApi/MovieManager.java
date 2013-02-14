@@ -1,18 +1,33 @@
 package fi.cie.chiru.servicefusionar.serviceApi;
 
+
 import java.io.IOException;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.AsyncTask;
 import android.text.Layout;
+
+import org.json.JSONException;
+
+import fi.cie.chiru.servicefusionar.R;
+import gl.GLFactory;
+import gl.ObjectPicker;
+import gl.scenegraph.MeshComponent;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.DragEvent;
+
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnDragListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import fi.cie.chiru.servicefusionar.R;
+import util.IO;
 import util.Log;
 import util.Vec;
+
 
 
 import fi.cie.chiru.servicefusionar.serviceApi.FinnkinoXmlParser.Movie;
@@ -31,11 +46,15 @@ public class MovieManager
 {
 	private static final String LOG_TAG = "MovieManager";
 	private ServiceManager serviceManager;
-	private TextPopUp movieInfo[];
+	private String movieInfo[];
 	private boolean movieInfoFilled;
 	private boolean movieInfoDownloaded;
 	private int maxMovies = 5;
-		
+
+	private InfoBubble infobubble;
+	private String selectedMovie;
+	private OnDragListener listener;
+	
 	
 	public MovieManager(ServiceManager serviceManager)
 	{
@@ -46,19 +65,25 @@ public class MovieManager
 		new DownloadXmlTask().execute(URL);
 		
         this.serviceManager = serviceManager;
-        movieInfo = new TextPopUp[maxMovies];
+        movieInfo = new String[maxMovies];
 	}
 	
-    public void showMovieInfo()
+    public void showMovieInfo(String requesterName)
     {
-        if(!movieInfoFilled)
+        if(!movieInfoDownloaded)
     	    return;
         
-        for(int i=0; i<maxMovies; i++)
-        {
-            movieInfo[i].visible();
-        }
-        
+//    	if(!movieInfoFilled)
+//    	{
+//            infobubble = new InfoBubble(serviceManager);
+//    
+//    		
+//    		if(infobubble.setInfoBubbleApplication("MusicInfobubble"))
+//    		    infobubble.populateItems(movieInfo);
+//    	}
+    	
+    	infobubble.visible();
+   
     }
     
     public void seatSelection()
@@ -68,7 +93,8 @@ public class MovieManager
     
     public void login()
     {
-
+    	createAuditoriumScreen();
+    	createLogInScreen();
     }
     
     public void payment()
@@ -82,10 +108,10 @@ public class MovieManager
     		return;
     	
     	int longestTitle = getLongestMovieTitlteLen(movielist);
-    	
+
     	for(int i=0; i<maxMovies; i++)
     	{	
-    	    TextPopUp movieInfoItem = new TextPopUp(this.serviceManager);
+    	
     	    String movieInfoString = new String();
     		String time = new String();
     		String movieTitle = new String();
@@ -96,13 +122,21 @@ public class MovieManager
     		auditorium = movielist.get(i).auditorium;
     		
     		movieInfoString = time + " " + movieTitle + fillWhiteSpace(longestTitle - movieTitle.length()) + "    " + auditorium;
+
     		Log.d(LOG_TAG, movieInfoString);
-    		movieInfoItem.setDragText(movieInfoString);
-    		movieInfoItem.setPosition(new Vec(5.0f, 4.0f + i, -15.0f));
    		
-    		movieInfo[i] = movieInfoItem;
-    		movieInfoFilled = true;
+//    		movieInfo[i] = movieInfoItem;
+//    		movieInfoFilled = true;
+
+    		movieInfo[i] = movieInfoString;
+    		movieInfoFilled =true;
+
     	}
+    	
+    	infobubble = new InfoBubble(serviceManager);
+    	    	
+ 		if(infobubble.setInfoBubbleApplication("MusicInfobubble"))
+ 		    infobubble.populateItems(movieInfo);
     }
     
     private String fillWhiteSpace(int number)
@@ -132,6 +166,7 @@ public class MovieManager
     	return len;
     }
     
+
     // Implementation of AsyncTask used to download XML feed from Finnkino.
     private class DownloadXmlTask extends AsyncTask<String, Void, List<Movie>> 
     {
@@ -171,7 +206,7 @@ public class MovieManager
         	//Log.d(LOG_TAG, result);
         }
     }
-
+    
 
     private List<Movie> loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
     	InputStream stream = null;
@@ -206,5 +241,51 @@ public class MovieManager
         conn.connect();
         InputStream stream = conn.getInputStream();
         return stream;
+    }
+
+    
+    
+    
+    private void createAuditoriumScreen()
+    {
+    	MeshComponent plaza = GLFactory.getInstance().newTexturedSquare("plaza", IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.plaza_1_smaller));
+    	
+    	serviceManager.setVisibilityToAllApplications(false);
+    	infobubble.visible();
+    	
+    	serviceManager.getSetup().world.add(plaza);
+ 	    plaza.setPosition(new Vec(0.0f, -5.0f, 0.0f));
+ 	    plaza.setRotation(new Vec(45.0f, 180.0f, 0.0f));
+ 	    plaza.setScale(new Vec(15.0f, 10.0f, 15.0f));
+    	
+    }
+    
+    private void createLogInScreen()
+    {
+    	Handler mHandler = new Handler(Looper.getMainLooper());
+    	
+    	mHandler.post(new Runnable() {
+
+			@Override
+			public void run() 
+			{
+				LayoutInflater li = (LayoutInflater) serviceManager.getSetup().myTargetActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
+				View v = li.inflate(R.layout.movielogin, null); 
+				RelativeLayout root = (RelativeLayout) serviceManager.getSetup().getGuiSetup().getMainContainerView();
+				root.addView(v);
+				    	
+//				MeshComponent loginScreen = GLFactory.getInstance().newTexturedSquare("loginscreen", IO.loadBitmapFromView(v));
+//				
+//				serviceManager.getSetup().world.add(loginScreen);
+//		    	loginScreen.setPosition(new Vec(0.0f, 0.0f, 0.0f));
+//		    	loginScreen.setRotation(new Vec(90.0f, 0.0f, 0.0f));
+//		    	loginScreen.setScale(new Vec(15.0f, 10.0f, 15.0f));
+				
+			}
+
+
+
+		});
+
     }
 }
