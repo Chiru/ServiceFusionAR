@@ -1,11 +1,9 @@
 package fi.cie.chiru.servicefusionar.serviceApi;
 
 import gl.ObjectPicker;
-import util.Log;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.View.OnDragListener;
-import android.widget.RelativeLayout;
 
 public class CustomDragEventListener implements OnDragListener 
 {
