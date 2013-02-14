@@ -32,7 +32,6 @@ import util.Vec;
 
 import fi.cie.chiru.servicefusionar.serviceApi.FinnkinoXmlParser.Movie;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -47,7 +46,6 @@ public class MovieManager
 	private static final String LOG_TAG = "MovieManager";
 	private ServiceManager serviceManager;
 	private String movieInfo[];
-	private boolean movieInfoFilled;
 	private boolean movieInfoDownloaded;
 	private int maxMovies = 5;
 
@@ -58,7 +56,6 @@ public class MovieManager
 	
 	public MovieManager(ServiceManager serviceManager)
 	{
-		movieInfoFilled = false;
 		movieInfoDownloaded = false;
 		
 		String URL = "http://www.finnkino.fi/xml/Schedule/?area=1018";
@@ -72,18 +69,8 @@ public class MovieManager
     {
         if(!movieInfoDownloaded)
     	    return;
-        
-//    	if(!movieInfoFilled)
-//    	{
-//            infobubble = new InfoBubble(serviceManager);
-//    
-//    		
-//    		if(infobubble.setInfoBubbleApplication("MusicInfobubble"))
-//    		    infobubble.populateItems(movieInfo);
-//    	}
     	
-    	infobubble.visible();
-   
+    	infobubble.visible();   
     }
     
     public void seatSelection()
@@ -117,20 +104,14 @@ public class MovieManager
     		String movieTitle = new String();
     		String auditorium = new String();
     		
-    		time = movielist.get(i).time;
+    		time = movielist.get(i).time.split("[T]")[1];
     		movieTitle = movielist.get(i).title;
     		auditorium = movielist.get(i).auditorium;
     		
     		movieInfoString = time + " " + movieTitle + fillWhiteSpace(longestTitle - movieTitle.length()) + "    " + auditorium;
 
     		Log.d(LOG_TAG, movieInfoString);
-   		
-//    		movieInfo[i] = movieInfoItem;
-//    		movieInfoFilled = true;
-
     		movieInfo[i] = movieInfoString;
-    		movieInfoFilled =true;
-
     	}
     	
     	infobubble = new InfoBubble(serviceManager);
@@ -243,9 +224,7 @@ public class MovieManager
         return stream;
     }
 
-    
-    
-    
+
     private void createAuditoriumScreen()
     {
     	MeshComponent plaza = GLFactory.getInstance().newTexturedSquare("plaza", IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.plaza_1_smaller));
@@ -282,8 +261,6 @@ public class MovieManager
 //		    	loginScreen.setScale(new Vec(15.0f, 10.0f, 15.0f));
 				
 			}
-
-
 
 		});
 
