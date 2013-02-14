@@ -89,10 +89,16 @@ public class SceneParser
         		String dropCommand = commandObj.getString("DROP");
         		String longClickCommand = commandObj.getString("LONG_CLICK");
 
-        		serviceApp.setOnClickCommand(CommandFactory.createCommand(clickCommand, serviceManager));
-        		serviceApp.setOnDoubleClickCommand(CommandFactory.createCommand(dropCommand, serviceManager));
-        		serviceApp.setOnLongClickCommand(CommandFactory.createCommand(longClickCommand, serviceManager));
+        		serviceApp.setOnClickCommand(CommandFactory.createCommand(clickCommand, serviceManager, name));
+        		serviceApp.setOnDoubleClickCommand(CommandFactory.createCommand(dropCommand, serviceManager, name));
+        		serviceApp.setOnLongClickCommand(CommandFactory.createCommand(longClickCommand, serviceManager, name));
         		
+        		boolean visible = ServiceAppObj.getBoolean("visible");
+        		
+        		if(!visible)
+        			serviceApp.setvisible(false);
+        		
+        		serviceManager.getSetup().world.add(serviceApp);
         		serviceApplications.add(serviceApp);
 
         	}

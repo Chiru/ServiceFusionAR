@@ -5,10 +5,12 @@ import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 
 public class MovieLogin extends Command
 {
-	ServiceManager serviceManager;
+	private ServiceManager serviceManager;
+	private String serviceApplicationName;
 	
-    public MovieLogin(ServiceManager serviceManager)
+    public MovieLogin(ServiceManager serviceManager, String serviceApplicationName)
     {
+    	this.serviceApplicationName = serviceApplicationName;
     	this.serviceManager = serviceManager;
     }
     

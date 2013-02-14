@@ -5,17 +5,19 @@ import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 
 public class ShowMovieInfo extends Command
 {
-	ServiceManager serviceManager;
+	private ServiceManager serviceManager;
+	private String serviceApplicationName;
 	
-    public ShowMovieInfo(ServiceManager serviceManager)
+    public ShowMovieInfo(ServiceManager serviceManager, String serviceApplicationName)
     {
     	this.serviceManager = serviceManager;
+    	this.serviceApplicationName = serviceApplicationName;
     }
     
 	@Override
 	public boolean execute() 
 	{
-		serviceManager.getMovieManager().showMovieInfo();
+		serviceManager.getMovieManager().showMovieInfo(serviceApplicationName);
 		return true;
 	}
 
