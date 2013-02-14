@@ -1,5 +1,10 @@
 package fi.cie.chiru.servicefusionar.serviceApi;
 
+import java.io.IOException;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import android.os.AsyncTask;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,39 +15,44 @@ import util.Log;
 import util.Vec;
 
 
+import fi.cie.chiru.servicefusionar.serviceApi.FinnkinoXmlParser.Movie;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+
+
 public class MovieManager
 {
 	private static final String LOG_TAG = "MovieManager";
 	private ServiceManager serviceManager;
-	private String movieData[][];
 	private TextPopUp movieInfo[];
 	private boolean movieInfoFilled;
+	private boolean movieInfoDownloaded;
 	private int maxMovies = 5;
-	
-	String test1[] = {"19:00", "Lincoln", "Sali 1"}; 
-	String test2[] = {"19:00", "Django Unchained", "Sali 2"};
-	String test3[] = {"21:00", "Argo", "Sali 1"};
-	String test4[] = {"21:00", "Hobitti - Odottamaton matka (2D)", "Sali 3"};
-	String test5[] = {"21:00", "Django Unchained", "Sali 3"}; 
-	
+		
 	
 	public MovieManager(ServiceManager serviceManager)
 	{
-		movieData = new String[maxMovies][3];
-		movieData[0] = test1;
-		movieData[1] = test2;
-		movieData[2] = test3;
-		movieData[3] = test4;
-		movieData[4] = test5;
-        this.serviceManager = serviceManager;
 		movieInfoFilled = false;
-        movieInfo= new TextPopUp[maxMovies];
+		movieInfoDownloaded = false;
+		
+		String URL = "http://www.finnkino.fi/xml/Schedule/?area=1018";
+		new DownloadXmlTask().execute(URL);
+		
+        this.serviceManager = serviceManager;
+        movieInfo = new TextPopUp[maxMovies];
 	}
 	
     public void showMovieInfo()
     {
         if(!movieInfoFilled)
-    	    fillMovieInfo();
+    	    return;
         
         for(int i=0; i<maxMovies; i++)
         {
@@ -66,9 +76,12 @@ public class MovieManager
     	
     }
     
-    private void fillMovieInfo()
+    private void fillMovieInfo(List<Movie> movielist)
     {
-    	int longestTitle = getLongestMovieTitlteLen(movieData);
+    	if (!movieInfoDownloaded || movielist == null)
+    		return;
+    	
+    	int longestTitle = getLongestMovieTitlteLen(movielist);
     	
     	for(int i=0; i<maxMovies; i++)
     	{	
@@ -78,9 +91,9 @@ public class MovieManager
     		String movieTitle = new String();
     		String auditorium = new String();
     		
-    		time = movieData[i][0];
-    		movieTitle = movieData[i][1];
-    		auditorium = movieData[i][2];
+    		time = movielist.get(i).time;
+    		movieTitle = movielist.get(i).title;
+    		auditorium = movielist.get(i).auditorium;
     		
     		movieInfoString = time + " " + movieTitle + fillWhiteSpace(longestTitle - movieTitle.length()) + "    " + auditorium;
     		Log.d(LOG_TAG, movieInfoString);
@@ -88,7 +101,7 @@ public class MovieManager
     		movieInfoItem.setPosition(new Vec(5.0f, 4.0f + i, -15.0f));
    		
     		movieInfo[i] = movieInfoItem;
-    		movieInfoFilled =true;
+    		movieInfoFilled = true;
     	}
     }
     
@@ -102,18 +115,96 @@ public class MovieManager
     	return whitespace;
     }
     
-    private int getLongestMovieTitlteLen(String str[][])
+    private int getLongestMovieTitlteLen(List<Movie> movie)
     {
-    	int len = 0;
+    	if (movie == null)
+    	{
+    		return 0;
+    	}
     	
+    	int len = 0;
     	for(int k=0; k<maxMovies; k++)
     	{
-    	    if(str[k][1].length() > len)
-    	    	len = str[k][1].length();
+    	    if(movie.get(k).title.length() > len)
+    	    	len = movie.get(k).title.length();
     	}
     	
     	return len;
     }
+    
+    // Implementation of AsyncTask used to download XML feed from Finnkino.
+    private class DownloadXmlTask extends AsyncTask<String, Void, List<Movie>> 
+    {
+        @Override
+        protected List<Movie> doInBackground(String... urls) 
+        {
+        	List<Movie> empty = null;
+        	try 
+            {
+                return loadXmlFromNetwork(urls[0]);
+            } 
+            
+            catch (IOException e) 
+            {
+            	Log.d(LOG_TAG, e.toString());
+                return empty;
+            } 
+            catch (XmlPullParserException e) 
+            {
+            	Log.d(LOG_TAG, e.toString());
+                return empty;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Movie> result) 
+        {
+        	if (result != null)
+        	{
+        		movieInfoDownloaded = true;
+        		fillMovieInfo(result);
+        	}
+        	else
+        	{
+        		Log.d(LOG_TAG, "Got error during movie data downloading!");
+        	}
+        	//Log.d(LOG_TAG, result);
+        }
+    }
 
 
+    private List<Movie> loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
+    	InputStream stream = null;
+        FinnkinoXmlParser finnkinoXmlParser = new FinnkinoXmlParser();
+        List<Movie> movies = null;
+        
+        try 
+        {
+            stream = downloadUrl(urlString);
+            movies = finnkinoXmlParser.parse(stream);
+        }
+        
+        // Makes sure that the InputStream is closed after the app is finished using it.
+        finally
+        {
+            if (stream != null)
+                stream.close();
+        }        
+        return movies;
+    }
+
+    // Given a string representation of a URL, sets up a connection and gets
+    // an input stream.
+    private InputStream downloadUrl(String urlString) throws IOException {
+        URL url = new URL(urlString);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setReadTimeout(10000 /* milliseconds */);
+        conn.setConnectTimeout(15000 /* milliseconds */);
+        conn.setRequestMethod("GET");
+        conn.setDoInput(true);
+        // Starts the query
+        conn.connect();
+        InputStream stream = conn.getInputStream();
+        return stream;
+    }
 }
