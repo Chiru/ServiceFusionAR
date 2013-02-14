@@ -41,17 +41,17 @@ public class ServiceFusionSetup extends Setup
 	private GDXConnection gdxConnection;
 	private ServiceManager servicemanager;
 	
-	private SFSocketService socketService;
-    private Handler handler;
+//	private SFSocketService socketService;
+//    private Handler handler;
 
 	public ServiceFusionSetup() 
 	{
 		//private Thread socketThread;
 		gdxConnection = new GDXConnection();
-		handler = new Handler();
-		socketService = new SFSocketService(handler);
-		final Thread socketThread = new Thread(socketService);
-        socketThread.start();
+//		handler = new Handler();
+//		socketService = new SFSocketService(handler);
+//		final Thread socketThread = new Thread(socketService);
+//        socketThread.start();
 	}
 	
 	@Override
@@ -136,6 +136,6 @@ public class ServiceFusionSetup extends Setup
 	public void stopServer()
 	{
 		Log.d(LOG_TAG, "ServiceFusionSetup stopServer");
-		socketService.stopSocket();
+		//socketService.stopSocket();
 	}
 }
