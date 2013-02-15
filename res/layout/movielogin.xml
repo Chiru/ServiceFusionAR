@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="300dip"
     android:background="#DDDDDD">
     
@@ -112,6 +112,7 @@
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_alignParentRight="true"
+         android:layout_toRightOf="@+id/radioNainen"
          android:layout_below="@+id/et_synaika"
          android:textColor="#444444"
          android:textSize="6pt"
@@ -121,8 +122,9 @@
          android:id="@+id/radioMies"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_below="@+id/et_synaika"
-         android:layout_toLeftOf="@+id/radioNainen"
+         android:layout_alignBaseline="@+id/radioNainen"
+         android:layout_alignBottom="@+id/radioNainen"
+         android:layout_alignLeft="@+id/et_synaika"
          android:text="Mies"
          android:textColor="#444444"
          android:textSize="6pt" />
