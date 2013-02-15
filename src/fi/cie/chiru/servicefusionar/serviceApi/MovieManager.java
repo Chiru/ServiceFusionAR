@@ -78,10 +78,10 @@ public class MovieManager
     	
     }
     
-    public void login()
+    public void login(String movieTitle)
     {
     	createAuditoriumScreen();
-    	createLogInScreen();
+    	createLogInScreen(movieTitle);
     }
     
     public void payment()
@@ -239,10 +239,10 @@ public class MovieManager
     	
     }
     
-    private void createLogInScreen()
+    private void createLogInScreen(String movieTitle)
     {
     	Handler mHandler = new Handler(Looper.getMainLooper());
-    	
+    	final String title = new String(movieTitle);
     	mHandler.post(new Runnable() {
 
 			@Override
@@ -250,15 +250,18 @@ public class MovieManager
 			{
 				LayoutInflater li = (LayoutInflater) serviceManager.getSetup().myTargetActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
 				View v = li.inflate(R.layout.movielogin, null); 
+				TextView tv = (TextView)v.findViewById(R.id.elokuva);
+				tv.setText(title);
 				RelativeLayout root = (RelativeLayout) serviceManager.getSetup().getGuiSetup().getMainContainerView();
 				root.addView(v);
-				    	
-//				MeshComponent loginScreen = GLFactory.getInstance().newTexturedSquare("loginscreen", IO.loadBitmapFromView(v));
-//				
-//				serviceManager.getSetup().world.add(loginScreen);
-//		    	loginScreen.setPosition(new Vec(0.0f, 0.0f, 0.0f));
-//		    	loginScreen.setRotation(new Vec(90.0f, 0.0f, 0.0f));
-//		    	loginScreen.setScale(new Vec(15.0f, 10.0f, 15.0f));
+				v.setVisibility(View.GONE);
+				
+				MeshComponent loginScreen = GLFactory.getInstance().newTexturedSquare("loginscreen", IO.loadBitmapFromView(v, 30, 30));
+				
+				serviceManager.getSetup().world.add(loginScreen);
+		    	loginScreen.setPosition(new Vec(0.0f, 4.0f, 0.0f));
+		    	loginScreen.setRotation(new Vec(90.0f, 0.0f, 180.0f));
+		    	loginScreen.setScale(new Vec(15.0f, 10.0f, 15.0f));
 				
 			}
 
