@@ -7,6 +7,7 @@ public class MovieLogin extends Command
 {
 	private ServiceManager serviceManager;
 	private String serviceApplicationName;
+	private String movieTitle;
 	
     public MovieLogin(ServiceManager serviceManager, String serviceApplicationName)
     {
@@ -14,10 +15,17 @@ public class MovieLogin extends Command
     	this.serviceManager = serviceManager;
     }
     
+    @Override
+    public boolean execute(Object transfairObject) 
+    {
+    	movieTitle = (String)transfairObject;
+		return execute();
+	}
+    
 	@Override
 	public boolean execute() 
 	{
-		serviceManager.getMovieManager().login();
+		serviceManager.getMovieManager().login(movieTitle);
 		return true;
 	}
 

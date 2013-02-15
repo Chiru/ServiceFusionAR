@@ -24,10 +24,11 @@ public class CustomDragEventListener implements OnDragListener
 
 		     case DragEvent.ACTION_DROP:
 		    	 
+		    	 String str = (String)event.getClipData().getItemAt(0).getText(); 
 		    	 float x, y;
 		    	 x = event.getX();
 		    	 y = screenHeight - event.getY();
-		    	 ObjectPicker.getInstance().setDoubleClickPosition(x, y);
+		    	 ObjectPicker.getInstance().setDoubleClickPosition(x, y, str);
                  break;  
 		 }				 
 		 
