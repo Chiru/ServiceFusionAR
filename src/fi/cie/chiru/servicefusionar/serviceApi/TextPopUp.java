@@ -76,7 +76,7 @@ public class TextPopUp
 	    serviceManager.getSetup().world.add(textComponent);
 	    textComponent.setPosition(new Vec(this.position));
 	    textComponent.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-	    textComponent.setScale(new Vec(0.47f, 1.0f, 1.0f));
+	    textComponent.setScale(new Vec(0.5f, 1.0f, 1.0f));
 	    textComponent.setOnLongClickCommand(new DragTextPopUpObject(tv));
 	}
 	
