@@ -10,10 +10,13 @@ import android.text.Layout;
 
 import org.json.JSONException;
 
+import commands.ui.CommandInUiThread;
+
 import fi.cie.chiru.servicefusionar.R;
 import gl.GLFactory;
 import gl.ObjectPicker;
 import gl.scenegraph.MeshComponent;
+import android.content.ClipData;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,7 +24,10 @@ import android.view.DragEvent;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import util.IO;
@@ -50,9 +56,9 @@ public class MovieManager
 	private int maxMovies = 5;
 
 	private InfoBubble infobubble;
-	private String selectedMovie;
-	private OnDragListener listener;
-	
+	MeshComponent plaza;
+	MeshComponent loginScreen;
+	IdCard ic;
 	
 	public MovieManager(ServiceManager serviceManager)
 	{
@@ -105,6 +111,7 @@ public class MovieManager
     		String auditorium = new String();
     		
     		time = movielist.get(i).time.split("[T]")[1];
+    		time = time.substring(0,5);
     		movieTitle = movielist.get(i).title;
     		auditorium = movielist.get(i).auditorium;
     		
@@ -227,7 +234,7 @@ public class MovieManager
 
     private void createAuditoriumScreen()
     {
-    	MeshComponent plaza = GLFactory.getInstance().newTexturedSquare("plaza", IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.plaza_1_smaller));
+    	plaza = GLFactory.getInstance().newTexturedSquare("plaza", IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.plaza_1_smaller));
     	
     	serviceManager.setVisibilityToAllApplications(false);
     	infobubble.visible();
@@ -235,7 +242,7 @@ public class MovieManager
     	serviceManager.getSetup().world.add(plaza);
  	    plaza.setPosition(new Vec(0.0f, -5.0f, 0.0f));
  	    plaza.setRotation(new Vec(45.0f, 180.0f, 0.0f));
- 	    plaza.setScale(new Vec(15.0f, 10.0f, 15.0f));
+ 	    plaza.setScale(new Vec(15.5f, 10.0f, 15.0f));
     	
     }
     
@@ -256,8 +263,8 @@ public class MovieManager
 				root.addView(v);
 				v.setVisibility(View.GONE);
 				
-				MeshComponent loginScreen = GLFactory.getInstance().newTexturedSquare("loginscreen", IO.loadBitmapFromView(v, 30, 30));
-				
+				loginScreen = GLFactory.getInstance().newTexturedSquare("loginscreen", IO.loadBitmapFromView(v, 30, 30));
+				loginScreen.setOnDoubleClickCommand(new fillLogInScreen(title, v));
 				serviceManager.getSetup().world.add(loginScreen);
 		    	loginScreen.setPosition(new Vec(0.0f, 4.0f, 0.0f));
 		    	loginScreen.setRotation(new Vec(90.0f, 0.0f, 180.0f));
@@ -266,6 +273,93 @@ public class MovieManager
 			}
 
 		});
-
+    	
+        ic = new IdCard(serviceManager);
     }
+    
+    private class fillLogInScreen extends CommandInUiThread 
+	{
+    	private String str;
+    	private String movieTitle;
+    	private View lv;
+    	
+    	public fillLogInScreen(String movieTittle, View logView)
+    	{
+    		this.movieTitle = movieTittle;
+    		lv = logView;
+    	}
+
+    	@Override
+    	public boolean execute(Object transfairObject) 
+    	{
+    		str = (String)transfairObject;
+    		return execute();
+    	}
+    	    
+    		
+		@Override
+		public void executeInUiThread() 
+		{
+		    String idInfo[] = str.split(" ");
+			
+//		    String title = new String(movieTitle);
+//			String name = new String(idInfo[0]);
+//			String surName = new String(idInfo[1]);
+//			String dateOfBirth = new String(idInfo[2]);
+//			String gender = new String(idInfo[3]);
+//			String email = new String(idInfo[4]);
+//			String phoneNumber = new String(idInfo[5]);
+			
+//			LayoutInflater li = (LayoutInflater) serviceManager.getSetup().myTargetActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
+//			View vv = li.inflate(R.layout.movielogin, null);
+			//View v = root.findViewById(R.layout.movielogin);
+			
+//			TextView tv = (TextView)lv.findViewById(R.id.elokuva);
+//			tv.setText(title);
+			
+			EditText name_et = (EditText)lv.findViewById(R.id.et_etunimi);
+			name_et.setText(idInfo[0]);
+			
+			EditText surName_et = (EditText)lv.findViewById(R.id.et_sukunimi);
+			surName_et.setText(idInfo[1]);
+			
+			EditText dateOfBirth_et = (EditText)lv.findViewById(R.id.et_synaika);
+			dateOfBirth_et.setText(idInfo[2]);
+			
+			if(idInfo[3].compareTo("Male")==0)
+			{
+				RadioButton gender_rb = (RadioButton)lv.findViewById(R.id.radioMies);
+			    gender_rb.setChecked(true);
+			}
+			
+			if(idInfo[3].compareTo("Female")==0)
+			{
+				RadioButton gender_rb = (RadioButton)lv.findViewById(R.id.radioNainen);
+			    gender_rb.setChecked(true);
+			
+			}	
+
+			EditText email_et = (EditText)lv.findViewById(R.id.et_email);
+			email_et.setText(idInfo[4]);
+			
+			EditText phoneNumber_et = (EditText)lv.findViewById(R.id.et_puh);
+			phoneNumber_et.setText(idInfo[5]);
+			
+			RelativeLayout root = (RelativeLayout) serviceManager.getSetup().getGuiSetup().getMainContainerView();
+			root.removeView(lv);
+			root.addView(lv);
+			lv.setVisibility(View.GONE);
+			
+			MeshComponent loginScreenFilled = GLFactory.getInstance().newTexturedSquare("loginscreenFilled", IO.loadBitmapFromView(lv, 30, 30));
+			serviceManager.getSetup().world.remove(loginScreen);
+			
+			serviceManager.getSetup().world.add(loginScreenFilled);
+			loginScreenFilled.setPosition(new Vec(0.0f, 4.0f, 0.0f));
+			loginScreenFilled.setRotation(new Vec(90.0f, 0.0f, 180.0f));
+			loginScreenFilled.setScale(new Vec(15.0f, 10.0f, 15.0f));
+			
+		}
+    	
+		
+	}
 }
