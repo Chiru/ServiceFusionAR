@@ -44,6 +44,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -102,7 +103,8 @@ public class MovieManager
     	
     	int longestTitle = getLongestMovieTitlteLen(movielist);
 
-    	for(int i=0; i<maxMovies; i++)
+    	// \todo rewrite this
+    	for(int i = maxMovies - 1; i >= 0; i--)
     	{	
     	
     	    String movieInfoString = new String();
@@ -118,7 +120,9 @@ public class MovieManager
     		movieInfoString = time + " " + movieTitle + fillWhiteSpace(longestTitle - movieTitle.length()) + "    " + auditorium;
 
     		Log.d(LOG_TAG, movieInfoString);
-    		movieInfo[i] = movieInfoString;
+    		
+    		// \todo dirty hack 
+    		movieInfo[maxMovies - 1 - i] = movieInfoString;
     	}
     	
     	infobubble = new InfoBubble(serviceManager);
@@ -212,7 +216,12 @@ public class MovieManager
         {
             if (stream != null)
                 stream.close();
-        }        
+        }
+                
+        if (movies != null)
+        {
+        	Collections.sort(movies);
+        }
         return movies;
     }
 

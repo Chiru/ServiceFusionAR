@@ -48,17 +48,24 @@ public class FinnkinoXmlParser {
 
     // This class represents a single entry (movie) in the XML feed.
     // It includes the data members "time," "title," and "auditorium."
-    public static class Movie {
+	public static class Movie implements Comparable<Movie>
+	{
         public final String time;
         public final String title;
         public final String auditorium;
 
-        private Movie(String time, String title, String auditorium) {
+        private Movie(String time, String title, String auditorium)
+        {
             this.time = time;
             this.title = title;
             this.auditorium = auditorium;
             Log.d(LOG_TAG, "time: " + time + " title: " + title + " auditorium: " + auditorium);
         }
+
+		@Override
+		public int compareTo(Movie another) {
+			return this.time.compareTo(another.time);
+		}
     }
 
     // Parses the contents of an entry. If it encounters a time, title, or auditorium tag, hands them off
