@@ -60,7 +60,9 @@ public class GDXMesh extends MeshComponent
 				    this.texture.load(this.texture.getTextureData());
 				    reload = true;
 				}
-
+				
+				gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				
 				gl.glEnable(GL10.GL_TEXTURE_2D);
 				this.texture.bind();
 				this.model.render();
