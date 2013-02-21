@@ -43,8 +43,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 
@@ -52,7 +54,6 @@ public class MovieManager
 {
 	private static final String LOG_TAG = "MovieManager";
 	private ServiceManager serviceManager;
-	private String movieInfo[];
 	private boolean movieInfoDownloaded;
 	private int maxMovies = 5;
 
@@ -69,7 +70,6 @@ public class MovieManager
 		new DownloadXmlTask().execute(URL);
 		
         this.serviceManager = serviceManager;
-        movieInfo = new String[maxMovies];
 	}
 	
     public void showMovieInfo(String requesterName)
@@ -103,8 +103,12 @@ public class MovieManager
     	
     	int longestTitle = getLongestMovieTitlteLen(movielist);
 
-    	// \todo rewrite this
-    	for(int i = maxMovies - 1; i >= 0; i--)
+    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+    	String currentTime = sdf.format(new Date());
+    	
+    	List<String> movieInfo = new ArrayList<String>();
+    	
+    	for(int i = 0; i < movielist.size(); i++)
     	{	
     	
     	    String movieInfoString = new String();
@@ -114,6 +118,10 @@ public class MovieManager
     		
     		time = movielist.get(i).time.split("[T]")[1];
     		time = time.substring(0,5);
+    		
+    		if (currentTime.compareTo(time) > 0)
+    			continue;
+    		
     		movieTitle = movielist.get(i).title;
     		auditorium = movielist.get(i).auditorium;
     		
@@ -121,12 +129,13 @@ public class MovieManager
 
     		Log.d(LOG_TAG, movieInfoString);
     		
-    		// \todo dirty hack 
-    		movieInfo[maxMovies - 1 - i] = movieInfoString;
+    		if (movieInfo.size() < maxMovies)
+    			movieInfo.add(0, movieInfoString);
+
     	}
     	
     	infobubble = new InfoBubble(serviceManager);
-    	    	
+
  		if(infobubble.setInfoBubbleApplication("MusicInfobubble"))
  		    infobubble.populateItems(movieInfo);
     }
