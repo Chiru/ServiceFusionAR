@@ -1,5 +1,7 @@
 package fi.cie.chiru.servicefusionar.serviceApi;
 
+import java.util.List;
+
 import util.Vec;
 
 public class InfoBubble 
@@ -38,9 +40,9 @@ public class InfoBubble
 			return false;
 	}
 	
-	public void populateItems(String content[])
+	public void populateItems(List<String> content)
 	{
-		int contentLen = content.length;
+		int contentLen = content.size();
 		items = new TextPopUp[contentLen];
 		
     	for(int i=0; i<contentLen; i++)
@@ -48,7 +50,7 @@ public class InfoBubble
     		Vec infoBubblePosition = new Vec(infobubble.getPosition());
         	infoBubblePosition.add(0, 3.0f, 0);
 	        TextPopUp infoItem = new TextPopUp(this.serviceManager);
-	        infoItem.setDragText(content[i]);
+	        infoItem.setDragText(content.get(i));
 	        Vec itemPosition = new Vec(infoBubblePosition);
     		itemPosition.add(0, i*1.1f, 0);
     		infoItem.setPosition(itemPosition);
