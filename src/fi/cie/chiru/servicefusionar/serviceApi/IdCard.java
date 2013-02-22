@@ -31,6 +31,7 @@ public class IdCard
     private String email;
     private String phoneNumber;
 	private ServiceManager serviceManager;
+	private MeshComponent idCard;
        
     public IdCard(ServiceManager serviceManager)
     {
@@ -73,7 +74,7 @@ public class IdCard
 		Bitmap bms = Bitmap.createScaledBitmap(bm, 175, 120, false);
 		ImageView im = new ImageView(serviceManager.getSetup().myTargetActivity);
 		im.setImageBitmap(bms);
-        MeshComponent idCard = GLFactory.getInstance().newTexturedSquare("idCard", bm);
+        idCard = GLFactory.getInstance().newTexturedSquare("idCard", bm);
         idCard.setOnLongClickCommand(new DragImage(im, this.toString()));
     	    	
     	serviceManager.getSetup().world.add(idCard);
@@ -81,6 +82,11 @@ public class IdCard
     	idCard.setRotation(new Vec(90.0f, 180.0f, 0.0f));
     	idCard.setScale(new Vec(6.0f, 4.0f, 1.0f));
     	
+	}
+	
+	public void removeCard()
+	{
+		serviceManager.getSetup().world.remove(idCard);	
 	}
 	
 	private class DragImage extends CommandInUiThread 
