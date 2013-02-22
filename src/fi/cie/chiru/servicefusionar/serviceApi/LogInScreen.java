@@ -183,6 +183,9 @@ public class LogInScreen
 				serviceManager.getSetup().world.remove(okbutton);
 				serviceManager.getSetup().world.remove(cancelbutton);
 			    serviceManager.getSetup().world.remove(loginScreenFilled);
+			    okbutton = null;
+			    cancelbutton = null;
+			    loginScreenFilled = null;
 			    serviceManager.getMovieManager().seatSelection();
 			}
 			else
@@ -211,12 +214,20 @@ public class LogInScreen
 			serviceManager.getMovieManager().ic = null;
 			serviceManager.getSetup().world.remove(okbutton);
 			serviceManager.getSetup().world.remove(cancelbutton);
+		    okbutton = null;
+		    cancelbutton = null;
 			
 			if(screenfilled)
+			{
 			    serviceManager.getSetup().world.remove(loginScreenFilled);
+			    loginScreenFilled = null;
+			}
 			    
 			else
+			{
 				serviceManager.getSetup().world.remove(loginScreen);
+			    loginScreen = null;
+			}
 
 			serviceManager.setVisibilityToAllApplications(true);
 			serviceManager.getMovieManager().getInfoBubble().visible();
