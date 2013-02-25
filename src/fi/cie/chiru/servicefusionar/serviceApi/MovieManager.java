@@ -28,6 +28,7 @@ public class MovieManager
 	private InfoBubble infobubble;
 	private LogInScreen loginscreen;
 	private Auditorium auditorium;
+	private MoviePayment moviePayment;
 	public IdCard ic;
 	
 	public MovieManager(ServiceManager serviceManager)
@@ -38,6 +39,7 @@ public class MovieManager
 		new DownloadXmlTask().execute(URL);
 		loginscreen = new LogInScreen(serviceManager);
 		auditorium = new Auditorium(serviceManager);
+		moviePayment = new MoviePayment(serviceManager);
 		
         this.serviceManager = serviceManager;
 	}
@@ -66,9 +68,9 @@ public class MovieManager
     	auditorium.createAuditoriumScreen("Sali1");
     }
     
-    public void payment()
+    public void payment(List<SeatNumber> seats)
     {
-    	
+    	moviePayment.paySelectedSeats(seats);
     }
     
     public InfoBubble getInfoBubble()
