@@ -37,6 +37,7 @@ public class MovieManager
 	private LogInScreen loginscreen;
 	private Auditorium auditorium;
 	private MoviePayment moviePayment;
+	private List<MovieTicket> tickets = null;
 	public IdCard ic;
 	public CreditCard cc;
 	
@@ -90,11 +91,25 @@ public class MovieManager
     
     public void createTickets(List<SeatNumber> seats)
     {
+    	if(tickets ==null)
+    	    tickets = new ArrayList<MovieTicket>();
+    	
     	for(int i=0; i<seats.size(); i++)
     	{
     		MovieTicket ticket = new MovieTicket(serviceManager, selectedMovie, seats.get(i));
+    		tickets.add(ticket);
     	}
     		
+    }
+    
+    public void removeTickets()
+    {
+    	for(int i=0; i<tickets.size(); i++)
+    	{
+    		tickets.get(i).removeTicket();
+    	}
+    	
+    	tickets = null;	
     }
     
     public InfoBubble getInfoBubble()
