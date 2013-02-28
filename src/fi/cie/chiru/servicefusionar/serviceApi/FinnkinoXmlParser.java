@@ -38,7 +38,7 @@ public class FinnkinoXmlParser {
             // Starts by looking for the show tag
             if (name.equals("Shows")) {
                 entries = readShows(parser);
-                Log.d(LOG_TAG, name);
+                //Log.d(LOG_TAG, name);
             } else {
                 skip(parser);
             }
@@ -59,7 +59,7 @@ public class FinnkinoXmlParser {
             this.time = time;
             this.title = title;
             this.auditorium = auditorium;
-            Log.d(LOG_TAG, "time: " + time + " title: " + title + " auditorium: " + auditorium);
+            //Log.d(LOG_TAG, "time: " + time + " title: " + title + " auditorium: " + auditorium);
         }
 
 		@Override
