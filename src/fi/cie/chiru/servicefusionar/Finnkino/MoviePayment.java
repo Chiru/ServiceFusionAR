@@ -2,6 +2,7 @@ package fi.cie.chiru.servicefusionar.Finnkino;
 
 import java.util.List;
 
+import commands.Command;
 import commands.ui.CommandInUiThread;
 
 import fi.cie.chiru.servicefusionar.R;
@@ -157,6 +158,7 @@ public class MoviePayment
 			serviceManager.getSetup().world.remove(paymentScreen);
 			serviceManager.getSetup().world.remove(cancelButton);
 			serviceManager.getMovieManager().cc.removeCard();
+			serviceManager.getMovieManager().cc = null;
 			serviceManager.setVisibilityToAllApplications(true);
 			serviceManager.getMovieManager().getInfoBubble().visible();
 			serviceManager.getMovieManager().createTickets(selectedSeats);
@@ -188,6 +190,7 @@ public class MoviePayment
 		cancelButton.setPosition(new Vec(0.0f, (-1.0f - ((float)offset)*0.7f), 0.0f));
 		cancelButton.setRotation(new Vec(90.0f, 0.0f, 180.0f));
 		cancelButton.setScale(new Vec(6.0f, 2.0f, 1.0f));
+		cancelButton.setOnClickCommand(new Cancel());
     	
     }
     
@@ -204,5 +207,23 @@ public class MoviePayment
 			
 		return "rivi: " + row + rowWhiteSpace + "  paikka: " + col + colWhiteSpace + "  hinta: 9e";
 		
+	}
+	
+	private class Cancel extends Command
+	{		
+		
+		@Override
+		public boolean execute() 
+		{
+			serviceManager.getSetup().world.remove(paymentArea);
+			serviceManager.getSetup().world.remove(paymentScreen);
+			serviceManager.getSetup().world.remove(cancelButton);
+			serviceManager.getMovieManager().cc.removeCard();
+			serviceManager.getMovieManager().cc = null;
+			serviceManager.setVisibilityToAllApplications(true);
+			serviceManager.getMovieManager().getInfoBubble().visible();		
+			
+			return true;
+		}
 	}
 }
