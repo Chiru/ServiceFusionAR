@@ -2,6 +2,8 @@ package fi.cie.chiru.servicefusionar.serviceApi;
 
 import java.util.Vector;
 
+import android.content.Intent;
+
 import commands.Command;
 
 import util.Log;
@@ -16,12 +18,14 @@ public class ServiceManager
 	private ServiceFusionSetup setup;
 	private Vector<ServiceApplication> serviceApplications;
 	private MovieManager movieManager;
+	private MusicManager musicManager;
 
 	public ServiceManager(ServiceFusionSetup setup)
 	{
 		this.setup = setup;
 		serviceApplications = new Vector<ServiceApplication>();
 		movieManager = new MovieManager(this);
+		musicManager = new MusicManager(this);
 	}
 	
 	public ServiceFusionSetup getSetup()
@@ -32,6 +36,11 @@ public class ServiceManager
 	public MovieManager getMovieManager()
 	{
 		return movieManager;
+	}
+	
+	public MusicManager getMusicManager()
+	{
+		return musicManager;
 	}
 	
 	public void createApplications()
