@@ -1,4 +1,4 @@
-package fi.cie.chiru.servicefusionar.serviceApi;
+package fi.cie.chiru.servicefusionar.Finnkino;
 
 
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import util.IO;
 import util.Log;
 import util.Vec;
 import fi.cie.chiru.servicefusionar.R;
+import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
 import android.content.Context;
@@ -196,6 +197,7 @@ public class Auditorium
 	        {
 				vibratefeedback.execute();
 				RelativeLayout root = (RelativeLayout) serviceManager.getSetup().getGuiSetup().getMainContainerView();
+				plazaView.setVisibility(View.GONE);
 				root.removeView(plazaView);
 				serviceManager.getMovieManager().payment(selectedSeats);
 	        }
@@ -210,6 +212,7 @@ public class Auditorium
 	        {
 				vibratefeedback.execute();
 				RelativeLayout root = (RelativeLayout) serviceManager.getSetup().getGuiSetup().getMainContainerView();
+				plazaView.setVisibility(View.GONE);
 				root.removeView(plazaView);
 				serviceManager.setVisibilityToAllApplications(true);
 				serviceManager.getMovieManager().getInfoBubble().visible();

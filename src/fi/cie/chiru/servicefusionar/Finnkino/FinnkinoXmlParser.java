@@ -1,4 +1,4 @@
-package fi.cie.chiru.servicefusionar.serviceApi;
+package fi.cie.chiru.servicefusionar.Finnkino;
 
 import android.util.Log;
 import android.util.Xml;

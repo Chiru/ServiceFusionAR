@@ -1,4 +1,4 @@
-package fi.cie.chiru.servicefusionar.serviceApi;
+package fi.cie.chiru.servicefusionar.Finnkino;
 
 import commands.Command;
 import commands.ui.CommandInUiThread;
@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import fi.cie.chiru.servicefusionar.R;
+import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
 
@@ -132,7 +133,7 @@ public class LogInScreen
 			serviceManager.getSetup().world.add(loginScreenFilled);
 			loginScreenFilled.setPosition(new Vec(0.0f, 4.0f, 0.0f));
 			loginScreenFilled.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-			loginScreenFilled.setScale(new Vec(15.0f, 10.0f, 15.0f));
+			loginScreenFilled.setScale(new Vec(15.0f, 10.0f, 1.0f));
 
 			createButtons(lv);
 			okbutton.setOnClickCommand(new Accept(true));

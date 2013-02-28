@@ -1,4 +1,4 @@
-package fi.cie.chiru.servicefusionar.serviceApi;
+package fi.cie.chiru.servicefusionar.Finnkino;
 
 public class SeatNumber {
 	
