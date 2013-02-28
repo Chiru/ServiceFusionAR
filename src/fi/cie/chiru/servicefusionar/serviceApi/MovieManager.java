@@ -7,7 +7,14 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.os.AsyncTask;
 import util.Log;
-import fi.cie.chiru.servicefusionar.serviceApi.FinnkinoXmlParser.Movie;
+import fi.cie.chiru.servicefusionar.Finnkino.Auditorium;
+import fi.cie.chiru.servicefusionar.Finnkino.FinnkinoXmlParser;
+import fi.cie.chiru.servicefusionar.Finnkino.LogInScreen;
+import fi.cie.chiru.servicefusionar.Finnkino.MoviePayment;
+import fi.cie.chiru.servicefusionar.Finnkino.MovieTicket;
+import fi.cie.chiru.servicefusionar.Finnkino.SeatNumber;
+import fi.cie.chiru.servicefusionar.Finnkino.FinnkinoXmlParser.Movie;
+
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -24,12 +31,14 @@ public class MovieManager
 	private ServiceManager serviceManager;
 	private boolean movieInfoDownloaded;
 	private int maxMovies = 5;
+	private String selectedMovie;
 
 	private InfoBubble infobubble;
 	private LogInScreen loginscreen;
 	private Auditorium auditorium;
 	private MoviePayment moviePayment;
 	public IdCard ic;
+	public CreditCard cc;
 	
 	public MovieManager(ServiceManager serviceManager)
 	{
@@ -54,11 +63,14 @@ public class MovieManager
     
     public void login(String movieTitle)
     {
+    	selectedMovie = movieTitle;
     	//if more auditoriums than Plaza1 is added later the auditorium number can be parsed from movieTitle
     	serviceManager.setVisibilityToAllApplications(false);
     	infobubble.visible();
     	//auditorium.createAuditoriumScreen("Sali1");
     	loginscreen.createLogInScreen(movieTitle);
+    	moviePayment.setMovieName(movieTitle);
+    	
     	if(ic==null)
     	    ic = new IdCard(serviceManager);
     }
@@ -71,6 +83,18 @@ public class MovieManager
     public void payment(List<SeatNumber> seats)
     {
     	moviePayment.paySelectedSeats(seats);
+    	
+    	if(cc==null)
+    	    cc = new CreditCard(serviceManager);
+    }
+    
+    public void createTickets(List<SeatNumber> seats)
+    {
+    	for(int i=0; i<seats.size(); i++)
+    	{
+    		MovieTicket ticket = new MovieTicket(serviceManager, selectedMovie, seats.get(i));
+    	}
+    		
     }
     
     public InfoBubble getInfoBubble()
@@ -107,7 +131,7 @@ public class MovieManager
     		movieTitle = movielist.get(i).title;
     		auditorium = movielist.get(i).auditorium;
     		
-    		movieInfoString = time + " " + movieTitle + fillWhiteSpace(longestTitle - movieTitle.length()) + "    " + auditorium;
+    		movieInfoString = time + "  " + movieTitle + fillWhiteSpace(longestTitle - movieTitle.length()) + "    " + auditorium;
 
     		Log.d(LOG_TAG, movieInfoString);
     		
