@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/elokuvalippu3" >
+        
+        
+       <TextView
+         android:id="@+id/elokuvalippu"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="10dip"
+         android:layout_marginTop="20dip"
+         android:layout_gravity="right"
+         android:text="Elokuvalippu"
+         android:textSize="8pt" />
+       
+      <TextView
+         android:id="@+id/elokuva_o"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="10dip"
+         android:layout_marginTop="5dip"
+         android:layout_below="@+id/elokuvalippu"
+         android:layout_gravity="right"
+         android:text="Otsikko"
+         android:textSize="7pt" />
+       
+      <TextView
+         android:id="@+id/aika"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="10dip"
+         android:layout_marginTop="5dip"
+         android:layout_below="@+id/elokuva_o"
+         android:layout_gravity="right"
+         android:text="aika"
+         android:textSize="7pt" />
+        
+      <TextView
+         android:id="@+id/pvm"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="30dip"
+         android:layout_marginTop="5dip"
+         android:layout_below="@+id/elokuva_o"
+         android:layout_toRightOf="@+id/aika"
+         android:layout_gravity="right"
+         android:text="päivämäärä"
+         android:textSize="7pt" />
+      
+       <TextView
+         android:id="@+id/sali"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="10dip"
+         android:layout_marginTop="10dip"
+         android:layout_below="@+id/aika"
+         android:layout_gravity="right"
+         android:text="Sali"
+         android:textSize="7pt" />
+       
+        <TextView
+         android:id="@+id/rivi"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="30dip"
+         android:layout_marginTop="10dip"
+         android:layout_below="@+id/aika"
+         android:layout_toRightOf="@+id/sali"
+         android:layout_gravity="right"
+         android:text="Rivi"
+         android:textSize="7pt" />
+        
+        <TextView
+         android:id="@+id/paikka"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="30dip"
+         android:layout_marginTop="10dip"
+         android:layout_below="@+id/aika"
+         android:layout_toRightOf="@+id/rivi"
+         android:layout_gravity="right"
+         android:text="Paikka"
+         android:textSize="7pt" />
+        
+        
+  </RelativeLayout>

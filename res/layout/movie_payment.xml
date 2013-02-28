@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#DDDDDD">
+    
+     <TextView
+         android:id="@+id/otsikko_payment"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerHorizontal="true"
+         android:text="Ostoskori"
+         android:textSize="8pt" />
+     
+     <TextView
+         android:id="@+id/elokuva_payment"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerHorizontal="true"
+         android:layout_below="@+id/otsikko_payment"
+         android:text="elokuva"
+         android:textSize="7pt"
+         android:layout_marginRight="10dip"
+         android:layout_marginLeft="10dip"
+         android:layout_marginTop="5dip"
+         android:textColor="#444444" />
+     
+     <TextView
+        android:id="@+id/paikat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="7pt"
+        android:textColor="#444444"
+        android:layout_below="@id/elokuva_payment"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="9dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="10dip"
+        android:text="Paikat:"/>
+     
+     <TextView
+        android:id="@+id/yht"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="7pt"
+        android:textColor="#444444"
+        android:layout_below="@id/elokuva_payment"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="9dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="10dip"
+        android:text="Yhteensä:"/>
+     
+     <ImageView
+         android:id="@+id/maksukortti"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="10dip"
+         android:layout_marginBottom="20dip"
+         android:layout_marginLeft="10dip"
+         android:layout_marginRight="10dip"
+         android:layout_below="@id/yht"
+         android:layout_centerHorizontal="true"
+         android:visibility="invisible"
+         android:src="@drawable/payment"/>
+    
+      <Button
+         android:id="@+id/peruuta"
+         android:layout_width="150dip"
+         android:layout_height="30dip"
+         android:layout_marginBottom="100dip"
+         android:layout_marginTop="15dip"
+         android:layout_below="@+id/maksukortti" 
+         android:layout_centerHorizontal="true"
+         android:textColor="#444444"
+         android:textSize="6pt"
+         android:visibility="invisible"
+         android:text="Peruuta" />
+
+
+</RelativeLayout>
