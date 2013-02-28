@@ -2,6 +2,7 @@ package fi.cie.chiru.servicefusionar.commands;
 
 import commands.Command;
 
+import fi.cie.chiru.servicefusionar.serviceApi.DragDataObject;
 import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 
 public class PlaySong extends Command
@@ -19,7 +20,12 @@ public class PlaySong extends Command
     @Override
     public boolean execute(Object transfairObject) 
     {
-    	song = (String)transfairObject;
+    	DragDataObject ddo = (DragDataObject)transfairObject;
+    	
+    	if(ddo.getManager().compareTo("MusicManager") != 0)
+    		return true;
+    	
+    	song = ddo.getData();
 		return execute();
 	}
     

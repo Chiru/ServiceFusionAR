@@ -161,7 +161,7 @@ public class MovieManager
     	infobubble = new InfoBubble(serviceManager);
 
  		if(infobubble.setInfoBubbleApplication("MovieInfobubble"))
- 		    infobubble.populateItems(movieInfo);
+ 		    infobubble.populateItems(movieInfo, "MovieManager");
     }
     
     private String fillWhiteSpace(int number)

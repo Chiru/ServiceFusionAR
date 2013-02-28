@@ -19,6 +19,7 @@ public class ServiceManager
 	private Vector<ServiceApplication> serviceApplications;
 	private MovieManager movieManager;
 	private MusicManager musicManager;
+	private ServiceFusionCalendar calendar;
 
 	public ServiceManager(ServiceFusionSetup setup)
 	{
@@ -26,6 +27,7 @@ public class ServiceManager
 		serviceApplications = new Vector<ServiceApplication>();
 		movieManager = new MovieManager(this);
 		musicManager = new MusicManager(this);
+		//calendar = new ServiceFusionCalendar(this);
 	}
 	
 	public ServiceFusionSetup getSetup()

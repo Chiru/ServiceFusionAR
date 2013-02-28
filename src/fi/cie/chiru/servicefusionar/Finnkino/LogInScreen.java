@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import fi.cie.chiru.servicefusionar.R;
+import fi.cie.chiru.servicefusionar.serviceApi.DragDataObject;
 import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
@@ -82,7 +83,8 @@ public class LogInScreen
 		@Override
 		public boolean execute(Object transfairObject) 
 		{
-			str = (String)transfairObject;
+			DragDataObject ddo = (DragDataObject)transfairObject;
+			str = ddo.getData();
 			return execute();
 		}
 

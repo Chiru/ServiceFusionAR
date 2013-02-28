@@ -5,6 +5,7 @@ import gl.scenegraph.MeshComponent;
 import util.IO;
 import util.Vec;
 import android.content.ClipData;
+import android.content.ClipData.Item;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -14,11 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import commands.ui.CommandInUiThread;
 
-public class TextPopUp
+public class DraggableText
 {
 
 	private static final String LOG_TAG = "TextPopUp";
 	private String text;
+	private String manager;
 	private TextView tv;
 	private ServiceManager serviceManager;
 	private Vec position;
@@ -26,7 +28,7 @@ public class TextPopUp
 	private boolean textCreated;
 	private MeshComponent textComponent;
 
-	public TextPopUp(ServiceManager serviceManager) 
+	public DraggableText(ServiceManager serviceManager) 
 	{
 		this.serviceManager = serviceManager;
 		textVisible = false;
@@ -36,6 +38,11 @@ public class TextPopUp
 	public void  setDragText(String text)
 	{
 		this.text = text;
+	}
+	
+	public void  setDragTextManager(String manager)
+	{
+		this.manager = manager;
 	}
 	
 	public void setPosition(Vec position)
@@ -118,6 +125,8 @@ public class TextPopUp
 			
 			View.DragShadowBuilder shadow = new DragShadowBuilder(v);
 			ClipData data = ClipData.newPlainText("DragData", text);
+			ClipData.Item i = new ClipData.Item(manager);
+			data.addItem(i);
 			v.startDrag(data, shadow, null, 0);
 		}
 		

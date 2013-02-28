@@ -1,6 +1,7 @@
 package fi.cie.chiru.servicefusionar.commands;
 
 import commands.Command;
+import fi.cie.chiru.servicefusionar.serviceApi.DragDataObject;
 import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 
 public class MovieLogin extends Command
@@ -18,7 +19,12 @@ public class MovieLogin extends Command
     @Override
     public boolean execute(Object transfairObject) 
     {
-    	movieTitle = (String)transfairObject;
+    	DragDataObject ddo = (DragDataObject)transfairObject;
+    	
+    	if(ddo.getManager().compareTo("MovieManager") != 0)
+    		return true;
+    	
+    	movieTitle = ddo.getData();
 		return execute();
 	}
     

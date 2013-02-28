@@ -6,7 +6,7 @@ import util.Vec;
 
 public class InfoBubble 
 {
-	private TextPopUp items[];
+	private DraggableText items[];
 	private ServiceManager serviceManager;
 	private ServiceApplication infobubble;
 	private boolean visible;
@@ -40,19 +40,20 @@ public class InfoBubble
 			return false;
 	}
 	
-	public void populateItems(List<String> content)
+	public void populateItems(List<String> content, String contentManager)
 	{
 		int contentLen = content.size();
-		items = new TextPopUp[contentLen];
+		items = new DraggableText[contentLen];
 		
     	for(int i=0; i<contentLen; i++)
     	{
     		Vec infoBubblePosition = new Vec(infobubble.getPosition());
-        	infoBubblePosition.add(0, 3.0f, 0);
-	        TextPopUp infoItem = new TextPopUp(this.serviceManager);
+        	infoBubblePosition.add(0, 7.0f, 0);
+        	DraggableText infoItem = new DraggableText(this.serviceManager);
 	        infoItem.setDragText(content.get(i));
+	        infoItem.setDragTextManager(contentManager);
 	        Vec itemPosition = new Vec(infoBubblePosition);
-    		itemPosition.add(0, i*1.1f, 0);
+    		itemPosition.add(0, -i*1.1f, 0);
     		infoItem.setPosition(itemPosition);
    		
     		items[i] = infoItem;

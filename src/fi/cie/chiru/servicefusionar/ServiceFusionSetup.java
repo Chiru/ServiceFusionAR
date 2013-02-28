@@ -110,7 +110,6 @@ public class ServiceFusionSetup extends Setup
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) 
 	{
 		guiSetup.setRightViewAllignBottom();
-
 		guiSetup.addImangeButtonToRightView(R.drawable.arrow_up_float, new Command() 
 		{
 			@Override
