@@ -26,7 +26,7 @@
             "commands" :
             {
                 "CLICK" : "",
-                "DROP" : "", 
+                "DROP" : "RemoveMovieTickets", 
                 "LONG_CLICK" : ""
             },
             "visible" : "true" 
@@ -116,13 +116,13 @@
             "commands" :
             {
                 "CLICK" : "",
-                "DROP" : "", 
+                "DROP" : "PlaySong", 
                 "LONG_CLICK" : ""
             },
             "visible" : "true" 
         },
         {
-            "name" : "MusicInfobubble",
+            "name" : "MovieInfobubble",
             "meshRef" : "infobuble.dae",
             "textRef" : "lightgreytex.jpg",
             "position" : 
@@ -180,6 +180,66 @@
                 "LONG_CLICK" : ""
             },
             "visible" : "true" 
+        },
+        {
+            "name" : "PubIcon",
+            "meshRef" : "pub.dae",
+            "textRef" : "pub_icon_colorCompleteMap.png",
+            "position" : 
+            {
+                "x" : "17.0", 
+                "y" : "0.0", 
+                "z" : "-15.0"
+            },
+            "rotation" : 
+            {
+                "x" : "270.0", 
+                "y" : "0.0", 
+                "z" : "0.0"
+            },
+             "scale" : 
+            {
+                "x" : "2.0", 
+                "y" : "2.0", 
+                "z" : "2.0"
+            },
+            "commands" :
+            {
+                "CLICK" : "ShowMusicPlaylist",
+                "DROP" : "", 
+                "LONG_CLICK" : ""
+            },
+            "visible" : "true" 
+        },
+        {
+            "name" : "MusicInfobubble",
+            "meshRef" : "infobuble.dae",
+            "textRef" : "lightgreytex.jpg",
+            "position" : 
+            {
+                "x" : "22.0", 
+                "y" : "10.0", 
+                "z" : "-15.0"
+            },
+            "rotation" : 
+            {
+                "x" : "270.0", 
+                "y" : "0.0", 
+                "z" : "0.0"
+            },
+             "scale" : 
+            {
+                "x" : "2.0", 
+                "y" : "2.0", 
+                "z" : "2.0"
+            },
+            "commands" :
+            {
+                "CLICK" : "",
+                "DROP" : "", 
+                "LONG_CLICK" : ""
+            },
+            "visible" : "false" 
         }
     ]
 }
