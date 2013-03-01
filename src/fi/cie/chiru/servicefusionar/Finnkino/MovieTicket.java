@@ -5,13 +5,16 @@ import java.util.Calendar;
 import util.IO;
 import util.Vec;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import fi.cie.chiru.servicefusionar.R;
+import fi.cie.chiru.servicefusionar.serviceApi.DraggableImage;
 import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
@@ -67,8 +70,13 @@ public class MovieTicket
 				
 				ticket.setVisibility(View.GONE);
 				
-				movieTicket = GLFactory.getInstance().newTexturedSquare("movieTicekt",IO.loadBitmapFromView(ticket));
-//				movieTicket.setOnLongClickCommand(new DragImage(im, this.toString()));
+				//ImageView im = (ImageView)ticket;
+				Bitmap bm = IO.loadBitmapFromView(ticket);
+				ImageView im = new ImageView(serviceManager.getSetup().myTargetActivity);
+				im.setImageBitmap(bm);
+				
+				movieTicket = GLFactory.getInstance().newTexturedSquare("movieTicekt", bm);
+				movieTicket.setOnLongClickCommand(new DraggableImage(serviceManager, im, this.toString()));
 		    	    	
 		    	serviceManager.getSetup().world.add(movieTicket);
 		    	movieTicket.setPosition(new Vec(-10.0f, -10.0f, 0.0f));
@@ -78,6 +86,11 @@ public class MovieTicket
 
 		});	
     	
+	}
+	
+	public void removeTicket()
+	{
+		serviceManager.getSetup().world.remove(movieTicket);	
 	}
 	
 	private String setDate()

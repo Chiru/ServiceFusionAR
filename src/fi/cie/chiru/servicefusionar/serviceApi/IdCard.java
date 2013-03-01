@@ -75,7 +75,7 @@ public class IdCard
 		ImageView im = new ImageView(serviceManager.getSetup().myTargetActivity);
 		im.setImageBitmap(bms);
         idCard = GLFactory.getInstance().newTexturedSquare("idCard", bm);
-        idCard.setOnLongClickCommand(new DragImage(im, this.toString()));
+        idCard.setOnLongClickCommand(new DraggableImage(serviceManager, im, this.toString()));
     	    	
     	serviceManager.getSetup().world.add(idCard);
     	idCard.setPosition(new Vec(15.0f, 0.0f, 0.0f));
@@ -87,36 +87,6 @@ public class IdCard
 	public void removeCard()
 	{
 		serviceManager.getSetup().world.remove(idCard);	
-	}
-	
-	private class DragImage extends CommandInUiThread 
-	{
-		private ImageView iv;
-		private String str;
-		
-		public DragImage(ImageView DraggedItem, String str)
-		{
-		    iv = DraggedItem;
-		    this.str = str;
-		}
-		
-	//	@Override
-		public void executeInUiThread()
-		{
-
-			RelativeLayout root = (RelativeLayout)serviceManager.getSetup().getGuiSetup().getMainContainerView();
-
-			root.removeView(iv);
-			root.addView(iv);
-			
-			//iv.setVisibility(View.GONE);
-			iv.setVisibility(View.INVISIBLE);
-		    
-			View.DragShadowBuilder shadow = new DragShadowBuilder(iv);
-			ClipData data = ClipData.newPlainText("DragData", str);
-			iv.startDrag(data, shadow, null, 0);
-		}
-		
 	}
     
 }
