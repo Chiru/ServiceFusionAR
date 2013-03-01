@@ -7,7 +7,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,16 +15,21 @@ public class FinnkinoXmlParser {
 	private static final String ns = null;
 	private static final String LOG_TAG = "FinnkinoXmlParser";
 
-    public List<Movie> parse(InputStream in) throws XmlPullParserException, IOException {
-        try {
+    public List<Movie> parse(String input){
+    	List<Movie> movies = null;
+    	try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(in, null);
+            parser.setInput(new StringReader(input));
             parser.nextTag();
-            return readFeed(parser);
-        } finally {
-            in.close();
-        }
+            movies = readFeed(parser);
+            
+        } catch (XmlPullParserException e) {
+        	Log.e(LOG_TAG, e.toString());
+        } catch (IOException e) {
+        	Log.e(LOG_TAG, e.toString());
+		}
+        return movies;
     }
 
     private List<Movie> readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
