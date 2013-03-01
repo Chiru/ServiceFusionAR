@@ -157,6 +157,9 @@ public class MoviePayment
 			serviceManager.getSetup().world.remove(paymentArea);
 			serviceManager.getSetup().world.remove(paymentScreen);
 			serviceManager.getSetup().world.remove(cancelButton);
+			paymentArea = null;
+			paymentScreen = null;
+			cancelButton = null;
 			serviceManager.getMovieManager().cc.removeCard();
 			serviceManager.getMovieManager().cc = null;
 			serviceManager.setVisibilityToAllApplications(true);
@@ -182,7 +185,7 @@ public class MoviePayment
     private void createCancelButton(View v, int offset)
     {
     	View cancel = v.findViewById(R.id.peruuta);
-    	cancel.setVisibility(View.INVISIBLE);
+    	cancel.setVisibility(View.GONE);
     	//cancel.setAlpha(0.9f);
 		
     	cancelButton = GLFactory.getInstance().newTexturedSquare("paymentCancel", IO.loadBitmapFromView(cancel));
@@ -218,6 +221,9 @@ public class MoviePayment
 			serviceManager.getSetup().world.remove(paymentArea);
 			serviceManager.getSetup().world.remove(paymentScreen);
 			serviceManager.getSetup().world.remove(cancelButton);
+			paymentArea = null;
+			paymentScreen = null;
+			cancelButton = null;
 			serviceManager.getMovieManager().cc.removeCard();
 			serviceManager.getMovieManager().cc = null;
 			serviceManager.setVisibilityToAllApplications(true);
