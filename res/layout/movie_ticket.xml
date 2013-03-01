@@ -69,7 +69,7 @@
          android:layout_below="@+id/aika"
          android:layout_toRightOf="@+id/sali"
          android:layout_gravity="right"
-         android:text="Rivi"
+         android:text="rivi"
          android:textSize="7pt" />
         
         <TextView
@@ -78,10 +78,11 @@
          android:layout_height="wrap_content"
          android:layout_marginLeft="30dip"
          android:layout_marginTop="10dip"
+         android:layout_marginRight="10dip"
          android:layout_below="@+id/aika"
          android:layout_toRightOf="@+id/rivi"
          android:layout_gravity="right"
-         android:text="Paikka"
+         android:text="paikka"
          android:textSize="7pt" />
         
         
