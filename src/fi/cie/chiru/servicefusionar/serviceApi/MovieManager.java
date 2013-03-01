@@ -160,7 +160,7 @@ public class MovieManager
     	
     	infobubble = new InfoBubble(serviceManager);
 
- 		if(infobubble.setInfoBubbleApplication("MusicInfobubble"))
+ 		if(infobubble.setInfoBubbleApplication("MovieInfobubble"))
  		    infobubble.populateItems(movieInfo);
     }
     
