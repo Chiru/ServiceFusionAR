@@ -13,6 +13,15 @@ public class CommandFactory
     	else if(commandName.compareTo("ShowMovieInfo")==0)
     		return new ShowMovieInfo(serviceManager, serviceApplicationName);
     	
+    	else if(commandName.compareTo("ShowMusicPlaylist")==0)
+    		return new ShowMusicPlaylist(serviceManager, serviceApplicationName);
+    	
+    	else if(commandName.compareTo("RemoveMovieTickets")==0)
+    		return new RemoveMovieTickets(serviceManager, serviceApplicationName);
+    	
+    	else if(commandName.compareTo("PlaySong")==0)
+    		return new PlaySong(serviceManager, serviceApplicationName);
+    	
     	else
     	    return null;
     }
