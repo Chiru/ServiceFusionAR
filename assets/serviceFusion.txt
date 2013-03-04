@@ -117,7 +117,7 @@
             {
                 "CLICK" : "",
                 "DROP" : "PlaySong", 
-                "LONG_CLICK" : ""
+                "LONG_CLICK" : "StopPlaying"
             },
             "visible" : "true" 
         },

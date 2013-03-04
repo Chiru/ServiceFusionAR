@@ -22,6 +22,9 @@ public class CommandFactory
     	else if(commandName.compareTo("PlaySong")==0)
     		return new PlaySong(serviceManager, serviceApplicationName);
     	
+    	else if(commandName.compareTo("StopPlaying")==0)
+    		return new StopPlaying(serviceManager, serviceApplicationName);
+    	
     	else
     	    return null;
     }
