@@ -57,7 +57,7 @@ public class ServiceFusionSetup extends Setup
 	@Override
 	public void _a_initFieldsIfNecessary() 
 	{
-		camera = new GLCamera(new Vec(0, 0, 0));
+		camera = new GLCamera(new Vec(0, 0, 40));
 		world = new World(camera);
 	}
 
