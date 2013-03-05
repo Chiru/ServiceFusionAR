@@ -24,16 +24,16 @@ public class MusicManager
     	Log.i(LOG_TAG, "Starting MusicManager");
     	this.serviceManager = serviceManager;
     	
-//		String URL = "http://www.djonline.fi/playing/?id=487";
+		String URL = "http://www.djonline.fi/playing/?id=487";
 		
-//		new XmlDownloader() { 
-//	        protected void onPostExecute(String xmlData) {
-//	    		PlaylistXmlParser parser = new PlaylistXmlParser();
+		new XmlDownloader() { 
+	        protected void onPostExecute(String xmlData) {
+	    		PlaylistXmlParser parser = new PlaylistXmlParser();
 //	    		parser.parse(xmlData);
-//	    		fillMusicPlaylist();
-//	        }
-//	    }.execute(URL); 
-		fillMusicPlaylist();
+	    		fillMusicPlaylist(parser.parse(xmlData));
+	        }
+	    }.execute(URL); 
+
 	    StartGrooveshark();
     }
     
@@ -52,7 +52,8 @@ public class MusicManager
 	public void showPlaylist(String serviceApplicationName) 
 	{
 		if(!musicPlaylistDownloaded)
-			fillMusicPlaylist();
+			return;
+			//fillMusicPlaylist();
     	
     	infobubble.visible();
 		
@@ -69,19 +70,55 @@ public class MusicManager
 	    return infobubble;
 	}
 	
-	private void fillMusicPlaylist()
+	private void fillMusicPlaylist(List<String> playlist)
 	{
+		playlist.add(0, "Pink Floyd - Comfortably Numb");
+		playlist.add(0, "Steven Wilson - Luminol");
+		playlist.add(0, "Esbjörn Svensson - Seven days of Falling");
+		int longestTitle = getLongestSongTitleLen(playlist);
 		
-		List<String> playlist = new ArrayList<String>();
-		playlist.add("Pink Floyd - Comfortably Numb           ");
-		playlist.add("Steven Wilson - Luminol                 ");
-		playlist.add("Esbjörn Svensson - Seven days of Falling");
+		List<String> tempList = new ArrayList<String>();
+		for (int i = 0; i < playlist.size(); i++)
+		{
+			String song = playlist.get(i);
+			song = song + fillWhiteSpace(longestTitle - song.length());
+			tempList.add(song);
+		}
+		
 		
 		infobubble = new InfoBubble(serviceManager);
 
  		if(infobubble.setInfoBubbleApplication("MusicInfobubble"))
- 		    infobubble.populateItems(playlist, "MusicManager");
+ 		    infobubble.populateItems(tempList, "MusicManager");
  		
  		musicPlaylistDownloaded = true;
 	}
+	
+    private String fillWhiteSpace(int number)
+    {
+    	String whitespace = new String();
+    	
+    	for(int j=0; j<number; j++)
+    		whitespace += " ";
+    	
+    	return whitespace;
+    }
+    
+    private int getLongestSongTitleLen(List<String> song)
+    {
+    	if (song == null)
+    	{
+    		return 0;
+    	}
+    	
+    	int len = 0;
+    	for(int k=0; k<song.size(); k++)
+    	{
+    	    if(song.get(k).length() > len)
+    	    	len = song.get(k).length();
+    	}
+    	
+    	return len;
+    }
+	
 }
