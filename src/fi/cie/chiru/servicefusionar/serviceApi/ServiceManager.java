@@ -25,9 +25,6 @@ public class ServiceManager
 	{
 		this.setup = setup;
 		serviceApplications = new Vector<ServiceApplication>();
-		movieManager = new MovieManager(this);
-		musicManager = new MusicManager(this);
-		//calendar = new ServiceFusionCalendar(this);
 	}
 	
 	public ServiceFusionSetup getSetup()
@@ -49,6 +46,9 @@ public class ServiceManager
 	{
 		SceneParser parser = new SceneParser();
 		serviceApplications = parser.parseFile(this, "serviceFusion.txt");
+		movieManager = new MovieManager(this);
+		musicManager = new MusicManager(this);
+		//calendar = new ServiceFusionCalendar(this);
 	}
 	
 	public ServiceApplication getApplication(String appName)

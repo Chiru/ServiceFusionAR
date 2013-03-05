@@ -8,11 +8,11 @@ import android.view.View.OnDragListener;
 
 public class CustomDragEventListener implements OnDragListener 
 {
-	float screenHeight;
+	private ServiceManager serviceManager;
 	
-	public CustomDragEventListener(float screenHeight)
+	public CustomDragEventListener(ServiceManager serviceManager)
 	{
-		this.screenHeight = screenHeight;
+		this.serviceManager = serviceManager;
 	}
 	@Override
 	public boolean onDrag(View v, DragEvent event) 
@@ -33,8 +33,9 @@ public class CustomDragEventListener implements OnDragListener
 		    	 }
 		    	 
 		    	 float x, y;
+		    	 
 		    	 x = event.getX();
-		    	 y = screenHeight - event.getY();
+		    	 y = serviceManager.getSetup().myGLSurfaceView.getOpenGlY(event.getY());//screenHeight - event.getY();
 		    	 
 		    	 ObjectPicker.getInstance().setDoubleClickPosition(x, y, new DragDataObject(dragInfo[0], dragInfo[1]));
                  break;  

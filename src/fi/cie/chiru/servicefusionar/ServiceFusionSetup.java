@@ -48,6 +48,7 @@ public class ServiceFusionSetup extends Setup
 	{
 		//private Thread socketThread;
 		gdxConnection = new GDXConnection();
+		servicemanager = new ServiceManager(this);
 //		handler = new Handler();
 //		socketService = new SFSocketService(handler);
 //		final Thread socketThread = new Thread(socketService);
@@ -81,7 +82,6 @@ public class ServiceFusionSetup extends Setup
 	public void addObjectsTo(GL1Renderer renderer, final World world, GLFactory objectFactory) 
 	{
 		this.renderer = renderer;
-		servicemanager = new ServiceManager(this);
 	    gdxConnection.open(myTargetActivity, renderer);
 	    servicemanager.createApplications();
 	}
@@ -129,7 +129,7 @@ public class ServiceFusionSetup extends Setup
 			}
 		});
 		
-		guiSetup.getMainContainerView().setOnDragListener(new CustomDragEventListener(getScreenHeigth()));
+		guiSetup.getMainContainerView().setOnDragListener(new CustomDragEventListener(servicemanager));
 	}
 	
 	public void stopServer()
