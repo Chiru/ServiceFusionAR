@@ -152,7 +152,7 @@ public class MovieManager
     		Log.d(LOG_TAG, movieInfoString);
     		
     		if (movieInfo.size() < maxMovies)
-    			movieInfo.add(0, movieInfoString);
+    			movieInfo.add(movieInfoString);
     		else
     			break;
 
