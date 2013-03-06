@@ -109,10 +109,14 @@ public class PlaylistXmlParser
         if (parser.next() == XmlPullParser.TEXT) {
             result = parser.getText();
             
+            //TODO Create some smarted method for parsing since rss feed seems to change from time to time.
             //Remove starting time from received text
             String[] temp = result.split("[:]");
-            if (temp.length>1)
+            if (temp.length>2) // String format: "11:35:18 Beck - Girl"
             	result = temp[2].substring(3);
+            
+            else if (temp.length > 1) // String format: "Next 2: Pink - Get The Party Started"
+            	result = temp[1].substring(1);
             
             parser.nextTag();
         }
