@@ -24,12 +24,12 @@ public class MusicManager
     	Log.i(LOG_TAG, "Starting MusicManager");
     	this.serviceManager = serviceManager;
     	
+    	// URL to Otto K's DjOnline site.
 		String URL = "http://www.djonline.fi/playing/?id=487";
 		
 		new XmlDownloader() { 
 	        protected void onPostExecute(String xmlData) {
 	    		PlaylistXmlParser parser = new PlaylistXmlParser();
-//	    		parser.parse(xmlData);
 	    		fillMusicPlaylist(parser.parse(xmlData));
 	        }
 	    }.execute(URL); 
@@ -41,7 +41,6 @@ public class MusicManager
     {
     	if (grooveshark == null)
     		grooveshark = new Grooveshark();
-
     }
     
     public void StopPlaying(String serviceApplicationName)
@@ -53,10 +52,8 @@ public class MusicManager
 	{
 		if(!musicPlaylistDownloaded)
 			return;
-			//fillMusicPlaylist();
     	
     	infobubble.visible();
-		
 	}
 	
 	public void playSong(String song)
@@ -74,17 +71,25 @@ public class MusicManager
 	{
 		playlist.add(0, "Pink Floyd - Comfortably Numb");
 		playlist.add(0, "Steven Wilson - Luminol");
-		playlist.add(0, "Esbjörn Svensson - Seven days of Falling");
+		//playlist.add(0, "Esbjörn Svensson - Seven days of Falling");
+		//playlist.add(0, "New Order - Crystal");
+		playlist.add(0, "Rise Against - Make It Stop");
 		int longestTitle = getLongestSongTitleLen(playlist);
 		
 		List<String> tempList = new ArrayList<String>();
+
+		// Fill in white space to get all titles in same level
 		for (int i = 0; i < playlist.size(); i++)
 		{
 			String song = playlist.get(i);
+			
+			// Sometimes description in an rss feed is formatted as: "Current: OFF" instead of "Current: artist - song"  
+			if (song.equalsIgnoreCase("OFF"))
+				continue;
+			
 			song = song + fillWhiteSpace(longestTitle - song.length());
 			tempList.add(song);
 		}
-		
 		
 		infobubble = new InfoBubble(serviceManager);
 
@@ -94,6 +99,10 @@ public class MusicManager
  		musicPlaylistDownloaded = true;
 	}
 	
+	/* 
+	 * Returns string containing only wanted number of white space.
+	 * This is used to level strings in an info bubble.  
+	 */
     private String fillWhiteSpace(int number)
     {
     	String whitespace = new String();
@@ -104,6 +113,9 @@ public class MusicManager
     	return whitespace;
     }
     
+    /*
+     * Get length of the longest string in the received list object.
+     */
     private int getLongestSongTitleLen(List<String> song)
     {
     	if (song == null)
@@ -120,5 +132,4 @@ public class MusicManager
     	
     	return len;
     }
-	
 }
