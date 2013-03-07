@@ -44,7 +44,7 @@ public class PlaylistXmlParser
                 continue;
             }
             String name = parser.getName();
-            // Starts by looking for the show tag
+            // Starts by looking for the channel tag
             if (name.equals("channel")) {
                 entries = readItems(parser);
                 //Log.i(LOG_TAG, name);
@@ -109,7 +109,7 @@ public class PlaylistXmlParser
         if (parser.next() == XmlPullParser.TEXT) {
             result = parser.getText();
             
-            //TODO Create some smarted method for parsing since rss feed seems to change from time to time.
+            //TODO Create some smarter method for parsing since rss feed seems to change from time to time.
             //Remove starting time from received text
             String[] temp = result.split("[:]");
             if (temp.length>2) // String format: "11:35:18 Beck - Girl"
