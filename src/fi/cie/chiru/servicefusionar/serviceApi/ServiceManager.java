@@ -75,4 +75,9 @@ public class ServiceManager
 		}
 	
 	}
+	
+	public void onDestroy()
+	{
+		musicManager.onDestroy();
+	}
 }

@@ -137,4 +137,13 @@ public class ServiceFusionSetup extends Setup
 		Log.d(LOG_TAG, "ServiceFusionSetup stopServer");
 		//socketService.stopSocket();
 	}
+	
+	@Override
+	public void onDestroy(Activity a)
+	{
+		if (servicemanager != null)
+			servicemanager.onDestroy();
+		
+		super.onDestroy(a);
+	}
 }

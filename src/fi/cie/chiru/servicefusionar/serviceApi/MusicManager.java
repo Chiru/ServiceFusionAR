@@ -45,7 +45,8 @@ public class MusicManager
     
     public void StopPlaying(String serviceApplicationName)
     {
-    	grooveshark.StopPlaying();
+    	if (grooveshark != null)
+    		grooveshark.StopPlaying();
     }
     
 	public void showPlaylist(String serviceApplicationName) 
@@ -58,8 +59,11 @@ public class MusicManager
 	
 	public void playSong(String song)
 	{
-		grooveshark.SearchSong(song, 1);
-		Log.d("MusicManager", "start playing song: " + song);
+		if (grooveshark != null)
+		{
+			grooveshark.SearchSong(song, 1);
+			Log.d("MusicManager", "start playing song: " + song);
+		}
 	}
 	
 	public InfoBubble getInfoBubble()
@@ -131,5 +135,13 @@ public class MusicManager
     	}
     	
     	return len;
+    }
+    
+    public void onDestroy()
+    {
+    	if (grooveshark != null)
+    	{
+    		grooveshark.StopPlaying();
+    	}
     }
 }
