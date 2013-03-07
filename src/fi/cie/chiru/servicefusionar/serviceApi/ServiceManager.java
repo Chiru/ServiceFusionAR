@@ -48,7 +48,7 @@ public class ServiceManager
 		serviceApplications = parser.parseFile(this, "serviceFusion.txt");
 		movieManager = new MovieManager(this);
 		musicManager = new MusicManager(this);
-		//calendar = new ServiceFusionCalendar(this);
+		calendar = new ServiceFusionCalendar(this);
 	}
 	
 	public ServiceApplication getApplication(String appName)
@@ -71,6 +71,9 @@ public class ServiceManager
 	{
 		for(int i=0; i<serviceApplications.size(); i++)
 		{
+			if(serviceApplications.elementAt(i).getName().contains("Infobubble"))
+				continue;
+			
 			serviceApplications.elementAt(i).setvisible(visible);
 		}
 	

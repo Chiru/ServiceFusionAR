@@ -22,7 +22,7 @@ public class MovieManager
 	private static final String LOG_TAG = "MovieManager";
 	private ServiceManager serviceManager;
 	private boolean movieInfoDownloaded;
-	private int maxMovies = 5;
+	private int maxMovies = 10;
 	private String selectedMovie;
 
 	private InfoBubble infobubble;
@@ -68,6 +68,10 @@ public class MovieManager
     	//if more auditoriums than Plaza1 is added later the auditorium number can be parsed from movieTitle
     	serviceManager.setVisibilityToAllApplications(false);
     	infobubble.visible();
+    	
+    	if(serviceManager.getMusicManager().getInfoBubble() != null && serviceManager.getMusicManager().getInfoBubble().isVisible())
+    		serviceManager.getMusicManager().getInfoBubble().visible();
+    	
     	//auditorium.createAuditoriumScreen("Sali1");
     	loginscreen.createLogInScreen(movieTitle);
     	moviePayment.setMovieName(movieTitle);

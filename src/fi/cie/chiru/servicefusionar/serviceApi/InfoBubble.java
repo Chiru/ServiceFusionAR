@@ -30,6 +30,11 @@ public class InfoBubble
 	    
 	}
 	
+	public boolean isVisible()
+	{
+		return visible;
+	}
+	
 	public boolean setInfoBubbleApplication(String name)
 	{
 		infobubble = this.serviceManager.getApplication(name);
