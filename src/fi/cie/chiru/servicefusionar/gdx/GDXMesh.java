@@ -65,9 +65,7 @@ public class GDXMesh extends MeshComponent
 				
 				gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				
-				gl.glEnable(GL10.GL_TEXTURE_2D);
-				Log.e(LOG_TAG, "----------------------------" + texture.getTextureObjectHandle());
-				
+				gl.glEnable(GL10.GL_TEXTURE_2D);			
 				this.texture.bind();
 				this.model.render();
 				gl.glDisable(GL10.GL_TEXTURE_2D);
