@@ -1,5 +1,7 @@
 package fi.cie.chiru.servicefusionar.gdx;
 
+import java.nio.IntBuffer;
+
 import gl.ObjectPicker;
 import gl.Renderable;
 import gl.scenegraph.MeshComponent;
@@ -57,13 +59,15 @@ public class GDXMesh extends MeshComponent
 			{
 				if(!reload)
 				{
-				    this.texture.load(this.texture.getTextureData());
+					this.texture = new Texture(texture.getTextureData());
 				    reload = true;
 				}
 				
 				gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				
 				gl.glEnable(GL10.GL_TEXTURE_2D);
+				Log.e(LOG_TAG, "----------------------------" + texture.getTextureObjectHandle());
+				
 				this.texture.bind();
 				this.model.render();
 				gl.glDisable(GL10.GL_TEXTURE_2D);
