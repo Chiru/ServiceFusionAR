@@ -6,6 +6,7 @@ import java.io.*;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.util.Log;
 
 public class MainActivity extends Activity {
@@ -17,6 +18,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
 	{
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		super.onCreate(savedInstanceState);
 		
         serviceFusionSetup = new ServiceFusionSetup();
