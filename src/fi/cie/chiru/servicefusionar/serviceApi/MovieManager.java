@@ -108,6 +108,9 @@ public class MovieManager
     
     public void removeTickets()
     {
+    	if(tickets == null)
+    		return;
+    	
     	for(int i=0; i<tickets.size(); i++)
     	{
     		tickets.get(i).removeTicket();
