@@ -6,6 +6,7 @@ import commands.Command;
 import commands.ui.CommandInUiThread;
 
 import fi.cie.chiru.servicefusionar.R;
+import fi.cie.chiru.servicefusionar.calendar.CalendarEvent;
 import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
@@ -165,6 +166,9 @@ public class MoviePayment
 			serviceManager.setVisibilityToAllApplications(true);
 			serviceManager.getMovieManager().getInfoBubble().visible();
 			serviceManager.getMovieManager().createTickets(selectedSeats);
+			
+			String cEvent[] = selectedMovie.split(("\\s{2,}"));
+			serviceManager.getCalendar().addEvent(new CalendarEvent(cEvent[0], (cEvent[1] + " " + cEvent[2])));
 		}	
 	}
 	
