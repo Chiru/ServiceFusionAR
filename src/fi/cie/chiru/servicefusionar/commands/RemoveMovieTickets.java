@@ -1,6 +1,7 @@
 package fi.cie.chiru.servicefusionar.commands;
 
 import commands.Command;
+import fi.cie.chiru.servicefusionar.serviceApi.DragDataObject;
 import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 
 public class RemoveMovieTickets extends Command
@@ -13,6 +14,17 @@ public class RemoveMovieTickets extends Command
     	this.serviceManager = serviceManager;
     	this.serviceApplicationName = serviceApplicationName;
     }
+    
+    @Override
+    public boolean execute(Object transfairObject) 
+    {
+    	DragDataObject ddo = (DragDataObject)transfairObject;
+    	
+    	if(ddo.getManager().compareTo("") != 0)
+    		return true;
+    	
+		return execute();
+	}
     
 	@Override
 	public boolean execute() 
