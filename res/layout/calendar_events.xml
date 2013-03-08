@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    
+     <TextView
+        android:id="@+id/tänään"
+        android:textColor="#444444"
+        android:textSize="35dp"
+        android:layout_width="80dp"
+        android:minWidth="80dp"
+        android:layout_height="70dp"
+        android:minHeight="70dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:background="@drawable/bordersblue"
+        android:text="" />
+     
+    <TextView
+        android:id="@+id/tapahtumat"
+        android:textColor="#444444"
+        android:textSize="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:minHeight="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/tänään"
+        android:gravity="center"
+        android:background="@drawable/borders"
+        android:text="  Tapahtumat  " />
+    
+     <TextView
+        android:id="@+id/aika_tapahtuma1"
+        android:textColor="#444444"
+        android:textSize="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tänään"
+        android:gravity="center"
+        android:layout_alignBottom="@+id/tapahtuma1"
+        android:background="@drawable/borders"
+        android:text="8:30" />
+     
+      <TextView
+        android:id="@+id/tapahtuma1"
+        android:textColor="#444444"
+        android:textSize="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/aika_tapahtuma1"
+        android:layout_below="@+id/tapahtumat"
+        android:gravity="center"
+        android:layout_alignRight="@+id/tapahtumat"
+        android:background="@drawable/borders"
+        android:text="Salille Raatti" />
+      
+       <TextView
+        android:id="@+id/aika_tapahtuma2"
+        android:textColor="#444444"
+        android:textSize="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aika_tapahtuma1"
+        android:gravity="center"
+        android:layout_alignBottom="@+id/tapahtuma2"
+        android:background="@drawable/borders"
+        android:text="14:30" />
+     
+      <TextView
+        android:id="@+id/tapahtuma2"
+        android:textColor="#444444"
+        android:textSize="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/aika_tapahtuma2"
+        android:layout_below="@+id/tapahtuma1"
+        android:gravity="center"
+        android:layout_alignRight="@+id/tapahtumat"
+        android:background="@drawable/borders"
+        android:text="Kahville Maijan kanssa Antellille" />
+      
+       <TextView
+        android:id="@+id/aika_tapahtuma3"
+        android:textColor="#444444"
+        android:textSize="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aika_tapahtuma2"
+        android:gravity="center"
+        android:layout_alignBottom="@+id/tapahtuma3"
+        android:visibility="invisible"
+        android:background="@drawable/borders"
+        android:text="" />
+     
+      <TextView
+        android:id="@+id/tapahtuma3"
+        android:textColor="#444444"
+        android:textSize="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/aika_tapahtuma3"
+        android:layout_below="@+id/tapahtuma2"
+        android:gravity="center"
+        android:layout_alignRight="@+id/tapahtumat"
+        android:visibility="invisible"
+        android:background="@drawable/borders"
+        android:text="" />
+    
+</RelativeLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="#DDDDDD">
+    
+    <TextView
+        android:id="@+id/kuukausi"
+        android:textColor="#444444"
+        android:textSize="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="left"
+        android:layout_marginTop="10dp"
+        android:text="Kuukausi" />
+    
+   <GridLayout 
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/kalenteri_gridlayout"
+        android:layout_below="@id/kuukausi"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="8"
+        android:rowCount="7" />
+
+    <TextView
+        android:id="@+id/vuosi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/kalenteri_grid"
+        android:layout_alignParentRight="true"
+        android:text="Vuosi"
+        android:textColor="#444444"
+        android:layout_marginTop="10dp"
+        android:textSize="50dp" />
+ 
+</RelativeLayout>
