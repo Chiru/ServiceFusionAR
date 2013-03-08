@@ -81,7 +81,7 @@ public class MovieTicket
 		    	serviceManager.getSetup().world.add(movieTicket);
 		    	movieTicket.setPosition(new Vec(-10.0f, -10.0f, 0.0f));
 		    	movieTicket.setRotation(new Vec(90.0f, 180.0f, 0.0f));
-		    	movieTicket.setScale(new Vec(8.0f, 6.0f, 1.0f));
+		    	movieTicket.setScale(new Vec(7.0f, 6.0f, 1.0f));
 			}
 
 		});	
