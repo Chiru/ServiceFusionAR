@@ -11,6 +11,7 @@ import util.Vec;
 import worldData.World;
 
 import fi.cie.chiru.servicefusionar.ServiceFusionSetup;
+import fi.cie.chiru.servicefusionar.calendar.ServiceFusionCalendar;
 
 public class ServiceManager 
 {
@@ -35,6 +36,11 @@ public class ServiceManager
 	public MovieManager getMovieManager()
 	{
 		return movieManager;
+	}
+	
+	public ServiceFusionCalendar getCalendar()
+	{
+		return calendar;
 	}
 	
 	public MusicManager getMusicManager()
