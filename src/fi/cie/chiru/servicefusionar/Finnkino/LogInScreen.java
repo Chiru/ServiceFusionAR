@@ -27,6 +27,12 @@ public class LogInScreen
 	private MeshComponent loginScreenFilled;
 	private MeshComponent okbutton;
 	private MeshComponent cancelbutton;
+	//private float camOffsetX = 0.0f;
+	private float camOffsetY = 4.0f;
+	private float camOffsetZ = -40.0f;
+	private float okButtonOffsetX = 7.8f;
+	private float cancelButtonOffsetX = -7.6f;
+
 	
 	public LogInScreen(ServiceManager serviceManager)
 	{
@@ -56,8 +62,9 @@ public class LogInScreen
 				loginScreen = GLFactory.getInstance().newTexturedSquare("loginscreen", IO.loadBitmapFromView(v, 30, 30));
 				loginScreen.setOnDoubleClickCommand(new fillLogInScreen(v));
 				
+				Vec camPos = serviceManager.getSetup().getCamera().getPosition();
 				serviceManager.getSetup().world.add(loginScreen);
-		    	loginScreen.setPosition(new Vec(0.0f, 4.0f, 0.0f));
+		    	loginScreen.setPosition(new Vec(camPos.x, camPos.y + camOffsetY, camPos.z + camOffsetZ));
 		    	loginScreen.setRotation(new Vec(90.0f, 0.0f, 180.0f));
 		    	loginScreen.setScale(new Vec(15.0f, 10.0f, 15.0f));
 		    	
@@ -132,8 +139,9 @@ public class LogInScreen
 			serviceManager.getSetup().world.remove(okbutton);
 			serviceManager.getSetup().world.remove(cancelbutton);
 
+			Vec camPos = serviceManager.getSetup().getCamera().getPosition();
 			serviceManager.getSetup().world.add(loginScreenFilled);
-			loginScreenFilled.setPosition(new Vec(0.0f, 4.0f, 0.0f));
+			loginScreenFilled.setPosition(new Vec(camPos.x, camPos.y + camOffsetY, camPos.z + camOffsetZ));
 			loginScreenFilled.setRotation(new Vec(90.0f, 0.0f, 180.0f));
 			loginScreenFilled.setScale(new Vec(15.0f, 10.0f, 1.0f));
 
@@ -155,13 +163,14 @@ public class LogInScreen
 		okbutton = GLFactory.getInstance().newTexturedSquare("ok", IO.loadBitmapFromView(ok));
         cancelbutton = GLFactory.getInstance().newTexturedSquare("cancel", IO.loadBitmapFromView(cancel));
         
+        Vec camPos = serviceManager.getSetup().getCamera().getPosition();
         serviceManager.getSetup().world.add(okbutton);
-    	okbutton.setPosition(new Vec(7.8f, 0.0f, 0.0f));
+    	okbutton.setPosition(new Vec(camPos.x + okButtonOffsetX, camPos.y, camPos.z + camOffsetZ));
     	okbutton.setRotation(new Vec(90.0f, 0.0f, 180.0f));
     	okbutton.setScale(new Vec(4.0f, 1.5f, 1.0f));
     	
     	serviceManager.getSetup().world.add(cancelbutton);
-    	cancelbutton.setPosition(new Vec(-7.6f, 0.0f, 0.0f));
+    	cancelbutton.setPosition(new Vec(camPos.x + cancelButtonOffsetX, camPos.y, camPos.z + camOffsetZ));
     	cancelbutton.setRotation(new Vec(90.0f, 0.0f, 180.0f));
     	cancelbutton.setScale(new Vec(4.0f, 1.5f, 1.0f));
 	}

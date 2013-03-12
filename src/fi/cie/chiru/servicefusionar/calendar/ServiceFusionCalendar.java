@@ -41,6 +41,11 @@ public class ServiceFusionCalendar
 	private float dayGridWidth = 1.7f;
 	private float dayGridHeight = 1.4f;
 	private boolean eventsVisible;
+	private float camOffsetX = 12.0f;
+	private float camOffsetY = 6.0f;
+	private float camOffsetZ = -40.0f;
+	private float eventsOffsetX = 10.0f;
+	private float eventsOffsetY = 6.1f;
     
     private String months[] =  { "TAMMIKUU", "HELMIKUU", "MAALISKUU",
                                  "HUHTIKUU", "TOUKOKUU", "KESÄKUU",
@@ -85,8 +90,9 @@ public class ServiceFusionCalendar
 				calendar = GLFactory.getInstance().newTexturedSquare("calendar", IO.loadBitmapFromView(v, 35, 35));
 				calendar.setOnClickCommand(new FlipEventsVisibility());
 				
+				Vec camPos = serviceManager.getSetup().getCamera().getPosition();
 				serviceManager.getSetup().world.add(calendar);
-				calendar.setPosition(new Vec(12.0f, 6.0f, 0.0f));
+				calendar.setPosition(new Vec(camPos.x + camOffsetX, camPos.y + camOffsetY, camPos.z + camOffsetZ));
 				calendar.setRotation(new Vec(90.0f, 0.0f, 180.0f));
 				calendar.setScale(new Vec(12.0f, 10.0f, 1.0f));
 				
@@ -191,9 +197,10 @@ public class ServiceFusionCalendar
     	
     	if(visible == true)
     	{
-    		calendar.addChild(eventsToday);
+    		//calendar.addChild(eventsToday);
+    		Vec camPos = serviceManager.getSetup().getCamera().getPosition();
     	    serviceManager.getSetup().world.add(eventsToday);
-		    eventsToday.setPosition(new Vec(10.0f+((float)curCol)*dayGridWidth , 6.1f-((float)curRow)*dayGridHeight, 0.0f));
+		    eventsToday.setPosition(new Vec(camPos.x + eventsOffsetX +((float)curCol)*dayGridWidth , camPos.y + eventsOffsetY-((float)curRow)*dayGridHeight, camPos.z + camOffsetZ));
 		    eventsToday.setRotation(new Vec(90.0f, 0.0f, 180.0f));
 		    eventsToday.setScale(new Vec(8.0f, 7.0f, 1.0f));
 		    eventsVisible = true;

@@ -34,6 +34,11 @@ public class MoviePayment
 	private ServiceManager serviceManager;
 	private String selectedMovie;
 	private List<SeatNumber> selectedSeats;
+	//private float camOffsetX = 0.0f;
+	private float camOffsetY = 4.0f;
+	private float camOffsetZ = -40.0f;
+	private float paymentAreaOffsetY = 3.5f;
+	private float cancelButtonOffsetY = -1.0f;
 	
 	public MoviePayment(ServiceManager serviceManager)
 	{
@@ -128,9 +133,10 @@ public class MoviePayment
 				v.setVisibility(View.GONE);
 				paymentScreen = GLFactory.getInstance().newTexturedSquare("paymentscreen", IO.loadBitmapFromView(v));
 				
+				Vec camPos = serviceManager.getSetup().getCamera().getPosition();
 				int offset = selectedSeats.size();
 				serviceManager.getSetup().world.add(paymentScreen);
-				paymentScreen.setPosition(new Vec(0.0f, 4.0f, 0.0f));
+				paymentScreen.setPosition(new Vec(camPos.x, camPos.y + camOffsetY, camPos.z + camOffsetZ));
 				paymentScreen.setRotation(new Vec(90.0f, 0.0f, 180.0f));
 				paymentScreen.setScale(new Vec(15.0f, (14.0f + (float)offset), 1.0f));
 				
@@ -179,8 +185,10 @@ public class MoviePayment
 		pArea.setAlpha(0.9f);
 		
 		paymentArea = GLFactory.getInstance().newTexturedSquare("paymentArea", IO.loadBitmapFromView(pArea));
+		
+		Vec camPos = serviceManager.getSetup().getCamera().getPosition();
 		serviceManager.getSetup().world.add(paymentArea);
-		paymentArea.setPosition(new Vec(0.0f, (3.5f - ((float)offset)*0.7f), 0.0f));
+		paymentArea.setPosition(new Vec(camPos.x, (camPos.y + paymentAreaOffsetY - ((float)offset)*0.7f), camPos.z + camOffsetZ));
 		paymentArea.setRotation(new Vec(90.0f, 0.0f, 180.0f));
 		paymentArea.setScale(new Vec(6.0f, 6.0f, 1.0f));
 		paymentArea.setOnDoubleClickCommand(new handlePayment());
@@ -193,8 +201,10 @@ public class MoviePayment
     	//cancel.setAlpha(0.9f);
 		
     	cancelButton = GLFactory.getInstance().newTexturedSquare("paymentCancel", IO.loadBitmapFromView(cancel));
+    	
+    	Vec camPos = serviceManager.getSetup().getCamera().getPosition();
 		serviceManager.getSetup().world.add(cancelButton);
-		cancelButton.setPosition(new Vec(0.0f, (-1.0f - ((float)offset)*0.7f), 0.0f));
+		cancelButton.setPosition(new Vec(camPos.x, (camPos.y + cancelButtonOffsetY - ((float)offset)*0.7f), camPos.z + camOffsetZ));
 		cancelButton.setRotation(new Vec(90.0f, 0.0f, 180.0f));
 		cancelButton.setScale(new Vec(6.0f, 2.0f, 1.0f));
 		cancelButton.setOnClickCommand(new Cancel());
