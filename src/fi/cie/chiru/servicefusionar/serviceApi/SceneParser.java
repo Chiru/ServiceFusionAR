@@ -64,7 +64,7 @@ public class SceneParser
         		JSONObject ServiceAppObj = entries.getJSONObject(i);
         		String name = ServiceAppObj.getString("name");
         		
-        		ServiceApplication serviceApp = new ServiceApplication(name);
+        		ServiceApplication serviceApp = new ServiceApplication(serviceManager,name);
         		
         		String meshName = ServiceAppObj.getString("meshRef");
         		String textureName = ServiceAppObj.getString("textRef");

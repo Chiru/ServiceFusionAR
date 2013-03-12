@@ -4,7 +4,7 @@ import fi.cie.chiru.servicefusionar.gdx.GDXMesh;
 import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
-
+import java.lang.Math;
 import commands.Command;
 
 import util.Log;
@@ -18,11 +18,14 @@ public class ServiceApplication extends AbstractObj
 	private static final String LOG_TAG = "ServiceApplication";
 	private GDXMesh gdxMesh;
 	private String name;
+	private boolean attachedToCamera;
+	ServiceManager serviceManager;
 	
-	public ServiceApplication(String name)
+	public ServiceApplication(ServiceManager serviceManager, String name)
 	{
 		Log.d(LOG_TAG, "Creating application " + name);
 		this.name = name;
+		this.serviceManager = serviceManager;
 	}
 	
 	public String getName()
@@ -76,7 +79,7 @@ public class ServiceApplication extends AbstractObj
 	@Override
 	public boolean update(float timeDelta, Updateable parent) 
 	{
-		// TODO Auto-generated method stub
+		gdxMesh.update(timeDelta, parent);
 		return true;
 	}
 
@@ -90,8 +93,7 @@ public class ServiceApplication extends AbstractObj
 	@Override
 	public void render(GL10 gl, Renderable parent) 
 	{
-		gdxMesh.render(gl, parent);
-		
+		gdxMesh.render(gl, parent);	
 	}
 
 	@Override
