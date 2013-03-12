@@ -21,6 +21,7 @@ import util.Vec;
 import worldData.SystemUpdater;
 import worldData.World;
 import actions.Action;
+import actions.ActionRotateCameraBuffered;
 import android.R;
 import android.app.Activity;
 import android.os.Handler;
@@ -58,7 +59,7 @@ public class ServiceFusionSetup extends Setup
 	@Override
 	public void _a_initFieldsIfNecessary() 
 	{
-		camera = new GLCamera(new Vec(0, 0, 40));
+		camera = new GLCamera(new Vec(0, 0, 0));
 		world = new World(camera);
 	}
 
@@ -97,13 +98,15 @@ public class ServiceFusionSetup extends Setup
 	public void _c_addActionsToEvents(final EventManager eventManager, CustomGLSurfaceView arView, SystemUpdater updater) 
 	{
 		addObjectsTo(renderer, world, GLFactory.getInstance());
+//		rotateGLCameraAction = new ActionRotateCameraBuffered(camera);
+//		eventManager.addOnOrientationChangedAction(rotateGLCameraAction);
 	}
 
 	@Override
 	public void _d_addElementsToUpdateThread(SystemUpdater updater) 
 	{
 		updater.addObjectToUpdateCycle(world);
-		updater.addObjectToUpdateCycle(rotateGLCameraAction);
+//		updater.addObjectToUpdateCycle(rotateGLCameraAction);
 	}
 
 	@Override
