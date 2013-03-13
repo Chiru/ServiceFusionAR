@@ -121,7 +121,7 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
 		
 	}
 	
-	/*
+	/**
 	Public constructor for Grooveshark API. This constructor initializes grooveshark connection, saves
 	sessionId and country data for later use.
 	 */
@@ -159,10 +159,8 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
 	    		GetCountry();
 	        }
 	    }.execute(payload); 
-			
-		//Log.i(LOG_TAG, "SessionId: " + session_id);
+
 	}
-		
 
     private void GetCountry()
     {
@@ -184,9 +182,7 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
 	    		}
 	        }
 	    }.execute(payload); 
-	    
-//    	response: {"header":{"hostname":"RHL060"},"result":{"ID":67,"CC1":0,"CC2":4,"CC3":0,"CC4":0,"DMA":0,"IPR":0}}
-    	//Log.i(LOG_TAG, "Country data: " + country);
+
     }
 
     public void SearchSong(String song_name, int limit)
@@ -219,15 +215,7 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
 	    		SearchSongCallback(response);
 	        }
 	    }.execute(payload.toString()); 
-    	
-    	//Log.i(LOG_TAG, "SearchSongsResponse: " + response);
 
-//    	02-27 14:38:35.139: I/GroovesharkPlayer(26145): response: {"header":{"hostname":"RHL082"},
-    	/*"result":{"songs":[
-    	{"SongID":2380658,"SongName":"Dream Lover","ArtistID":1868,"ArtistName":"Bobby Darin","AlbumID":377398,"AlbumName":"Darin at the Copa","CoverArtFilename":"377398.jpg","Popularity":1305608233,"IsLowBitrateAvailable":true,"IsVerified":true,"Flags":0},
-    	{"SongID":3461388,"SongName":"Blue Velvet","ArtistID":1868,"ArtistName":"Bobby Darin","AlbumID":2769,"AlbumName":"Unknown Album","CoverArtFilename":"2769.jpg","Popularity":1305600466,"IsLowBitrateAvailable":true,"IsVerified":false,"Flags":0}]}}
-    	*/
-    	
     }
     
     private void SearchSongCallback(String s)
@@ -239,7 +227,6 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
 			Log.e(LOG_TAG, e.toString());
 		}
 		
-		//{"result":{"songs":[{"IsVerified":false,"Popularity":1306368189,"AlbumID":7553722,"ArtistName":"Floyd, Pink","SongName":"Pink Floyd - Comfortably Numb","AlbumName":"---","Flags":0,"ArtistID":2240819,"SongID":34656221,"IsLowBitrateAvailable":true,"CoverArtFilename":""}]},"header":{"hostname":"RHL082"}}
 		try {
 			// Get first song object from JSON response
 			JSONObject song = responseObject.getJSONObject("result").getJSONArray("songs").getJSONObject(0);
@@ -281,18 +268,11 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
 	        }
 	    }.execute(payload.toString()); 
     	
-
-//    	{"header":{"hostname":"RHL082"},"result":
-//    	{"StreamKey":"aa9c38bb2d90d9fce9f09ecd2b965271f04e04e0_512e0f01_245372_12b5396_ba725816_8_0",
-//    	"url":"http:\/\/stream128a-he.grooveshark.com\/stream.php?streamKey=aa9c38bb2d90d9fce9f09ecd2b965271f04e04e0_512e0f01_245372_12b5396_ba725816_8_0",
-//    	"StreamServerID":2048,"uSecs":150000000}}
     }
     
     private void GetStreamServerCallback(String response, String song_id)
     {
     	JSONObject result = null;    	
-    	//response: {"header":{"hostname":"RHL081"},"result":{"StreamKey":"017e654d827942c3473e453c2acbecb8e8e72316_5134a23b_210cfdd_2b0df7b_bb44c48b_8_0","url":"http:\/\/stream54-he.grooveshark.com\/stream.php?streamKey=017e654d827942c3473e453c2acbecb8e8e72316_5134a23b_210cfdd_2b0df7b_bb44c48b_8_0","StreamServerID":1024,"uSecs":380000000}}
-    	//{"StreamKey":"d902145cb0e88fcaadabf006cd87453656216630_5134a3f4_210cfdd_2b0df7b_bb4501a9_8_0","uSecs":380000000,"StreamServerID":2097152,"url":"http:\/\/stream67-he.grooveshark.com\/stream.php?streamKey=d902145cb0e88fcaadabf006cd87453656216630_5134a3f4_210cfdd_2b0df7b_bb4501a9_8_0"}
     	
     	try	{
     		result = new JSONObject(response).getJSONObject("result");
@@ -336,39 +316,31 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
     	JSONObject payload = new JSONObject();
 
     	try {
-    		header.put("wsKey", key);
-    		header.put("sessionID", session_id);
-
-    		parameters.put("songID", active_stream.get("songID"));
-			parameters.put("streamKey", active_stream.getString("StreamKey"));
-    		parameters.put("streamServerID", active_stream.get("StreamServerID"));
-    		
-    		payload.put("method", "markSongComplete");
-    		payload.put("header", header);
-    		payload.put("parameters", parameters);
-    		
-    		// Since we stop playing there is no need to mark stream anymore.
-    		active_stream.put("Acked", true);
+    		if (active_stream.getBoolean("Acked"))
+    		{
+	    		header.put("wsKey", key);
+	    		header.put("sessionID", session_id);
+	
+	    		parameters.put("songID", active_stream.get("songID"));
+				parameters.put("streamKey", active_stream.getString("StreamKey"));
+	    		parameters.put("streamServerID", active_stream.get("StreamServerID"));
+	    		
+	    		payload.put("method", "markSongComplete");
+	    		payload.put("header", header);
+	    		payload.put("parameters", parameters);
+	    		
+				new Request() { 
+					protected void onPostExecute(String response) {}
+				}.execute(payload.toString()); 
+    		}
     	} catch (JSONException e) {
     		Log.e(LOG_TAG, e.toString());
     	}
-    	
-    	
-		new Request() { 
-	        protected void onPostExecute(String response) {
-	        }
-	    }.execute(payload.toString()); 
-
-	    if (mediaPlayer != null)
-	    {
-	    	if (mediaPlayer.isPlaying())
-	    	{
-	    		//mediaPlayer.stop();
-//	    		mediaPlayer.release();
-//	    		mediaPlayer = null;
-	    	}
-	    }
-    	//active_stream.remove(stream_key);
+    	try {
+    		active_stream.put("StreamIsPlaying", false);
+    	} catch (JSONException e) {
+    		Log.e(LOG_TAG, e.toString());
+    	}
     }
 
     public void MarkStreamOver30s()
@@ -380,7 +352,8 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
     	JSONObject parameters = new JSONObject();
     	JSONObject payload = new JSONObject();
     	try {
-    		if (!active_stream.getBoolean("Acked"))
+            // Check if stream is not already acked and it is really active! If not don't mark its length!
+    		if (!active_stream.getBoolean("Acked") && active_stream.getBoolean("StreamIsPlaying"))
     		{
 	    		header.put("wsKey", key);
 	    		header.put("sessionID", session_id);
@@ -435,6 +408,11 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
 	public void onPrepared(MediaPlayer mp)
 	{
     	mediaPlayer.start();
+    	try {
+    		active_stream.put("StreamIsPlaying", true);
+    	} catch (JSONException e) {
+    		Log.e(LOG_TAG, e.toString());
+    	}
     	
     	timer = new Timer();
     	timer.schedule(new TimerTask(){
