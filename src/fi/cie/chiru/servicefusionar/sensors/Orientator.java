@@ -13,6 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.FloatMath;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Orientator implements SensorEventListener, LocationListener
@@ -191,12 +192,23 @@ public class Orientator implements SensorEventListener, LocationListener
 			myListener.newResult("Rotation Matrix", mRotationMatrix);
 			break;
 		case Sensor.TYPE_ACCELEROMETER:
-			mGravity=values;
+			if(mGravity==null) { // first run
+				mGravity=values;
+			} else {
+				lowPassFilter(0.5f, 1.0f, values, mGravity, mGravity);
+				myListener.newResult("Acc_filtered", mGravity);
+			}
 			break;
 		case Sensor.TYPE_MAGNETIC_FIELD:
-			mGeoMagnetic=values;
+			if(mGeoMagnetic==null) { // first run
+				mGeoMagnetic=values;
+			} else {
+				lowPassFilter(2.0f, 4.0f, values, mGeoMagnetic, mGeoMagnetic);
+				myListener.newResult("Geo_filtered", mGeoMagnetic);
+			}
 			break;
 		}
+
 		// Check cached geo-magnetic field
 		checkMagField();
 		if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER ||
@@ -223,7 +235,6 @@ public class Orientator implements SensorEventListener, LocationListener
 										 (float)Math.toDegrees(orientationValues[0])+(float)magField.getDeclination(),
 										 (float)Math.toDegrees(orientationValues[1]), (float)Math.toDegrees(orientationValues[2])});
 				*/
-				myListener.newOrientation((360+Math.toDegrees(orientationValues[0])+magField.getDeclination())%360);
 				/** If we want to have Landscape/Portrait */
 				/*
 				WindowManager myWM = (WindowManager)myContext.getSystemService(Context.WINDOW_SERVICE);
@@ -234,6 +245,12 @@ public class Orientator implements SensorEventListener, LocationListener
 				tilt=(tilt<-1||tilt>1.20)?1:0;
 				//myListener.newResult("Tilt status", new float[] { tilt });
 				myListener.isTilt(tilt>0);
+				/** Display orientation only if not tilted */
+				if(tilt!=1){
+					double angle=(360+Math.toDegrees(orientationValues[0])+magField.getDeclination())%360;
+					angle=angle-(angle%5);
+					myListener.newOrientation(angle);
+				}
 			}
 		}
 		computes.set(false);
@@ -270,6 +287,25 @@ public class Orientator implements SensorEventListener, LocationListener
 		magFieldTime = now;
 	}
 
+	/** Basic low pass filter */
+	private void lowPassFilter(float low, float high, float[] current, float[] previous, float[] next) {
+		if (current==null||previous==null) throw new NullPointerException("Input array must be non-NULL");
+        if (current.length!=previous.length) throw new IllegalArgumentException("Arrays must have same length");
+        float alpha = computeAlpha(low, high, current, previous);
+
+        for (int i = 0; i < current.length; i++) {
+            next[i]=previous[i]+alpha*(current[i]-previous[i]);
+        }
+	}
+	private static final float computeAlpha(float low, float high, float[] c, float[] p) {
+        float distance = FloatMath.sqrt((float)(Math.pow((double)(p[0]-c[0]),2d)+Math.pow((double)(p[1]-c[1]),2d)+Math.pow((double)(p[2]-c[2]),2d)));
+        if (distance < low) {
+            return 0.001f; // steady
+        } else if (distance >= low || distance < high) {
+            return 0.3f; // start moving
+        }
+        return 0.6f; // moving!
+    }
 
 	@Override
 	public void onProviderDisabled(String provider)
