@@ -98,6 +98,9 @@ public class SceneParser
         		if(!visible)
         			serviceApp.setvisible(false);
         		
+        		boolean attached = ServiceAppObj.getBoolean("attached");
+                serviceApp.attachToCamera(attached);
+        		
         		serviceManager.getSetup().world.add(serviceApp);
         		serviceApplications.add(serviceApp);
 

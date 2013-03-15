@@ -101,7 +101,11 @@ public class ServiceFusionCalendar
 				eventv.setVisibility(View.GONE);
 				
                 eventsToday = GLFactory.getInstance().newTexturedSquare("eventsToday", IO.loadBitmapFromView(eventv, 35, 35));
-                //showEvents(true);
+    		    eventsToday.setPosition(new Vec(camPos.x + eventsOffsetX +((float)curCol)*dayGridWidth , camPos.y + eventsOffsetY-((float)curRow)*dayGridHeight, camPos.z + camOffsetZ));
+    		    eventsToday.setRotation(new Vec(90.0f, 0.0f, 180.0f));
+    		    eventsToday.setScale(new Vec(8.0f, 7.0f, 1.0f));
+                serviceManager.getSetup().camera.attachToCamera(calendar);
+                serviceManager.getSetup().camera.attachToCamera(eventsToday);
 			}
 		});
     }
@@ -200,9 +204,9 @@ public class ServiceFusionCalendar
     		//calendar.addChild(eventsToday);
     		Vec camPos = serviceManager.getSetup().getCamera().getPosition();
     	    serviceManager.getSetup().world.add(eventsToday);
-		    eventsToday.setPosition(new Vec(camPos.x + eventsOffsetX +((float)curCol)*dayGridWidth , camPos.y + eventsOffsetY-((float)curRow)*dayGridHeight, camPos.z + camOffsetZ));
-		    eventsToday.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-		    eventsToday.setScale(new Vec(8.0f, 7.0f, 1.0f));
+//		    eventsToday.setPosition(new Vec(camPos.x + eventsOffsetX +((float)curCol)*dayGridWidth , camPos.y + eventsOffsetY-((float)curRow)*dayGridHeight, camPos.z + camOffsetZ));
+//		    eventsToday.setRotation(new Vec(90.0f, 0.0f, 180.0f));
+//		    eventsToday.setScale(new Vec(8.0f, 7.0f, 1.0f));
 		    eventsVisible = true;
     	}
     	else

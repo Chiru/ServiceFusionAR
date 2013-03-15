@@ -31,7 +31,7 @@ import commands.Command;
 public class ServiceFusionSetup extends Setup 
 {
 
-	public GLCamera camera;
+	public ServiceFusionCamera camera;
 	public World world;
 	
 	protected static final int delta = 5;
@@ -59,7 +59,7 @@ public class ServiceFusionSetup extends Setup
 	@Override
 	public void _a_initFieldsIfNecessary() 
 	{
-		camera = new GLCamera(new Vec(0, 0, 0));
+		camera = new ServiceFusionCamera(new Vec(0, 0, 0));
 		world = new World(camera);
 	}
 
@@ -118,7 +118,8 @@ public class ServiceFusionSetup extends Setup
 			@Override
 			public boolean execute() 
 			{
-				camera.changeZPositionBuffered(+delta);
+				float angle = camera.getRotation().y + delta;
+				camera.setNewAngle(angle);
 				return false;
 			}
 		});
@@ -127,7 +128,8 @@ public class ServiceFusionSetup extends Setup
 			@Override
 			public boolean execute() 
 			{
-				camera.changeZPositionBuffered(-delta);
+				float angle = camera.getRotation().y - delta;
+				camera.setNewAngle(angle);
 				return false;
 			}
 		});

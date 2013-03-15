@@ -29,7 +29,8 @@
                 "DROP" : "RemoveMovieTickets", 
                 "LONG_CLICK" : ""
             },
-            "visible" : "true" 
+            "visible" : "true",
+            "attached" : "true" 
         },
         {
             "name" : "Twitter",
@@ -59,7 +60,8 @@
                 "DROP" : "MovieLogin", 
                 "LONG_CLICK" : ""
             },
-            "visible" : "true" 
+            "visible" : "true",
+            "attached" : "true" 
         },
         {
             "name" : "Skype",
@@ -89,7 +91,8 @@
                 "DROP" : "", 
                 "LONG_CLICK" : ""
             },
-            "visible" : "true" 
+            "visible" : "true",
+            "attached" : "true" 
         },
         {
             "name" : "Radio",
@@ -119,7 +122,8 @@
                 "DROP" : "PlaySong", 
                 "LONG_CLICK" : "StopPlaying"
             },
-            "visible" : "true" 
+            "visible" : "true",
+            "attached" : "true" 
         },
         {
             "name" : "MovieInfobubble",
@@ -127,7 +131,7 @@
             "textRef" : "lightgreytex.jpg",
             "position" : 
             {
-                "x" : "5.0", 
+                "x" : "55.0", 
                 "y" : "5.0", 
                 "z" : "-55.0"
             },
@@ -149,7 +153,8 @@
                 "DROP" : "", 
                 "LONG_CLICK" : ""
             },
-            "visible" : "false" 
+            "visible" : "false",
+            "attached" : "false" 
         },
          {
             "name" : "MovieIcon",
@@ -157,7 +162,7 @@
             "textRef" : "movie_icon_colorCompleteMap.png",
             "position" : 
             {
-                "x" : "0.0", 
+                "x" : "50.0", 
                 "y" : "-5.0", 
                 "z" : "-55.0"
             },
@@ -179,7 +184,8 @@
                 "DROP" : "", 
                 "LONG_CLICK" : ""
             },
-            "visible" : "true" 
+            "visible" : "true",
+            "attached" : "false" 
         },
         {
             "name" : "PubIcon",
@@ -209,7 +215,8 @@
                 "DROP" : "", 
                 "LONG_CLICK" : ""
             },
-            "visible" : "true" 
+            "visible" : "true",
+            "attached" : "false" 
         },
         {
             "name" : "MusicInfobubble",
@@ -239,7 +246,8 @@
                 "DROP" : "", 
                 "LONG_CLICK" : ""
             },
-            "visible" : "false" 
+            "visible" : "false",
+            "attached" : "false" 
         }
     ]
 }

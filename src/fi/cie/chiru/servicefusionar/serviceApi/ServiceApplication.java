@@ -4,7 +4,6 @@ import fi.cie.chiru.servicefusionar.gdx.GDXMesh;
 import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
-import java.lang.Math;
 import commands.Command;
 
 import util.Log;
@@ -71,9 +70,19 @@ public class ServiceApplication extends AbstractObj
 	{
 		return gdxMesh.getScale();
 	}
-	public void  setvisible(boolean visible)
+	public void setvisible(boolean visible)
 	{
 		gdxMesh.setVisible(visible);
+	}
+	
+	public void attachToCamera(boolean attached)
+	{
+		this.attachedToCamera = attached;
+		
+		if(attached)
+		{
+			serviceManager.getSetup().camera.attachToCamera(this.gdxMesh);
+		}
 	}
 
 	@Override
