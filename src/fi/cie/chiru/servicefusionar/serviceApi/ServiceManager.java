@@ -12,6 +12,7 @@ import worldData.World;
 
 import fi.cie.chiru.servicefusionar.ServiceFusionSetup;
 import fi.cie.chiru.servicefusionar.calendar.ServiceFusionCalendar;
+import fi.cie.chiru.servicefusionar.sensors.Sensors;
 
 public class ServiceManager 
 {
@@ -21,6 +22,7 @@ public class ServiceManager
 	private MovieManager movieManager;
 	private MusicManager musicManager;
 	private ServiceFusionCalendar calendar;
+	private Sensors sensors;
 
 	public ServiceManager(ServiceFusionSetup setup)
 	{
@@ -55,6 +57,8 @@ public class ServiceManager
 		movieManager = new MovieManager(this);
 		musicManager = new MusicManager(this);
 		calendar = new ServiceFusionCalendar(this);
+		
+		sensors = new Sensors(this);
 	}
 	
 	public ServiceApplication getApplication(String appName)
@@ -88,5 +92,6 @@ public class ServiceManager
 	public void onDestroy()
 	{
 		musicManager.onDestroy();
+		sensors.onDestroy();
 	}
 }
