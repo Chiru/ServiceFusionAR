@@ -40,10 +40,15 @@ public class MovieManager
 		String URL = "http://www.finnkino.fi/xml/Schedule/?area=1018";
 		new XmlDownloader() { 
 	        protected void onPostExecute(String xmlData) {
-	        	movieInfoDownloaded = true;
+	        	if (xmlData != null)
+	        	{
+	        		movieInfoDownloaded = true;
 	        	
-	        	FinnkinoXmlParser parser = new FinnkinoXmlParser();
-	    		fillMovieInfo(parser.parse(xmlData));
+	        		FinnkinoXmlParser parser = new FinnkinoXmlParser();
+	        		fillMovieInfo(parser.parse(xmlData));
+	        	}
+	        	else
+	        		Log.e(LOG_TAG, "Couldn't download xml data!");
 	        }
 	    }.execute(URL); 
 		
