@@ -331,7 +331,7 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
     	JSONObject payload = new JSONObject();
 
     	try {
-    		if (active_stream.getBoolean("Acked"))
+    		if (active_stream.getBoolean("Acked") && active_stream.getBoolean("StreamIsPlaying"))
     		{
 	    		header.put("wsKey", key);
 	    		header.put("sessionID", session_id);
