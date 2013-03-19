@@ -141,22 +141,27 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
 		
 		new Request() { 
 	        protected void onPostExecute(String response) {
-	    		JSONObject responseObject = null;
-	    		try {
-	    			responseObject = new JSONObject(response);
-	    		} catch (JSONException e) {
-	    			Log.e(LOG_TAG, e.toString());
-	    		}
-	    		
-	    		try {
-	    			if (responseObject.getJSONObject("result").getBoolean("success"))
-	    				session_id = responseObject.getJSONObject("result").getString("sessionID");
-	    		} catch (JSONException e) {
-	    			Log.e(LOG_TAG, e.toString());
-	    		}
-	    		
-	    		// Initialize Country data for Grooveshark session
-	    		GetCountry();
+	        	JSONObject responseObject = null;
+	        	if (response != null)
+	        	{
+		    		try {
+		    			responseObject = new JSONObject(response);
+		    		} catch (JSONException e) {
+		    			Log.e(LOG_TAG, e.toString());
+		    		}
+		    		
+		    		try {
+		    			if (responseObject.getJSONObject("result").getBoolean("success"))
+		    				session_id = responseObject.getJSONObject("result").getString("sessionID");
+		    		} catch (JSONException e) {
+		    			Log.e(LOG_TAG, e.toString());
+		    		}
+		    		
+		    		// Initialize Country data for Grooveshark session
+		    		GetCountry();
+	        	}
+	        	else
+	        		Log.e(LOG_TAG, "Couldn't get response from Grooveshark service!");
 	        }
 	    }.execute(payload); 
 
@@ -169,17 +174,22 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
 		new Request() { 
 	        protected void onPostExecute(String response) {
 	        	JSONObject responseObject = null;
-	    		try {
-	    			responseObject = new JSONObject(response);
-	    		} catch (JSONException e) {
-	    			Log.e(LOG_TAG, e.toString());
-	    		}
-	    		
-	        	try {
-	    			country = responseObject.getJSONObject("result");
-	    		} catch (JSONException e) {
-	    			Log.e(LOG_TAG, e.toString());
-	    		}
+	        	if (response != null)
+	        	{
+		    		try {
+		    			responseObject = new JSONObject(response);
+		    		} catch (JSONException e) {
+		    			Log.e(LOG_TAG, e.toString());
+		    		}
+		    		
+		        	try {
+		    			country = responseObject.getJSONObject("result");
+		    		} catch (JSONException e) {
+		    			Log.e(LOG_TAG, e.toString());
+		    		}
+	        	}
+	        	else
+	        		Log.e(LOG_TAG, "Couldn't get response from Grooveshark service!");
 	        }
 	    }.execute(payload); 
 
@@ -274,36 +284,41 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
     {
     	JSONObject result = null;    	
     	
-    	try	{
-    		result = new JSONObject(response).getJSONObject("result");
-    		    		
-    		active_stream.put("songID", song_id);
-    		active_stream.put("StreamKey", result.getString("StreamKey"));
-    		active_stream.put("StreamServerID", result.getString("StreamServerID"));
-    		active_stream.put("url", result.getString("url"));
-    		active_stream.put("TimeElapsed", 0);
-    		active_stream.put("Acked", false);
-    		
-    	} catch (JSONException e) {
-    		Log.d(LOG_TAG, result.toString());
-    		Log.e(LOG_TAG, e.toString());
+    	if (response != null)
+    	{
+	    	try	{
+	    		result = new JSONObject(response).getJSONObject("result");
+	    		    		
+	    		active_stream.put("songID", song_id);
+	    		active_stream.put("StreamKey", result.getString("StreamKey"));
+	    		active_stream.put("StreamServerID", result.getString("StreamServerID"));
+	    		active_stream.put("url", result.getString("url"));
+	    		active_stream.put("TimeElapsed", 0);
+	    		active_stream.put("Acked", false);
+	    		
+	    	} catch (JSONException e) {
+	    		Log.d(LOG_TAG, result.toString());
+	    		Log.e(LOG_TAG, e.toString());
+	    	}
+	    	
+	    	if (mediaPlayer == null)
+	    		mediaPlayer = new MediaPlayer();
+	    	
+	    	mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+	    	mediaPlayer.setOnCompletionListener(this);
+	    	mediaPlayer.setOnPreparedListener(this);
+	    	
+	    	try {
+	    		mediaPlayer.setDataSource(active_stream.getString("url"));
+	    		mediaPlayer.prepareAsync();
+	    	} catch (IOException e) {
+				Log.e(LOG_TAG, e.toString());
+			} catch (JSONException e) {
+				Log.e(LOG_TAG, e.toString());
+			}
     	}
-    	
-    	if (mediaPlayer == null)
-    		mediaPlayer = new MediaPlayer();
-    	
-    	mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-    	mediaPlayer.setOnCompletionListener(this);
-    	mediaPlayer.setOnPreparedListener(this);
-    	
-    	try {
-    		mediaPlayer.setDataSource(active_stream.getString("url"));
-    		mediaPlayer.prepareAsync();
-    	} catch (IOException e) {
-			Log.e(LOG_TAG, e.toString());
-		} catch (JSONException e) {
-			Log.e(LOG_TAG, e.toString());
-		}
+    	else
+    		Log.e(LOG_TAG, "Couldn't get response from Grooveshark service!");
     }
 
     public void MarkStreamFinished()
@@ -316,7 +331,7 @@ public class Grooveshark implements MediaPlayer.OnCompletionListener, MediaPlaye
     	JSONObject payload = new JSONObject();
 
     	try {
-    		if (active_stream.getBoolean("Acked"))
+    		if (active_stream.getBoolean("Acked") && active_stream.getBoolean("StreamIsPlaying"))
     		{
 	    		header.put("wsKey", key);
 	    		header.put("sessionID", session_id);

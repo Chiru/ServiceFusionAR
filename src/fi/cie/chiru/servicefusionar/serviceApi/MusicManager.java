@@ -29,8 +29,13 @@ public class MusicManager
 		
 		new XmlDownloader() { 
 	        protected void onPostExecute(String xmlData) {
-	    		PlaylistXmlParser parser = new PlaylistXmlParser();
-	    		fillMusicPlaylist(parser.parse(xmlData));
+	        	if (xmlData != null)
+	        	{
+	        		PlaylistXmlParser parser = new PlaylistXmlParser();
+	        		fillMusicPlaylist(parser.parse(xmlData));
+	        	}
+	        	else
+	        		Log.e(LOG_TAG, "Couldn't download xml data!");
 	        }
 	    }.execute(URL); 
 
