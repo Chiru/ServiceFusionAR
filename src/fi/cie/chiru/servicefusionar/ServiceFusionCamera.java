@@ -15,7 +15,6 @@ import gl.scenegraph.MeshComponent;
 
 public class ServiceFusionCamera extends GLCamera
 {
-	private float i = 0.0f;
 	private List<MeshComponent> attachedMeshes;
 	private float prevAngle;
 	private float currentAngle;
@@ -31,12 +30,12 @@ public class ServiceFusionCamera extends GLCamera
 	@Override
 	public boolean update(float timeDelta, Updateable parent) 
 	{
-		if(angleChanged)
-		{
-			updateMeshPositions();
-			angleChanged = false;
-		}
-		return super.update(timeDelta, parent);
+//		if(angleChanged)
+//		{
+//			updateMeshPositions();
+//			angleChanged = false;
+//		}
+		return true;//super.update(timeDelta, parent);
 	}
 	
 	public void attachToCamera(MeshComponent mc)
@@ -54,16 +53,26 @@ public class ServiceFusionCamera extends GLCamera
 		prevAngle = currentAngle;
 		currentAngle = angle;
 		this.setRotation(0.0f, angle, 0.0f);
-		angleChanged = true;
+		//angleChanged = true;
+		updateMeshPositions();
 	}
 	
 	private void updateMeshPositions()
 	{
-		float rotAngleRad = (float)((currentAngle - prevAngle)*(Math.PI/180));
+		float angle = currentAngle - prevAngle;
+		
+		if(angle == 0)
+			return;
+		
+		float rotAngleRad = (float)(angle*(Math.PI/180));
+		Vec direction = new Vec();
+		
 		for(int i = 0; i<attachedMeshes.size(); i++)
 		{
 			MeshComponent meshComp = attachedMeshes.get(i);
 			Vec meshPos = meshComp.getPosition();
+			Vec meshRot = meshComp.getRotation();
+			Vec camRot = this.getRotation();
 			Vec camPos = this.getPosition();
 
 			float sin = (float)Math.sin(rotAngleRad);
@@ -74,9 +83,8 @@ public class ServiceFusionCamera extends GLCamera
 			Matrix.multiplyMV(res, 0, rotMat, 0, pos, 0);
 			meshPos.setTo(camPos.x + res[0], camPos.y + res[1], camPos.z + res[2]);
 			
-			Vec meshRot = meshComp.getRotation();
-			Vec camRot = this.getRotation();
-
+			meshRot.setTo(meshRot.x, -camRot.y , meshRot.z);
+            
 		}		
 	}
 }
