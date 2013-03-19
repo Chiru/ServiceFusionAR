@@ -38,8 +38,8 @@ public class CreditCard
 		Vec camPos = serviceManager.getSetup().getCamera().getPosition();
     	serviceManager.getSetup().world.add(creditCard);
     	creditCard.setPosition(new Vec(camPos.x + 15.0f, 0.0f, camPos.z - 40.0f));
-    	creditCard.setRotation(new Vec(90.0f, 180.0f, 0.0f));
-    	creditCard.setScale(new Vec(6.0f, 4.0f, 1.0f));
+    	creditCard.setRotation(new Vec(90.0f, 0.0f, 180.0f));
+    	creditCard.setScale(new Vec(6.0f, 1.0f, 4.0f));
     	
 	}
 	

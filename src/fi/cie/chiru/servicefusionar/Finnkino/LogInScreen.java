@@ -66,7 +66,7 @@ public class LogInScreen
 				serviceManager.getSetup().world.add(loginScreen);
 		    	loginScreen.setPosition(new Vec(camPos.x, camPos.y + camOffsetY, camPos.z + camOffsetZ));
 		    	loginScreen.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-		    	loginScreen.setScale(new Vec(15.0f, 10.0f, 15.0f));
+		    	loginScreen.setScale(new Vec(15.0f, 1.0f, 10.0f));
 		    	
 		    	createButtons(v);
 		    	okbutton.setOnClickCommand(new Accept(false));
@@ -143,7 +143,7 @@ public class LogInScreen
 			serviceManager.getSetup().world.add(loginScreenFilled);
 			loginScreenFilled.setPosition(new Vec(camPos.x, camPos.y + camOffsetY, camPos.z + camOffsetZ));
 			loginScreenFilled.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-			loginScreenFilled.setScale(new Vec(15.0f, 10.0f, 1.0f));
+			loginScreenFilled.setScale(new Vec(15.0f, 1.0f, 10.0f));
 
 			createButtons(lv);
 			okbutton.setOnClickCommand(new Accept(true));
@@ -167,12 +167,12 @@ public class LogInScreen
         serviceManager.getSetup().world.add(okbutton);
     	okbutton.setPosition(new Vec(camPos.x + okButtonOffsetX, camPos.y, camPos.z + camOffsetZ));
     	okbutton.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-    	okbutton.setScale(new Vec(4.0f, 1.5f, 1.0f));
+    	okbutton.setScale(new Vec(4.0f, 1.0f, 1.5f));
     	
     	serviceManager.getSetup().world.add(cancelbutton);
     	cancelbutton.setPosition(new Vec(camPos.x + cancelButtonOffsetX, camPos.y, camPos.z + camOffsetZ));
     	cancelbutton.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-    	cancelbutton.setScale(new Vec(4.0f, 1.5f, 1.0f));
+    	cancelbutton.setScale(new Vec(4.0f, 1.0f, 1.5f));
 	}
 	 
 	private class Accept extends Command

@@ -94,7 +94,7 @@ public class ServiceFusionCalendar
 				serviceManager.getSetup().world.add(calendar);
 				calendar.setPosition(new Vec(camPos.x + camOffsetX, camPos.y + camOffsetY, camPos.z + camOffsetZ));
 				calendar.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-				calendar.setScale(new Vec(12.0f, 10.0f, 1.0f));
+				calendar.setScale(new Vec(12.0f, 1.0f, 10.0f));
 				
 				View eventv = createEvents(li);
 				root.addView(eventv);
@@ -103,7 +103,7 @@ public class ServiceFusionCalendar
                 eventsToday = GLFactory.getInstance().newTexturedSquare("eventsToday", IO.loadBitmapFromView(eventv, 35, 35));
     		    eventsToday.setPosition(new Vec(camPos.x + eventsOffsetX +((float)curCol)*dayGridWidth , camPos.y + eventsOffsetY-((float)curRow)*dayGridHeight, camPos.z + camOffsetZ));
     		    eventsToday.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-    		    eventsToday.setScale(new Vec(8.0f, 7.0f, 1.0f));
+    		    eventsToday.setScale(new Vec(8.0f, 1.0f, 7.0f));
                 serviceManager.getSetup().camera.attachToCamera(calendar);
                 serviceManager.getSetup().camera.attachToCamera(eventsToday);
 			}
@@ -190,7 +190,7 @@ public class ServiceFusionCalendar
 		    	
 		    	serviceManager.getSetup().world.remove(eventsToday);
 		    	eventsToday = null;
-		    	eventsToday = GLFactory.getInstance().newTexturedSquare("eventsTodayUpdated", IO.loadBitmapFromView(v));
+		    	eventsToday = GLFactory.getInstance().newTexturedSquare("eventsTodayUpdated", IO.loadBitmapFromView(v, 35, 35));
 				showEvents(true);
 			}
 		});
@@ -202,11 +202,11 @@ public class ServiceFusionCalendar
     	if(visible == true)
     	{
     		//calendar.addChild(eventsToday);
-    		Vec camPos = serviceManager.getSetup().getCamera().getPosition();
+//    		Vec camPos = serviceManager.getSetup().getCamera().getPosition();
     	    serviceManager.getSetup().world.add(eventsToday);
 //		    eventsToday.setPosition(new Vec(camPos.x + eventsOffsetX +((float)curCol)*dayGridWidth , camPos.y + eventsOffsetY-((float)curRow)*dayGridHeight, camPos.z + camOffsetZ));
 //		    eventsToday.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-//		    eventsToday.setScale(new Vec(8.0f, 7.0f, 1.0f));
+//		    eventsToday.setScale(new Vec(8.0f, 1.0f, 7.0f));
 		    eventsVisible = true;
     	}
     	else

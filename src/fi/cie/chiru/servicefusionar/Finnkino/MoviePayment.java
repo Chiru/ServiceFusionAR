@@ -138,7 +138,7 @@ public class MoviePayment
 				serviceManager.getSetup().world.add(paymentScreen);
 				paymentScreen.setPosition(new Vec(camPos.x, camPos.y + camOffsetY, camPos.z + camOffsetZ));
 				paymentScreen.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-				paymentScreen.setScale(new Vec(15.0f, (14.0f + (float)offset), 1.0f));
+				paymentScreen.setScale(new Vec(15.0f, 1.0f, (14.0f + (float)offset)));
 				
 				createPaymentArea(v, offset);
 				createCancelButton(v, offset);
@@ -190,7 +190,7 @@ public class MoviePayment
 		serviceManager.getSetup().world.add(paymentArea);
 		paymentArea.setPosition(new Vec(camPos.x, (camPos.y + paymentAreaOffsetY - ((float)offset)*0.7f), camPos.z + camOffsetZ));
 		paymentArea.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-		paymentArea.setScale(new Vec(6.0f, 6.0f, 1.0f));
+		paymentArea.setScale(new Vec(6.0f, 1.0f, 6.0f));
 		paymentArea.setOnDoubleClickCommand(new handlePayment());
     }
     
@@ -206,7 +206,7 @@ public class MoviePayment
 		serviceManager.getSetup().world.add(cancelButton);
 		cancelButton.setPosition(new Vec(camPos.x, (camPos.y + cancelButtonOffsetY - ((float)offset)*0.7f), camPos.z + camOffsetZ));
 		cancelButton.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-		cancelButton.setScale(new Vec(6.0f, 2.0f, 1.0f));
+		cancelButton.setScale(new Vec(6.0f, 1.0f, 2.0f));
 		cancelButton.setOnClickCommand(new Cancel());
     	
     }
