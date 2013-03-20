@@ -8,9 +8,7 @@ import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 import android.os.Handler;
 import android.util.Log;
 
-import worldData.Updateable;
-
-public class Sensors implements Updateable, OrientationListener 
+public class Sensors implements OrientationListener 
 {
 	private static final String LOG_TAG = "ServiceFusion sensors";
 	ServiceManager serviceManager = null;
@@ -158,12 +156,6 @@ public class Sensors implements Updateable, OrientationListener
 		if(!bool) {
 			newStatus(0, "Sensor "+sensor+" need 8 figure calibration..."); // You need to draw an 8 in the air :)
 		}
-	}
-
-	@Override
-	public boolean update(float timeDelta, Updateable parent) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 	
 	public void onDestroy()
