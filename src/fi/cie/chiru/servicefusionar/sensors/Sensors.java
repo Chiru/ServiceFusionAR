@@ -95,7 +95,7 @@ public class Sensors implements OrientationListener
 			}
 			if (!p.isEmpty())
 			{
-				if (currentAngle - Float.valueOf(p) > 5 || currentAngle - Float.valueOf(p) < -5 )
+				if (currentAngle - Float.valueOf(p) > 4 || currentAngle - Float.valueOf(p) < -4 )
 				{
 					Log.i(LOG_TAG, "Sensor result: " + p);
 					currentAngle = Float.valueOf(p);
