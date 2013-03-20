@@ -50,6 +50,11 @@ public class ServiceManager
 		return musicManager;
 	}
 	
+	public Sensors getSensors()
+	{
+		return sensors;
+	}
+	
 	public void createApplications()
 	{
 		SceneParser parser = new SceneParser();
