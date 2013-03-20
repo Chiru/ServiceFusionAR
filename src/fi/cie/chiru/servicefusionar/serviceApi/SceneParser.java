@@ -32,16 +32,23 @@ public class SceneParser
 	{
 		Vector<ServiceApplication> serviceApplications = new Vector<ServiceApplication>();
 		
+		InputStream in = null;
 		try 
 		{
-			InputStream in = serviceManager.getSetup().myTargetActivity.getAssets().open(fileName);
+			in = serviceManager.getSetup().myTargetActivity.getAssets().open(fileName);
 			sceneContent = IO.convertInputStreamToString(in);
-            
 		} 
 		catch (IOException e) 
 		{
 			Log.e(LOG_TAG, "Could not read file: " +fileName);
 			e.printStackTrace();
+		} finally {
+			try {
+				Log.i(LOG_TAG, "Closing scene input stream");
+				in.close();
+			} catch (IOException e) {
+				Log.e(LOG_TAG, e.toString());
+			}
 		}
 		
 		JSONObject jsonObj = null;
