@@ -101,12 +101,17 @@ public class Sensors implements Updateable, OrientationListener
 				{
 					Log.i(LOG_TAG, "Sensor result: " + p);
 					currentAngle = Float.valueOf(p);
-					serviceManager.getSetup().camera.setNewAngle(currentAngle);
+					//serviceManager.getSetup().camera.setNewAngle(currentAngle);
 				}
 				
 			}
 			//textResult.setText(p);
 		}
+	}
+	
+	public float getCurrentAngle()
+	{
+		return currentAngle;
 	}
 
 	/** add new sensor result to the list */
