@@ -1,6 +1,7 @@
 package fi.cie.chiru.servicefusionar;
 
 import fi.cie.chiru.servicefusionar.gdx.GDXConnection;
+import fi.cie.chiru.servicefusionar.sensors.Sensors;
 import fi.cie.chiru.servicefusionar.serviceApi.CustomDragEventListener;
 import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 import geo.GeoObj;
@@ -59,7 +60,7 @@ public class ServiceFusionSetup extends Setup
 	@Override
 	public void _a_initFieldsIfNecessary() 
 	{
-		camera = new ServiceFusionCamera(new Vec(0, 0, 0));
+		camera = new ServiceFusionCamera(servicemanager, new Vec(0, 0, 0));
 		world = new World(camera);
 	}
 
@@ -111,29 +112,7 @@ public class ServiceFusionSetup extends Setup
 
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) 
-	{
-		guiSetup.setRightViewAllignBottom();
-		guiSetup.addImangeButtonToRightView(R.drawable.arrow_up_float, new Command() 
-		{
-			@Override
-			public boolean execute() 
-			{
-				float angle = camera.getRotation().y + delta;
-				camera.setNewAngle(angle);
-				return false;
-			}
-		});
-		guiSetup.addImangeButtonToRightView(R.drawable.arrow_down_float, new Command() 
-		{
-			@Override
-			public boolean execute() 
-			{
-				float angle = camera.getRotation().y - delta;
-				camera.setNewAngle(angle);
-				return false;
-			}
-		});
-		
+	{	
 		guiSetup.getMainContainerView().setOnDragListener(new CustomDragEventListener(servicemanager));
 	}
 	
