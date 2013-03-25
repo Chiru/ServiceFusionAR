@@ -188,10 +188,20 @@ public class ServiceFusionCalendar
 		    	root.addView(v);
 				v.setVisibility(View.GONE);
 		    	
+				Vec eventPos = eventsToday.getPosition();
+				Vec eventRot = calendar.getRotation();
+				
+				serviceManager.getSetup().camera.detachFromCamera(eventsToday);
 		    	serviceManager.getSetup().world.remove(eventsToday);
-		    	eventsToday = null;
+		    	//eventsToday = null;
 		    	eventsToday = GLFactory.getInstance().newTexturedSquare("eventsTodayUpdated", IO.loadBitmapFromView(v, 35, 35));
-				showEvents(true);
+		    	serviceManager.getSetup().world.add(eventsToday);
+
+		    	eventsToday.setPosition(new Vec(eventPos.x, eventPos.y, eventPos.z));
+    		    eventsToday.setRotation(new Vec(90.0f, eventRot.y, 180.0f));
+    		    eventsToday.setScale(new Vec(8.0f, 1.0f, 7.0f));
+    		    serviceManager.getSetup().camera.attachToCamera(eventsToday);
+		    	showEvents(true);
 			}
 		});
     }
@@ -199,7 +209,7 @@ public class ServiceFusionCalendar
     public void showEvents(boolean visible)
     {
     	
-    	if(visible == true)
+    	if(visible)
     	{
     		//calendar.addChild(eventsToday);
 //    		Vec camPos = serviceManager.getSetup().getCamera().getPosition();
@@ -213,6 +223,20 @@ public class ServiceFusionCalendar
     	{
     		serviceManager.getSetup().world.remove(eventsToday);
     		eventsVisible = false;
+    	}
+    }
+    
+    public void visible(boolean visible)
+    {
+    	if(!visible)
+    	{
+    		serviceManager.getSetup().world.remove(calendar);
+    		serviceManager.getSetup().world.remove(eventsToday);
+    	}
+    	else
+    	{
+    		serviceManager.getSetup().world.add(calendar);
+    		serviceManager.getSetup().world.add(eventsToday);
     	}
     }
     
