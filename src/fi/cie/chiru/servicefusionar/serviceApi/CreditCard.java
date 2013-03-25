@@ -29,9 +29,8 @@ public class CreditCard
 	private void initCard()
 	{
 		Bitmap bm = IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.visa_card);
-		Bitmap bms = Bitmap.createScaledBitmap(bm, 175, 120, false);
 		ImageView im = new ImageView(serviceManager.getSetup().myTargetActivity);
-		im.setImageBitmap(bms);
+		im.setImageBitmap(bm);
 		creditCard = GLFactory.getInstance().newTexturedSquare("creditCard", bm);
 		creditCard.setOnLongClickCommand(new DraggableImage(serviceManager, im, ""));
     	
@@ -39,7 +38,7 @@ public class CreditCard
     	serviceManager.getSetup().world.add(creditCard);
     	creditCard.setPosition(new Vec(camPos.x + 15.0f, 0.0f, camPos.z - 40.0f));
     	creditCard.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-    	creditCard.setScale(new Vec(6.0f, 1.0f, 4.0f));
+    	creditCard.setScale(new Vec(4.5f, 1.0f, 4.0f));
     	
 	}
 	

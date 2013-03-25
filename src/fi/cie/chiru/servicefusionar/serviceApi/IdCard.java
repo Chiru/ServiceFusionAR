@@ -71,9 +71,8 @@ public class IdCard
 		}
 		
 		Bitmap bm = IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.id_card);
-		Bitmap bms = Bitmap.createScaledBitmap(bm, 175, 120, false);
 		ImageView im = new ImageView(serviceManager.getSetup().myTargetActivity);
-		im.setImageBitmap(bms);
+		im.setImageBitmap(bm);
         idCard = GLFactory.getInstance().newTexturedSquare("idCard", bm);
         idCard.setOnLongClickCommand(new DraggableImage(serviceManager, im, this.toString()));
         
@@ -81,7 +80,7 @@ public class IdCard
     	serviceManager.getSetup().world.add(idCard);
     	idCard.setPosition(new Vec(camPos.x + 15.0f, 0.0f, camPos.z - 40.0f));
     	idCard.setRotation(new Vec(90.0f, 0.0f, 180.0f));
-    	idCard.setScale(new Vec(6.0f, 1.0f, 4.0f));
+    	idCard.setScale(new Vec(4.5f, 1.0f, 4.0f));
     	
 	}
 	
