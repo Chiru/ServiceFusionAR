@@ -38,13 +38,28 @@ public class Auditorium
 	private Bitmap wheelchair_seat;
 	private Bitmap yellow_seat;
 	private Command vibratefeedback;
+	private boolean small = false;
 	
 	public Auditorium(ServiceManager serviceManager)
 	{
 		this.serviceManager = serviceManager;
-		green_seat = IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.green_seat);
-		wheelchair_seat = IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.wheelchair);
-		yellow_seat = IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.yellow_seat);
+		
+		if(serviceManager.getSetup().getScreenHeigth() == 897 && serviceManager.getSetup().getScreenWidth() == 540);
+            small = true;
+            
+		if(small)
+		{
+		    green_seat = IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.green_seat_small);
+		    wheelchair_seat = IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.wheelchair_small);
+		    yellow_seat = IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.yellow_seat_small);
+		}
+		else
+		{
+		    green_seat = IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.green_seat);
+		    wheelchair_seat = IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.wheelchair);
+		    yellow_seat = IO.loadBitmapFromId(serviceManager.getSetup().myTargetActivity, R.drawable.yellow_seat);
+		}
+		
 		vibratefeedback = new CommandDeviceVibrate(serviceManager.getSetup().myTargetActivity, 30);
 		selectedSeats = new ArrayList<SeatNumber>();
 	}
@@ -119,16 +134,14 @@ public class Auditorium
 		        colSpec = GridLayout.spec(i, 1);
 			    rowSpec = GridLayout.spec(j, 1);
                 p = new GridLayout.LayoutParams(rowSpec, colSpec);
-                
                 seatCol++;
-                
+
         		if(plaza1Margins[i][j] != null)
 			        p.setMargins(plaza1Margins[i][j][0], plaza1Margins[i][j][1], plaza1Margins[i][j][2], plaza1Margins[i][j][3]);
         		
 			    p.setGravity(Gravity.START|Gravity.END);
 			
 			    seat = new ImageView(serviceManager.getSetup().myTargetActivity);
-			    
 			    if(((i>4 && i<8) || (i>25 && i<29)) && j==14)
 			    {
 			        seat.setImageBitmap(wheelchair_seat);
@@ -148,7 +161,7 @@ public class Auditorium
                         changeSeat(v);
                     }
                 });
-			    
+
 			    gl.addView(seat, p);
 			}
 		    
@@ -216,48 +229,75 @@ public class Auditorium
 				root.removeView(plazaView);
 				serviceManager.setVisibilityToAllApplications(true);
 				serviceManager.getMovieManager().getInfoBubble().visible();
+				serviceManager.getSetup().camera.setUIMode(false);
+				
 	        }
 	    });
 	}
 	
 	private void initPlaza1Margins()
 	{
-		plaza1Margins = new int[34][15][]; 
-	    plaza1Margins[0][0] = new int[] {117,72,3,0};
-	    plaza1Margins[1][0] = new int[] {3,74,3,0};
-	    plaza1Margins[2][0] = new int[] {3,74,3,0};
-	    plaza1Margins[3][0] = new int[] {3,74,3,0};
-	    plaza1Margins[4][0] = new int[] {3,74,3,0};
-	    plaza1Margins[5][0] = new int[] {3,74,3,0};
-	    plaza1Margins[6][0] = new int[] {3,74,3,0};
-	    plaza1Margins[7][0] = new int[] {3,74,3,0};
-	    plaza1Margins[8][0] = new int[] {3,74,3,0};
-	    plaza1Margins[9][0] = new int[] {3,74,3,0};
-	    plaza1Margins[10][0] = new int[] {3,74,3,0};
-	    plaza1Margins[11][0] = new int[] {3,74,3,0};
-	    plaza1Margins[12][0] = new int[] {3,74,3,0};
-	    plaza1Margins[13][0] = new int[] {3,74,3,0};
-	    plaza1Margins[14][0] = new int[] {3,74,3,0};
-	    plaza1Margins[15][0] = new int[] {3,74,3,0};
-	    plaza1Margins[16][0] = new int[] {3,74,3,0};
-	    plaza1Margins[17][0] = new int[] {3,74,3,0};
-	    plaza1Margins[18][0] = new int[] {3,74,3,0};
-	    plaza1Margins[19][0] = new int[] {3,74,3,0};
-	    plaza1Margins[20][0] = new int[] {3,74,3,0};
-	    plaza1Margins[21][0] = new int[] {3,74,3,0};
-	    plaza1Margins[22][0] = new int[] {3,74,3,0};
-	    plaza1Margins[23][0] = new int[] {3,74,3,0};
-	    plaza1Margins[24][0] = new int[] {3,74,3,0};
-	    plaza1Margins[25][0] = new int[] {3,74,3,0};
-	    plaza1Margins[26][0] = new int[] {3,74,3,0};
-	    plaza1Margins[27][0] = new int[] {3,74,3,0};
-	    plaza1Margins[28][0] = new int[] {3,74,3,0};
-	    plaza1Margins[29][0] = new int[] {3,74,3,0};
-	    plaza1Margins[30][0] = new int[] {3,74,3,0};
-	    plaza1Margins[31][0] = new int[] {3,74,3,0};
-	    plaza1Margins[32][0] = new int[] {3,74,3,0};
-	    plaza1Margins[33][0] = new int[] {3,74,3,0};
-	    plaza1Margins[33][0] = new int[] {3,74,120,0};
+		plaza1Margins = new int[34][15][];
+		
+		int topFirstRow;
+		int leftFirstCol;
+		int rightFirstCol;
+		int left;
+		int right;
+		int bottom = 0;
+		
+		if(small)
+		{
+			left = 2;
+			right = 2;
+			topFirstRow = 64;		
+			leftFirstCol = 92;
+			rightFirstCol = 100;
+		}
+		else
+		{
+			left = 3;
+			right = 3;
+			topFirstRow = 74;		
+			leftFirstCol = 117;
+		    rightFirstCol = 120;
+		}
+		
+	    plaza1Margins[0][0] = new int[] {leftFirstCol,topFirstRow,right,bottom};
+	    plaza1Margins[1][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[2][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[3][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[4][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[5][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[6][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[7][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[8][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[9][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[10][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[11][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[12][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[13][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[14][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[15][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[16][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[17][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[18][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[19][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[20][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[21][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[22][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[23][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[24][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[25][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[26][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[27][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[28][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[29][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[30][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[31][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[32][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[33][0] = new int[] {left,topFirstRow,right,bottom};
+	    plaza1Margins[33][0] = new int[] {left,topFirstRow,rightFirstCol,bottom};
 	}
 	
 	private class SeatTag {
