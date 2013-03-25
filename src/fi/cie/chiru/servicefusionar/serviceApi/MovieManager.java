@@ -69,6 +69,7 @@ public class MovieManager
     
     public void login(String movieTitle)
     {
+    	serviceManager.getSetup().camera.setUIMode(true);
     	selectedMovie = movieTitle;
     	//if more auditoriums than Plaza1 is added later the auditorium number can be parsed from movieTitle
     	serviceManager.setVisibilityToAllApplications(false);
