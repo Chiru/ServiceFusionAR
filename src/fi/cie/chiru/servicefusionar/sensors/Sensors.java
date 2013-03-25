@@ -17,6 +17,7 @@ public class Sensors implements OrientationListener
 	Handler myHandler;
 	SensorResults sensorResults = new SensorResults();
 	float currentAngle = 0.f;
+	boolean tilt;
 
 	public Sensors(ServiceManager servicemanager)
 	{
@@ -149,6 +150,8 @@ public class Sensors implements OrientationListener
 		} else {
 			newStatus(0, "Started as no tilting...");
 		}
+		
+		tilt = bool;
 	}
 	/** add implementation for the isCalibrated. This is how we know if the device sensors are reliable */
 	public void isCalibrated(final String sensor, Boolean bool)
@@ -156,6 +159,11 @@ public class Sensors implements OrientationListener
 		if(!bool) {
 			newStatus(0, "Sensor "+sensor+" need 8 figure calibration..."); // You need to draw an 8 in the air :)
 		}
+	}
+	
+	public boolean tilted()
+	{
+		return tilt;
 	}
 	
 	public void onDestroy()
