@@ -91,6 +91,8 @@ public class ServiceManager
 			
 			serviceApplications.elementAt(i).setvisible(visible);
 		}
+		
+		calendar.visible(visible);
 	
 	}
 	
