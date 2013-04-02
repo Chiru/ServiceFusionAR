@@ -16,11 +16,17 @@ import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.ScaleGestureDetector.OnScaleGestureListener;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.GridLayout.Spec;
@@ -30,6 +36,7 @@ import android.widget.RelativeLayout;
 public class Auditorium 
 {
 	private View plazaView;
+	private Zoom zoom;
 	private MeshComponent plaza;
 	private ServiceManager serviceManager;
 	private int plaza1Margins [][][];
@@ -62,6 +69,7 @@ public class Auditorium
 		
 		vibratefeedback = new CommandDeviceVibrate(serviceManager.getSetup().myTargetActivity, 30);
 		selectedSeats = new ArrayList<SeatNumber>();
+		zoom = new Zoom(true);
 	}
 	
 	public void createAuditoriumScreen(final String plazaName)
@@ -77,8 +85,8 @@ public class Auditorium
 				if(plazaName.compareTo("Sali1")==0)
 					plazaView = createPlaza1(li);
 				
+				plazaView.setOnTouchListener(new Zoom(false));
 				RelativeLayout root = (RelativeLayout) serviceManager.getSetup().getGuiSetup().getMainContainerView();
-				
 				root.addView(plazaView);
 				//plazaView.setVisibility(View.INVISIBLE);
 
@@ -95,7 +103,8 @@ public class Auditorium
 	private View createPlaza1(LayoutInflater l)
 	{
 		initPlaza1Margins();
-		GridLayout gl = (GridLayout)l.inflate(R.layout.movie_seatselection2, null);		
+		GridLayout gl = (GridLayout)l.inflate(R.layout.movie_seatselection2, null);
+		
 		setPlaza1Seats(gl);
 		connectButtons(gl);
 		View sv = (View)gl;
@@ -162,6 +171,7 @@ public class Auditorium
                     }
                 });
 
+			    //seat.setOnTouchListener(zoom);
 			    gl.addView(seat, p);
 			}
 		    
@@ -329,6 +339,108 @@ public class Auditorium
 			this.seatNum = seatNum;
 		}
 		
+	}
+	
+	private class Zoom implements OnTouchListener
+	{
+		PointF startPoint = new PointF();	
+		PointF prevTransPoint = new PointF();
+		PointF curTransPoint = new PointF(0,0);
+		float prevDist = 1.0f;
+		float curDist;
+		float scaleFact = 1.06f;
+		float transFact = 1.02f;
+		float maxScale = 3.0f;
+		float minScale = 1.0f;
+		boolean passEventsOn = true;
+		
+	    public Zoom(boolean passEventsOn)
+	    {
+	    	this.passEventsOn = passEventsOn;
+	    }
+		 
+		@Override
+		public boolean onTouch(View arg0, MotionEvent event) 
+		{	
+			int action = event.getActionMasked();
+
+			switch (action) 
+			{
+			case MotionEvent.ACTION_POINTER_DOWN:
+				startPoint.set(event.getX(), event.getY());
+//				if(event.getPointerCount() == 2)
+//				{
+//				    float x = (event.getX(0) + event.getX(1))/2.0f;
+//				    float y = (event.getY(0) + event.getY(1))/2.0f;
+//				    Log.d("--------------------", "startPoint x: "+ x + " y: " + y);
+//				    startPoint.set(x, y);
+//				}
+				break;
+
+			case MotionEvent.ACTION_MOVE:
+				if(event.getPointerCount() == 2)
+				{
+					prevDist = curDist;
+					curDist = distance(event);
+					if(curDist > prevDist)
+						zoom(true, startPoint);
+					else
+						zoom(false, startPoint);
+					
+				}
+				else
+				{
+					prevTransPoint.set(curTransPoint.x, curTransPoint.y);
+					curTransPoint.set(event.getX(), event.getY());
+					translate(curTransPoint.x - prevTransPoint.x, curTransPoint.y - prevTransPoint.y);
+				}
+				break;
+			}
+
+			if(passEventsOn)
+				return false;
+			else
+			    return true;
+		}
+		
+		//true scale-up, false scale down
+		private void zoom(boolean scale, PointF pivot) 
+		{
+//			plazaView.setPivotX(pivot.x);
+//			plazaView.setPivotY(pivot.y);
+			if(scale)
+			{
+			    plazaView.setScaleX(Math.min(plazaView.getScaleX()*scaleFact, maxScale));
+			    plazaView.setScaleY(Math.min(plazaView.getScaleY()*scaleFact, maxScale));
+			}
+			else
+			{
+			    plazaView.setTranslationX(0.0f);
+			    plazaView.setTranslationY(0.0f);
+			    plazaView.setScaleX(Math.max(plazaView.getScaleX()/scaleFact, minScale));
+			    plazaView.setScaleY(Math.max(plazaView.getScaleY()/scaleFact, minScale));
+			}
+	    }
+		
+		private float distance(MotionEvent event) 
+		{
+			float x = event.getX(0) - event.getX(1);
+			float y = event.getY(0) - event.getY(1);
+			return (float)Math.sqrt(x * x + y * y);
+		}
+		
+		private void translate(float x, float y)
+		{
+
+			if(Math.abs(x) < 25 && Math.abs(y) < 25)
+			{
+			    if(plazaView.getScaleX() > 1 || plazaView.getScaleY() > 1)
+			    {
+			        plazaView.setTranslationX(plazaView.getTranslationX()+x);
+			        plazaView.setTranslationY(plazaView.getTranslationY()+y);
+			    }
+			}
+		}
 	}
 }
 
