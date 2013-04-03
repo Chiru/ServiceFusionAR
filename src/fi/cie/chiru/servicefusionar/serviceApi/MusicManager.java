@@ -15,6 +15,7 @@ public class MusicManager
     private Grooveshark grooveshark = null;
     private ServiceManager serviceManager = null;
 	private InfoBubble infobubble;
+	private List<String> musicInfo = null;
 	boolean musicPlaylistDownloaded;
 
 
@@ -32,7 +33,7 @@ public class MusicManager
 	        	if (xmlData != null)
 	        	{
 	        		PlaylistXmlParser parser = new PlaylistXmlParser();
-	        		fillMusicPlaylist(parser.parse(xmlData));
+	        		musicInfo = parser.parse(xmlData);
 	        	}
 	        	else
 	        		Log.e(LOG_TAG, "Couldn't download xml data!");
@@ -76,21 +77,24 @@ public class MusicManager
 	    return infobubble;
 	}
 	
-	private void fillMusicPlaylist(List<String> playlist)
+	public void fillMusicPlaylist(/*List<String> playlist*/)
 	{
-		playlist.add(0, "Pink Floyd - Comfortably Numb");
-		playlist.add(0, "Steven Wilson - Luminol");
+		if (musicInfo == null)
+			return;
+		
+		musicInfo.add(0, "Pink Floyd - Comfortably Numb");
+		musicInfo.add(0, "Steven Wilson - Luminol");
 		//playlist.add(0, "Esbjörn Svensson - Seven days of Falling");
 		//playlist.add(0, "New Order - Crystal");
-		playlist.add(0, "Rise Against - Make It Stop");
-		int longestTitle = getLongestSongTitleLen(playlist);
+		musicInfo.add(0, "Rise Against - Make It Stop");
+		int longestTitle = getLongestSongTitleLen(musicInfo);
 		
 		List<String> tempList = new ArrayList<String>();
 
 		// Fill in white space to get all titles in same level
-		for (int i = 0; i < playlist.size(); i++)
+		for (int i = 0; i < musicInfo.size(); i++)
 		{
-			String song = playlist.get(i);
+			String song = musicInfo.get(i);
 			
 			// Sometimes description in an rss feed is formatted as: "Current: OFF" instead of "Current: artist - song"  
 			if (song.equalsIgnoreCase("OFF"))

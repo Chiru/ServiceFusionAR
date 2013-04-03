@@ -24,8 +24,10 @@ public class MovieManager
 	private boolean movieInfoDownloaded;
 	private int maxMovies = 10;
 	private String selectedMovie;
+	private List<Movie> movieInfo = null;
 
 	private InfoBubble infobubble;
+	private ServiceApplication movieApplication = null;
 	private LogInScreen loginscreen;
 	private Auditorium auditorium;
 	private MoviePayment moviePayment;
@@ -45,7 +47,7 @@ public class MovieManager
 	        		movieInfoDownloaded = true;
 	        	
 	        		FinnkinoXmlParser parser = new FinnkinoXmlParser();
-	        		fillMovieInfo(parser.parse(xmlData));
+	        		movieInfo = parser.parse(xmlData);
 	        	}
 	        	else
 	        		Log.e(LOG_TAG, "Couldn't download xml data!");
@@ -57,6 +59,7 @@ public class MovieManager
 		moviePayment = new MoviePayment(serviceManager);
 		
         this.serviceManager = serviceManager;
+        movieApplication = serviceManager.getApplication("MovieIcon");
 	}
 	
     public void showMovieInfo(String requesterName)
@@ -131,19 +134,19 @@ public class MovieManager
     }
     
     @SuppressLint("SimpleDateFormat")
-	private void fillMovieInfo(List<Movie> movielist)
+	public void fillMovieInfo()
     {
-    	if (!movieInfoDownloaded || movielist == null)
+    	if (!movieInfoDownloaded || movieInfo == null)
     		return;
     	
-    	int longestTitle = getLongestMovieTitlteLen(movielist);
+    	int longestTitle = getLongestMovieTitlteLen(movieInfo);
 
     	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
     	String currentTime = sdf.format(new Date());
     	
-    	List<String> movieInfo = new ArrayList<String>();
+    	List<String> movieInfoList = new ArrayList<String>();
     	
-    	for(int i = 0; i < movielist.size(); i++)
+    	for(int i = 0; i < movieInfo.size(); i++)
     	{	
     	
     	    String movieInfoString = new String();
@@ -151,21 +154,21 @@ public class MovieManager
     		String movieTitle = new String();
     		String auditorium = new String();
     		
-    		time = movielist.get(i).time.split("[T]")[1];
+    		time = movieInfo.get(i).time.split("[T]")[1];
     		time = time.substring(0,5);
     		
     		if (currentTime.compareTo(time) > 0)
     			continue;
     		
-    		movieTitle = movielist.get(i).title;
-    		auditorium = movielist.get(i).auditorium;
+    		movieTitle = movieInfo.get(i).title;
+    		auditorium = movieInfo.get(i).auditorium;
     		
     		movieInfoString = time + "  " + movieTitle + fillWhiteSpace(longestTitle - movieTitle.length()) + "    " + auditorium;
 
     		Log.d(LOG_TAG, movieInfoString);
     		
-    		if (movieInfo.size() < maxMovies)
-    			movieInfo.add(movieInfoString);
+    		if (movieInfoList.size() < maxMovies)
+    			movieInfoList.add(movieInfoString);
     		else
     			break;
 
@@ -174,7 +177,7 @@ public class MovieManager
     	infobubble = new InfoBubble(serviceManager);
 
  		if(infobubble.setInfoBubbleApplication("MovieInfobubble"))
- 		    infobubble.populateItems(movieInfo, "MovieManager");
+ 		    infobubble.populateItems(movieInfoList, "MovieManager");
     }
     
     private String fillWhiteSpace(int number)
