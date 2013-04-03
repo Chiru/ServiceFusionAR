@@ -2,13 +2,7 @@ package fi.cie.chiru.servicefusionar.serviceApi;
 
 import java.util.Vector;
 
-import android.content.Intent;
-
-import commands.Command;
-
-import util.Log;
-import util.Vec;
-import worldData.World;
+import android.location.Location;
 
 import fi.cie.chiru.servicefusionar.ServiceFusionSetup;
 import fi.cie.chiru.servicefusionar.calendar.ServiceFusionCalendar;
@@ -22,7 +16,9 @@ public class ServiceManager
 	private MovieManager movieManager;
 	private MusicManager musicManager;
 	private ServiceFusionCalendar calendar;
-	private Sensors sensors;
+	private Sensors sensors = null;
+	
+	private boolean locationset = false;
 
 	public ServiceManager(ServiceFusionSetup setup)
 	{
@@ -57,13 +53,14 @@ public class ServiceManager
 	
 	public void createApplications()
 	{
+		sensors = new Sensors(this);
+		
 		SceneParser parser = new SceneParser();
 		serviceApplications = parser.parseFile(this, "serviceFusion.txt");
 		movieManager = new MovieManager(this);
 		musicManager = new MusicManager(this);
 		calendar = new ServiceFusionCalendar(this);
 		
-		sensors = new Sensors(this);
 	}
 	
 	public ServiceApplication getApplication(String appName)
@@ -94,6 +91,18 @@ public class ServiceManager
 		
 		calendar.visible(visible);
 	
+	}
+	
+	public void geoLocationEstablished(Location location)
+	{
+		if (!locationset)
+		{
+			for(int i=0; i<serviceApplications.size(); i++)
+			{
+				serviceApplications.elementAt(i).servicePlaceFromLocation(location);
+			}
+			locationset = true;	
+		}
 	}
 	
 	public void onDestroy()
