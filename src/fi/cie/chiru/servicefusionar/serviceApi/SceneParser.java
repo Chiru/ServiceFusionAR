@@ -91,6 +91,22 @@ public class SceneParser
         		    serviceApp.setScale(new Vec((float)scaleObj.getDouble("x"), (float)scaleObj.getDouble("y"), (float)scaleObj.getDouble("z")));
         		}
         		
+        		JSONObject geoLocation = null;
+        		try {
+        			geoLocation = ServiceAppObj.getJSONObject("geoLocation");
+        		} catch (JSONException e){}
+        		if (geoLocation != null)
+        		{
+        			double latitude = 0.0d;
+        			double longitude = 0.0d;
+        			try {
+        				latitude = geoLocation.getDouble("Latitude");
+        				longitude = geoLocation.getDouble("Longitude");
+        			} catch (JSONException e) {}
+        			Log.i(LOG_TAG, "Location: " + geoLocation.toString());
+        			serviceApp.setGeoLocation(latitude, longitude);
+        		}
+        		
         		JSONObject commandObj = ServiceAppObj.getJSONObject("commands");
         		String clickCommand = commandObj.getString("CLICK");
         		String dropCommand = commandObj.getString("DROP");
