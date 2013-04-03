@@ -154,7 +154,12 @@
                 "LONG_CLICK" : ""
             },
             "visible" : "false",
-            "attached" : "false" 
+            "attached" : "false", 
+            "geoLocation" :
+            {
+                "Latitude" : "65.011104",
+                "Longitude" : "25.465869"
+            } 
         },
          {
             "name" : "MovieIcon",
@@ -185,7 +190,12 @@
                 "LONG_CLICK" : ""
             },
             "visible" : "true",
-            "attached" : "false" 
+            "attached" : "false", 
+            "geoLocation" :
+            {
+                "Latitude" : "65.011104",
+                "Longitude" : "25.465869"
+		    }
         },
         {
             "name" : "PubIcon",
@@ -216,7 +226,12 @@
                 "LONG_CLICK" : ""
             },
             "visible" : "true",
-            "attached" : "false" 
+            "attached" : "false",
+            "geoLocation" :
+            {
+                "Latitude" : "65.067572",
+                "Longitude" : "25.492573"
+            }
         },
         {
             "name" : "MusicInfobubble",
@@ -247,7 +262,12 @@
                 "LONG_CLICK" : ""
             },
             "visible" : "false",
-            "attached" : "false" 
+            "attached" : "false",
+            "geoLocation" :
+            {
+                "Latitude" : "65.067572",
+                "Longitude" : "25.492573"
+            } 
         }
     ]
 }
