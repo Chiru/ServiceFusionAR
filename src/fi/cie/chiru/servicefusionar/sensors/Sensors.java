@@ -5,19 +5,21 @@ import java.util.List;
 
 import fi.cie.chiru.servicefusionar.serviceApi.ServiceManager;
 
+import android.location.Location;
 import android.os.Handler;
 import android.util.Log;
 
 public class Sensors implements OrientationListener 
 {
 	private static final String LOG_TAG = "ServiceFusion sensors";
-	ServiceManager serviceManager = null;
+	private Location currentGeoLocation = null;
+	private ServiceManager serviceManager = null;
 
-	Orientator orientator;
-	Handler myHandler;
-	SensorResults sensorResults = new SensorResults();
-	float currentAngle = 0.f;
-	boolean tilt;
+	private Orientator orientator;
+	private Handler myHandler;
+	private SensorResults sensorResults = new SensorResults();
+	private float currentAngle = 0.f;
+	private boolean tilt;
 
 	public Sensors(ServiceManager servicemanager)
 	{
@@ -87,30 +89,54 @@ public class Sensors implements OrientationListener
 
 		private void post()
 		{
-			String p = "";
+			String angle = "";
+			String location = "";
 			
-			// We use only angle data at the moment
 			for(SensorResult cur : results) {
-				p += (p.length() > 0 ? "\n" : "");
-				p += (cur.sensorName.equals("Angle") ? cur.sensorReading : "");
-			}
-			if (!p.isEmpty())
-			{
-				if (currentAngle - Float.valueOf(p) > 4 || currentAngle - Float.valueOf(p) < -4 )
-				{
-					Log.i(LOG_TAG, "Sensor result: " + p);
-					currentAngle = Float.valueOf(p);
-					//serviceManager.getSetup().camera.setNewAngle(currentAngle);
-				}
+				angle += (angle.length() > 0 ? "\n" : "");
+				angle += (cur.sensorName.equals("Angle") ? cur.sensorReading : "");
 				
+				location += (angle.length() > 0 ? "\n" : "");
+				location += (cur.sensorName.equals("Location") ? cur.sensorReading : "");
 			}
-			//textResult.setText(p);
+			if (!angle.isEmpty())
+			{
+				if (currentAngle - Float.valueOf(angle) > 4 || currentAngle - Float.valueOf(angle) < -4 )
+				{
+					Log.i(LOG_TAG, "Sensor result: " + angle);
+					currentAngle = Float.valueOf(angle);
+				}
+			}
+			if (!location.isEmpty())
+			{
+				if (currentGeoLocation == null)
+					currentGeoLocation = new Location("GpsLocation");
+				
+				if (location.split(",").length > 1)
+				{
+					//
+					double latitude = Float.valueOf(location.split(",")[0]);
+					double longitude = Float.valueOf(location.split(",")[1]);
+					currentGeoLocation.setLatitude(latitude);
+					currentGeoLocation.setLongitude(longitude);
+					//Log.i(LOG_TAG, latitude + ", " + longitude);
+					
+					serviceManager.geoLocationEstablished(currentGeoLocation);
+				}
+			}
 		}
 	}
 	
+	/** return current bearing angle of the device */
 	public float getCurrentAngle()
 	{
 		return currentAngle;
+	}
+	
+	/** return current geological location if it is already available, otherwise return null */
+	public Location getCurrentLocation()
+	{
+		return currentGeoLocation;
 	}
 
 	/** add new sensor result to the list */
