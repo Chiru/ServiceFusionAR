@@ -4,6 +4,9 @@ import fi.cie.chiru.servicefusionar.gdx.GDXMesh;
 import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import android.location.Location;
+
 import commands.Command;
 
 import util.Log;
@@ -18,7 +21,10 @@ public class ServiceApplication extends AbstractObj
 	private GDXMesh gdxMesh;
 	private String name;
 	private boolean attachedToCamera;
-	ServiceManager serviceManager;
+	private boolean visible;
+	private Location geoLocation = null;
+	private ServiceManager serviceManager;
+	private InfoBubble infobubble = null; 
 	
 	public ServiceApplication(ServiceManager serviceManager, String name)
 	{
@@ -72,7 +78,8 @@ public class ServiceApplication extends AbstractObj
 	}
 	public void setvisible(boolean visible)
 	{
-		gdxMesh.setVisible(visible);
+		this.visible = visible;
+		gdxMesh.setVisible(this.visible);
 	}
 	
 	public void attachToCamera(boolean attached)
@@ -82,6 +89,77 @@ public class ServiceApplication extends AbstractObj
 		if(attached)
 		{
 			serviceManager.getSetup().camera.attachToCamera(this.gdxMesh);
+		}
+	}
+	
+	public void setGeoLocation(double latitude, double longitude)
+	{	
+		if (geoLocation == null)
+			geoLocation = new Location("pre-saved location info");
+		
+		geoLocation.setLatitude(latitude);
+		geoLocation.setLongitude(longitude);
+		
+		if (serviceManager.getSensors().getCurrentLocation() == null)
+		{
+			Log.d(LOG_TAG,  "Setting app " + this.getName() + " to unvisible");
+			this.setvisible(false);
+		}
+	}
+	
+	public Location getGeoLocation()
+	{
+		return geoLocation;
+	}
+	
+	public void servicePlaceFromLocation(Location location)
+	{
+		float bearing;
+		if (geoLocation != null)
+		{
+		
+			float[] results= new float[3];
+			// The computed distance in meters is stored in results[0].
+			// If results has length 2 or greater, the initial bearing is stored in results[1].
+			// If results has length 3 or greater, the final bearing is stored in results[2].
+			Location.distanceBetween(location.getLatitude(), location.getLongitude(), this.geoLocation.getLatitude(), this.geoLocation.getLongitude(), results);
+			bearing = (float)((360 + results[2]) % 360f);
+			
+			Log.i(LOG_TAG, "Bearing for application " + this.getName() + ": " + bearing);
+			
+			Vec pos = new Vec();
+			float z = 20f * (float)Math.cos(Math.toRadians(bearing));
+			float x = 20f * (float)Math.sin(Math.toRadians(bearing));
+				
+			if (this.getName().equals("MovieInfobubble"))
+			{
+				x = x * 1.9f;
+				z = z * 1.9f;
+				
+				Log.i(LOG_TAG, "position = " + x + ", " + z);
+				pos.setTo(x, 3, -z);
+				this.setPosition(pos);
+				
+				serviceManager.getMovieManager().fillMovieInfo();
+			}
+			else if (this.getName().equals("MusicInfobubble"))
+			{
+				x = x * 1.9f;
+				z = z * 1.9f;
+				
+				Log.i(LOG_TAG, "position = " + x + ", " + z);
+				pos.setTo(x, 3, -z);
+				this.setPosition(pos);
+				
+				serviceManager.getMusicManager().fillMusicPlaylist();
+			}
+			else
+			{
+				Log.i(LOG_TAG, "position = " + x + ", " + z);
+				pos.setTo(x, -4, -z);
+				this.setPosition(pos);
+				this.setvisible(true);
+			}
 		}
 	}
 
@@ -138,6 +216,5 @@ public class ServiceApplication extends AbstractObj
 	public void setOnDoubleClickCommand(Command c) 
 	{
         gdxMesh.setOnDoubleClickCommand(c);
-	}
-	
+	}	
 }
