@@ -26,7 +26,7 @@ public class MovieManager
 	private String selectedMovie;
 	private List<Movie> movieInfo = null;
 
-	private InfoBubble infobubble;
+	private InfoBubble infobubble = null;
 	private ServiceApplication movieApplication = null;
 	private LogInScreen loginscreen;
 	private Auditorium auditorium;
@@ -66,8 +66,8 @@ public class MovieManager
     {
         if(!movieInfoDownloaded)
     	    return;
-    	
-    	infobubble.visible();   
+    	if (infobubble != null)
+    		infobubble.visible();   
     }
     
     public void login(String movieTitle)
@@ -76,7 +76,8 @@ public class MovieManager
     	selectedMovie = movieTitle;
     	//if more auditoriums than Plaza1 is added later the auditorium number can be parsed from movieTitle
     	serviceManager.setVisibilityToAllApplications(false);
-    	infobubble.visible();
+    	if (infobubble != null)
+    		infobubble.visible();
     	
     	if(serviceManager.getMusicManager().getInfoBubble() != null && serviceManager.getMusicManager().getInfoBubble().isVisible())
     		serviceManager.getMusicManager().getInfoBubble().visible();

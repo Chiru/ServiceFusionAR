@@ -14,7 +14,7 @@ public class MusicManager
     
     private Grooveshark grooveshark = null;
     private ServiceManager serviceManager = null;
-	private InfoBubble infobubble;
+	private InfoBubble infobubble = null;
 	private List<String> musicInfo = null;
 	boolean musicPlaylistDownloaded;
 
@@ -59,8 +59,9 @@ public class MusicManager
 	{
 		if(!musicPlaylistDownloaded)
 			return;
-    	
-    	infobubble.visible();
+		
+		if (infobubble != null)
+			infobubble.visible();
 	}
 	
 	public void playSong(String song)
