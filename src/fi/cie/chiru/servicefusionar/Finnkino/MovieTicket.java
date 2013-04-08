@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -78,11 +79,20 @@ public class MovieTicket
 				movieTicket = GLFactory.getInstance().newTexturedSquare("movieTicekt", bm);
 				movieTicket.setOnLongClickCommand(new DraggableImage(serviceManager, im, this.toString()));
 				
-				Vec camPos = serviceManager.getSetup().getCamera().getPosition();    	
+				Vec camPos = serviceManager.getSetup().getCamera().getPosition();
+				Vec camRot = serviceManager.getSetup().getCamera().getRotation();
+//				if(camRot.y == 0.0f)
+//					camRot = serviceManager.getSetup().getCamera().getRotation();
+
+				float angle = (float)(camRot.y*(Math.PI/180));
+				
+				float sin = (float)Math.sin(angle);
+				float cos = (float)Math.cos(angle);
 		    	serviceManager.getSetup().world.add(movieTicket);
-		    	movieTicket.setPosition(new Vec(camPos.x - 10.0f, camPos.y - 10.0f, camPos.z - 40.0f));
-		    	movieTicket.setRotation(new Vec(90.0f, 0.0f, 180.0f));
+		    	movieTicket.setPosition(new Vec(40.0f*sin, camPos.y - 8.0f, -40.0f*cos));
+		    	movieTicket.setRotation(new Vec(90.0f, camRot.y, 180.0f));
 		    	movieTicket.setScale(new Vec(7.0f, 1.0f, 6.0f));
+		    	serviceManager.getSetup().camera.attachToCamera(movieTicket);
 			}
 
 		});	
@@ -91,7 +101,8 @@ public class MovieTicket
 	
 	public void removeTicket()
 	{
-		serviceManager.getSetup().world.remove(movieTicket);	
+		serviceManager.getSetup().world.remove(movieTicket);
+		serviceManager.getSetup().camera.detachFromCamera(movieTicket);
 	}
 	
 	private String setDate()
