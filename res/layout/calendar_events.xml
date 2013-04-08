@@ -7,7 +7,7 @@
      <TextView
         android:id="@+id/tänään"
         android:textColor="#444444"
-        android:textSize="35dp"
+        android:textSize="45dp"
         android:layout_width="80dp"
         android:minWidth="80dp"
         android:layout_height="70dp"
@@ -20,7 +20,7 @@
     <TextView
         android:id="@+id/tapahtumat"
         android:textColor="#444444"
-        android:textSize="35dp"
+        android:textSize="45dp"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
         android:minHeight="70dp"

@@ -38,14 +38,14 @@ public class ServiceFusionCalendar
 	private MeshComponent calendar;
 	private MeshComponent eventsToday;
 	private int curCol, curRow;
-	private float dayGridWidth = 1.7f;
-	private float dayGridHeight = 1.4f;
+	private float dayGridWidth = 2.0f;
+	private float dayGridHeight = 1.7f;
 	private boolean eventsVisible;
-	private float camOffsetX = 12.0f;
+	private float camOffsetX = 11.25f;
 	private float camOffsetY = 6.0f;
 	private float camOffsetZ = -40.0f;
-	private float eventsOffsetX = 10.0f;
-	private float eventsOffsetY = 6.1f;
+	private float eventsOffsetX = 9.0f;
+	private float eventsOffsetY = 6.0f;
     
     private String months[] =  { "TAMMIKUU", "HELMIKUU", "MAALISKUU",
                                  "HUHTIKUU", "TOUKOKUU", "KESÄKUU",
@@ -77,7 +77,7 @@ public class ServiceFusionCalendar
 				populateCalendar(gl);
 				
 				TextView month = (TextView)v.findViewById(R.id.kuukausi);
-				month.setText(months[Calendar.MONTH]);
+				month.setText(months[Calendar.getInstance().get(Calendar.MONTH)]);
 				
 				TextView year = (TextView)v.findViewById(R.id.vuosi);
 				year.setText(""+Calendar.getInstance().get(Calendar.YEAR));
@@ -116,10 +116,10 @@ public class ServiceFusionCalendar
         Spec rowSpec;
 		GridLayout.LayoutParams p;
     	TextView tv;
-    	GregorianCalendar gCal = new GregorianCalendar(2013, Calendar.MONTH, 1);
+    	GregorianCalendar gCal = new GregorianCalendar(2013, Calendar.getInstance().get(Calendar.MONTH), 1);
     	int currentDay = gCal.get(Calendar.DAY_OF_WEEK);
 
-        gCal.add(Calendar.DAY_OF_YEAR, Calendar.SUNDAY - currentDay);
+        gCal.add(Calendar.DAY_OF_YEAR, Calendar.MONDAY - currentDay);
         
         for (int i = 0; i < gl.getRowCount()-1; i++)
         {
@@ -134,7 +134,7 @@ public class ServiceFusionCalendar
             	tv.setTextSize(40);
             	tv.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
 
-            	if(gCal.get(Calendar.DAY_OF_MONTH) == currentdayOfMonth)
+            	if(gCal.get(Calendar.DAY_OF_MONTH) == currentdayOfMonth && i!=4)
             	{
                 	tv.setBackgroundResource(R.drawable.bordersblue);
                 	curCol = j;
