@@ -167,15 +167,23 @@ public class MoviePayment
 			paymentArea = null;
 			paymentScreen = null;
 			cancelButton = null;
-			serviceManager.getMovieManager().createTickets(selectedSeats);
 			serviceManager.getMovieManager().cc.removeCard();
 			serviceManager.getMovieManager().cc = null;
 			serviceManager.setVisibilityToAllApplications(true);
 			serviceManager.getMovieManager().getInfoBubble().visible();
-			
 			serviceManager.getSetup().camera.setUIMode(false);
+			
+			try {
+				Thread.sleep(1000);
+			} catch(InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			serviceManager.getMovieManager().createTickets(selectedSeats);
 			String cEvent[] = selectedMovie.split(("\\s{2,}"));
 			serviceManager.getCalendar().addEvent(new CalendarEvent(cEvent[0], (cEvent[1] + " " + cEvent[2])));
+			
 		}	
 	}
 	
