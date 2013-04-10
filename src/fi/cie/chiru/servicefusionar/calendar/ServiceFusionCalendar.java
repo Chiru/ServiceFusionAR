@@ -134,7 +134,7 @@ public class ServiceFusionCalendar
             	tv.setTextSize(40);
             	tv.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
 
-            	if(gCal.get(Calendar.DAY_OF_MONTH) == currentdayOfMonth && i!=4)
+            	if(gCal.get(Calendar.DAY_OF_MONTH) == currentdayOfMonth)
             	{
                 	tv.setBackgroundResource(R.drawable.bordersblue);
                 	curCol = j;
