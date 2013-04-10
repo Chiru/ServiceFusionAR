@@ -33,9 +33,9 @@
             "attached" : "true" 
         },
         {
-            "name" : "Twitter",
-            "meshRef" : "twitter_medium_397.dae",
-            "textRef" : "twitter2.jpg",
+            "name" : "ShoppingCart",
+            "meshRef" : "shopping_cart_high_381.dae",
+            "textRef" : "lightgreytex.jpg",
             "position" : 
             {
                 "x" : "-18.0", 
@@ -50,9 +50,9 @@
             },
              "scale" : 
             {
-                "x" : "1.5", 
-                "y" : "1.5", 
-                "z" : "1.5"
+                "x" : "2.0", 
+                "y" : "2.0", 
+                "z" : "2.0"
             },
             "commands" :
             {
