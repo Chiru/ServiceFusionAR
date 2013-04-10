@@ -128,11 +128,13 @@ public class ServiceApplication extends AbstractObj
 			Log.i(LOG_TAG, "Bearing for application " + this.getName() + ": " + bearing);
 			
 			Vec pos = new Vec();
-			float z = 20f * (float)Math.cos(Math.toRadians(bearing));
-			float x = 20f * (float)Math.sin(Math.toRadians(bearing));
+			float z;
+			float x;
 				
 			if (this.getName().equals("MovieInfobubble"))
 			{
+				z = 20f * (float)Math.cos(Math.toRadians(bearing + 4));
+				x = 20f * (float)Math.sin(Math.toRadians(bearing + 4));
 				x = x * 1.9f;
 				z = z * 1.9f;
 				
@@ -144,6 +146,8 @@ public class ServiceApplication extends AbstractObj
 			}
 			else if (this.getName().equals("MusicInfobubble"))
 			{
+				z = 20f * (float)Math.cos(Math.toRadians(bearing + 6));
+				x = 20f * (float)Math.sin(Math.toRadians(bearing + 6));
 				x = x * 1.9f;
 				z = z * 1.9f;
 				
@@ -155,6 +159,9 @@ public class ServiceApplication extends AbstractObj
 			}
 			else
 			{
+				z = 20f * (float)Math.cos(Math.toRadians(bearing));
+				x = 20f * (float)Math.sin(Math.toRadians(bearing));
+				
 				Log.i(LOG_TAG, "position = " + x + ", " + z);
 				pos.setTo(x, -4, -z);
 				this.setPosition(pos);
