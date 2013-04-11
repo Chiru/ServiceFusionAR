@@ -22,12 +22,13 @@ public class MovieManager
 	private static final String LOG_TAG = "MovieManager";
 	private ServiceManager serviceManager;
 	private boolean movieInfoDownloaded;
+	private boolean moviePosition;
 	private int maxMovies = 10;
 	private String selectedMovie;
-	private List<Movie> movieInfo = null;
 
 	private InfoBubble infobubble = null;
-	private ServiceApplication movieApplication = null;
+	private List<String> movieInfoList = null;
+	
 	private LogInScreen loginscreen;
 	private Auditorium auditorium;
 	private MoviePayment moviePayment;
@@ -38,16 +39,16 @@ public class MovieManager
 	public MovieManager(ServiceManager serviceManager)
 	{
 		movieInfoDownloaded = false;
+		moviePosition = false;
 		
 		String URL = "http://www.finnkino.fi/xml/Schedule/?area=1018";
 		new XmlDownloader() { 
 	        protected void onPostExecute(String xmlData) {
 	        	if (xmlData != null)
-	        	{
-	        		movieInfoDownloaded = true;
-	        	
+	        	{        	
 	        		FinnkinoXmlParser parser = new FinnkinoXmlParser();
-	        		movieInfo = parser.parse(xmlData);
+	        		List<Movie> movieInfo = parser.parse(xmlData);	        		
+	        		setInfo(movieInfo);
 	        	}
 	        	else
 	        		Log.e(LOG_TAG, "Couldn't download xml data!");
@@ -59,7 +60,6 @@ public class MovieManager
 		moviePayment = new MoviePayment(serviceManager);
 		
         this.serviceManager = serviceManager;
-        movieApplication = serviceManager.getApplication("MovieIcon");
 	}
 	
     public void showMovieInfo(String requesterName)
@@ -134,20 +134,16 @@ public class MovieManager
     	return infobubble;
     }
     
-    @SuppressLint("SimpleDateFormat")
-	public void fillMovieInfo()
+    private void setInfo(List<Movie> movieList)
     {
-    	if (!movieInfoDownloaded || movieInfo == null)
-    		return;
-    	
-    	int longestTitle = getLongestMovieTitlteLen(movieInfo);
+    	int longestTitle = getLongestMovieTitlteLen(movieList);
 
     	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
     	String currentTime = sdf.format(new Date());
     	
-    	List<String> movieInfoList = new ArrayList<String>();
+    	movieInfoList = new ArrayList<String>();
     	
-    	for(int i = 0; i < movieInfo.size(); i++)
+    	for(int i = 0; i < movieList.size(); i++)
     	{	
     	
     	    String movieInfoString = new String();
@@ -155,14 +151,14 @@ public class MovieManager
     		String movieTitle = new String();
     		String auditorium = new String();
     		
-    		time = movieInfo.get(i).time.split("[T]")[1];
+    		time = movieList.get(i).time.split("[T]")[1];
     		time = time.substring(0,5);
     		
     		if (currentTime.compareTo(time) > 0)
     			continue;
     		
-    		movieTitle = movieInfo.get(i).title;
-    		auditorium = movieInfo.get(i).auditorium;
+    		movieTitle = movieList.get(i).title;
+    		auditorium = movieList.get(i).auditorium;
     		
     		movieInfoString = time + "  " + movieTitle + fillWhiteSpace(longestTitle - movieTitle.length()) + "    " + auditorium;
 
@@ -172,8 +168,23 @@ public class MovieManager
     			movieInfoList.add(movieInfoString);
     		else
     			break;
-
     	}
+    	
+    	movieInfoDownloaded = true;
+    	initializeBubble();
+    }
+    
+    public void positionInitialized()
+    {
+    	moviePosition = true;
+    	initializeBubble();
+    }
+    
+    @SuppressLint("SimpleDateFormat")
+	public void initializeBubble()
+    {
+    	if (!movieInfoDownloaded || !moviePosition)
+    		return;
     	
     	infobubble = new InfoBubble(serviceManager);
 

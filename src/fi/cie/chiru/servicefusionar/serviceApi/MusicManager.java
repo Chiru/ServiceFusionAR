@@ -16,12 +16,15 @@ public class MusicManager
     private ServiceManager serviceManager = null;
 	private InfoBubble infobubble = null;
 	private List<String> musicInfo = null;
-	boolean musicPlaylistDownloaded;
+	private boolean musicPlaylistDownloaded;
+	private boolean musicPositionInitialized;
 
 
     public MusicManager(ServiceManager serviceManager)
     {
     	musicPlaylistDownloaded = false;
+    	musicPositionInitialized = false;
+    	
     	Log.i(LOG_TAG, "Starting MusicManager");
     	this.serviceManager = serviceManager;
     	
@@ -34,6 +37,9 @@ public class MusicManager
 	        	{
 	        		PlaylistXmlParser parser = new PlaylistXmlParser();
 	        		musicInfo = parser.parse(xmlData);
+	        		musicPlaylistDownloaded = true;
+	        		
+	        		fillMusicPlaylist();
 	        	}
 	        	else
 	        		Log.e(LOG_TAG, "Couldn't download xml data!");
@@ -78,9 +84,15 @@ public class MusicManager
 	    return infobubble;
 	}
 	
+	public void positionInitialized()
+	{
+		musicPositionInitialized = true;
+		fillMusicPlaylist();
+	}
+	
 	public void fillMusicPlaylist(/*List<String> playlist*/)
 	{
-		if (musicInfo == null)
+		if (musicInfo == null || !musicPositionInitialized)
 			return;
 		
 		musicInfo.add(0, "Pink Floyd - Comfortably Numb");
@@ -110,7 +122,6 @@ public class MusicManager
  		if(infobubble.setInfoBubbleApplication("MusicInfobubble"))
  		    infobubble.populateItems(tempList, "MusicManager");
  		
- 		musicPlaylistDownloaded = true;
 	}
 	
 	/* 

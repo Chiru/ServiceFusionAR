@@ -142,7 +142,7 @@ public class ServiceApplication extends AbstractObj
 				pos.setTo(x, 3, -z);
 				this.setPosition(pos);
 				
-				serviceManager.getMovieManager().fillMovieInfo();
+				serviceManager.getMovieManager().positionInitialized();
 			}
 			else if (this.getName().equals("MusicInfobubble"))
 			{
@@ -155,7 +155,7 @@ public class ServiceApplication extends AbstractObj
 				pos.setTo(x, 3, -z);
 				this.setPosition(pos);
 				
-				serviceManager.getMusicManager().fillMusicPlaylist();
+				serviceManager.getMusicManager().positionInitialized();
 			}
 			else
 			{
