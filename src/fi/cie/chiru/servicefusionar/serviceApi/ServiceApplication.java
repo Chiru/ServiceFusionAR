@@ -88,7 +88,13 @@ public class ServiceApplication extends AbstractObj
 		
 		if(attached)
 		{
+			Log.d(LOG_TAG, "Attaching service " + this.name + " to camera");
 			serviceManager.getSetup().camera.attachToCamera(this.gdxMesh);
+		}
+		else
+		{
+			Log.d(LOG_TAG, "Detaching service " + this.name + " from camera");
+			serviceManager.getSetup().camera.detachFromCamera(this.gdxMesh);
 		}
 	}
 	
