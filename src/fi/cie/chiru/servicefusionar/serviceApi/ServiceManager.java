@@ -3,6 +3,7 @@ package fi.cie.chiru.servicefusionar.serviceApi;
 import java.util.Vector;
 
 import android.location.Location;
+import android.util.Log;
 
 import fi.cie.chiru.servicefusionar.ServiceFusionSetup;
 import fi.cie.chiru.servicefusionar.calendar.ServiceFusionCalendar;
@@ -18,7 +19,7 @@ public class ServiceManager
 	private ServiceFusionCalendar calendar;
 	private Sensors sensors = null;
 	
-	private boolean locationset = false;
+	private Location previousLocation = null;
 
 	public ServiceManager(ServiceFusionSetup setup)
 	{
@@ -95,14 +96,30 @@ public class ServiceManager
 	
 	public void geoLocationEstablished(Location location)
 	{
-		if (!locationset)
+		if (previousLocation == null)
 		{
 			for(int i=0; i<serviceApplications.size(); i++)
 			{
 				serviceApplications.elementAt(i).servicePlaceFromLocation(location);
 			}
-			locationset = true;	
+			previousLocation = new Location("PreviousGpsLocation");
+			previousLocation.set(location);
 		}
+		else
+		{
+			float distance = location.distanceTo(previousLocation);
+			//Log.i(LOG_TAG, "DistanceTo: " + distance);
+			if (distance > 20)
+			{
+				Log.i(LOG_TAG,  "Setting new positions for services, distance was: " + distance);
+				for(int i=0; i<serviceApplications.size(); i++)
+				{
+					serviceApplications.elementAt(i).servicePlaceFromLocation(location);
+				}
+				previousLocation.set(location);
+			}
+		}
+		
 	}
 	
 	public void onDestroy()
