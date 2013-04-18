@@ -238,7 +238,7 @@ public class Auditorium
 				plazaView.setVisibility(View.GONE);
 				root.removeView(plazaView);
 				serviceManager.setVisibilityToAllApplications(true);
-				serviceManager.getMovieManager().getInfoBubble().visible();
+				serviceManager.getMovieManager().getInfoBubble().setvisible(true);
 				serviceManager.getSetup().camera.setUIMode(false);
 				
 	        }

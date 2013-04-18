@@ -170,7 +170,7 @@ public class MoviePayment
 			serviceManager.getMovieManager().cc.removeCard();
 			serviceManager.getMovieManager().cc = null;
 			serviceManager.setVisibilityToAllApplications(true);
-			serviceManager.getMovieManager().getInfoBubble().visible();
+			serviceManager.getMovieManager().getInfoBubble().setvisible(true);
 			serviceManager.getSetup().camera.setUIMode(false);
 			
 			try {
@@ -250,7 +250,7 @@ public class MoviePayment
 			serviceManager.getMovieManager().cc.removeCard();
 			serviceManager.getMovieManager().cc = null;
 			serviceManager.setVisibilityToAllApplications(true);
-			serviceManager.getMovieManager().getInfoBubble().visible();		
+			serviceManager.getMovieManager().getInfoBubble().setvisible(true);		
 			serviceManager.getSetup().camera.setUIMode(false);
 			
 			return true;

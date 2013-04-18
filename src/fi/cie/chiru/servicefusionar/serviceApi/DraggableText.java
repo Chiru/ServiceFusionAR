@@ -70,6 +70,18 @@ public class DraggableText
 		}
 	}
 	
+	public void attachToCamera(boolean attach)
+	{
+		if(attach)
+		{
+			serviceManager.getSetup().camera.attachToCamera(textComponent);
+		}
+		else
+		{
+			serviceManager.getSetup().camera.detachFromCamera(textComponent);
+		}
+	}
+	
 	private void createTextComponent()
 	{
 	    tv = new TextView(serviceManager.getSetup().myTargetActivity);

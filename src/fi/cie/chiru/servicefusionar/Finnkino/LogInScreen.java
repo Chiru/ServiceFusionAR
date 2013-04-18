@@ -242,7 +242,7 @@ public class LogInScreen
 			}
 
 			serviceManager.setVisibilityToAllApplications(true);
-			serviceManager.getMovieManager().getInfoBubble().visible();
+			serviceManager.getMovieManager().getInfoBubble().setvisible(true);
 			serviceManager.getSetup().camera.setUIMode(false);
 			return true;
 		}

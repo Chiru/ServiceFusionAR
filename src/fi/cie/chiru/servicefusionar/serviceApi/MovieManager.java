@@ -67,7 +67,7 @@ public class MovieManager
         if(!movieInfoDownloaded)
     	    return;
     	if (infobubble != null)
-    		infobubble.visible();   
+    		infobubble.setvisible(!infobubble.isVisible());   
     }
     
     public void login(String movieTitle)
@@ -77,10 +77,10 @@ public class MovieManager
     	//if more auditoriums than Plaza1 is added later the auditorium number can be parsed from movieTitle
     	serviceManager.setVisibilityToAllApplications(false);
     	if (infobubble != null)
-    		infobubble.visible();
+    		infobubble.setvisible(false);
     	
     	if(serviceManager.getMusicManager().getInfoBubble() != null && serviceManager.getMusicManager().getInfoBubble().isVisible())
-    		serviceManager.getMusicManager().getInfoBubble().visible();
+    		serviceManager.getMusicManager().getInfoBubble().setvisible(false);
     	
     	//auditorium.createAuditoriumScreen("Sali1");
     	loginscreen.createLogInScreen(movieTitle);
@@ -186,10 +186,12 @@ public class MovieManager
     	if (!movieInfoDownloaded || !moviePosition)
     		return;
     	
-    	infobubble = new InfoBubble(serviceManager);
-
- 		if(infobubble.setInfoBubbleApplication("MovieInfobubble"))
- 		    infobubble.populateItems(movieInfoList, "MovieManager");
+    	infobubble = serviceManager.getInfobubble("MovieInfobubble");
+    	if (infobubble != null)
+    	{
+    		Log.i(LOG_TAG, "Starting to fill in infobubble");
+    		infobubble.populateItems(movieInfoList, "MovieManager");
+    	}
     }
     
     private String fillWhiteSpace(int number)

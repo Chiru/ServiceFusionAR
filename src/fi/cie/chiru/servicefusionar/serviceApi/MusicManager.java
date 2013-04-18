@@ -67,7 +67,7 @@ public class MusicManager
 			return;
 		
 		if (infobubble != null)
-			infobubble.visible();
+			infobubble.setvisible(true);
 	}
 	
 	public void playSong(String song)
@@ -117,10 +117,9 @@ public class MusicManager
 			tempList.add(song);
 		}
 		
-		infobubble = new InfoBubble(serviceManager);
-
- 		if(infobubble.setInfoBubbleApplication("MusicInfobubble"))
- 		    infobubble.populateItems(tempList, "MusicManager");
+		infobubble = serviceManager.getInfobubble("MusicInfobubble");
+    	if (infobubble != null)
+    		infobubble.populateItems(tempList, "MusicManager");
  		
 	}
 	
