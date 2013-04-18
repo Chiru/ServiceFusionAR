@@ -67,7 +67,7 @@ public class MusicManager
 			return;
 		
 		if (infobubble != null)
-			infobubble.setvisible(true);
+			infobubble.setvisible(!infobubble.isVisible());
 	}
 	
 	public void playSong(String song)
