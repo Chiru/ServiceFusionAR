@@ -20,11 +20,9 @@ public class ServiceApplication extends AbstractObj
 	private static final String LOG_TAG = "ServiceApplication";
 	private GDXMesh gdxMesh;
 	private String name;
-	private boolean attachedToCamera;
-	private boolean visible;
-	private Location geoLocation = null;
-	private ServiceManager serviceManager;
-	private InfoBubble infobubble = null; 
+	protected boolean visible;
+	protected Location geoLocation = null;
+	private ServiceManager serviceManager; 
 	
 	public ServiceApplication(ServiceManager serviceManager, String name)
 	{
@@ -84,8 +82,6 @@ public class ServiceApplication extends AbstractObj
 	
 	public void attachToCamera(boolean attached)
 	{
-		this.attachedToCamera = attached;
-		
 		if(attached)
 		{
 			Log.d(LOG_TAG, "Attaching service " + this.name + " to camera");
@@ -120,7 +116,6 @@ public class ServiceApplication extends AbstractObj
 	
 	public void servicePlaceFromLocation(Location location)
 	{
-		float bearing;
 		if (geoLocation != null)
 		{
 		
@@ -129,50 +124,22 @@ public class ServiceApplication extends AbstractObj
 			// If results has length 2 or greater, the initial bearing is stored in results[1].
 			// If results has length 3 or greater, the final bearing is stored in results[2].
 			Location.distanceBetween(location.getLatitude(), location.getLongitude(), this.geoLocation.getLatitude(), this.geoLocation.getLongitude(), results);
-			bearing = (float)((360 + results[2]) % 360f);
+			float bearing = (float)((360 + results[2]) % 360f);
 			
 			Log.i(LOG_TAG, "Bearing for application " + this.getName() + ": " + bearing);
 			
 			Vec pos = new Vec();
 			float z;
 			float x;
-				
-			if (this.getName().equals("MovieInfobubble"))
-			{
-				z = 20f * (float)Math.cos(Math.toRadians(bearing + 4));
-				x = 20f * (float)Math.sin(Math.toRadians(bearing + 4));
-				x = x * 1.9f;
-				z = z * 1.9f;
-				
-				Log.i(LOG_TAG, "position = " + x + ", " + z);
-				pos.setTo(x, 3, -z);
-				this.setPosition(pos);
-				
-				serviceManager.getMovieManager().positionInitialized();
-			}
-			else if (this.getName().equals("MusicInfobubble"))
-			{
-				z = 20f * (float)Math.cos(Math.toRadians(bearing + 6));
-				x = 20f * (float)Math.sin(Math.toRadians(bearing + 6));
-				x = x * 1.9f;
-				z = z * 1.9f;
-				
-				Log.i(LOG_TAG, "position = " + x + ", " + z);
-				pos.setTo(x, 3, -z);
-				this.setPosition(pos);
-				
-				serviceManager.getMusicManager().positionInitialized();
-			}
-			else
-			{
-				z = 20f * (float)Math.cos(Math.toRadians(bearing));
-				x = 20f * (float)Math.sin(Math.toRadians(bearing));
-				
-				Log.i(LOG_TAG, "position = " + x + ", " + z);
-				pos.setTo(x, -4, -z);
-				this.setPosition(pos);
-				this.setvisible(true);
-			}
+			
+			z = 20f * (float)Math.cos(Math.toRadians(bearing));
+			x = 20f * (float)Math.sin(Math.toRadians(bearing));
+			
+			Log.i(LOG_TAG, "position = " + x + ", " + z);
+			pos.setTo(x, -4, -z);
+			this.setPosition(pos);
+			this.setvisible(true);
+
 		}
 	}
 

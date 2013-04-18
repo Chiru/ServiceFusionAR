@@ -2,30 +2,34 @@ package fi.cie.chiru.servicefusionar.serviceApi;
 
 import java.util.List;
 
+import android.location.Location;
+import android.util.Log;
+
 import util.Vec;
 
-public class InfoBubble 
+public class InfoBubble extends ServiceApplication
 {
-	private DraggableText items[];
+	private final static String LOG_TAG = "InfoBubble"; 
+	private DraggableText items[] = null;
 	private ServiceManager serviceManager;
-	private ServiceApplication infobubble;
-	private boolean visible;
 	
-	public InfoBubble(ServiceManager serviceManager)
+	public InfoBubble(ServiceManager serviceManager, String name)
 	{
+		super (serviceManager, name);
 		this.serviceManager = serviceManager;
 		visible = false;
 	}
 	
-	public void visible()
+	@Override
+	public void setvisible(boolean visible)
 	{
-	    visible = !visible;
-	    
-		infobubble.setvisible(visible);
-		
-	    for(int i=0; i<items.length; i++)
+	    super.setvisible(visible);
+	    if (items != null)
 	    {
-	        items[i].visible();
+		    for(int i=0; i<items.length; i++)
+		    {
+		        items[i].visible();
+		    }
 	    }
 	    
 	}
@@ -35,16 +39,6 @@ public class InfoBubble
 		return visible;
 	}
 	
-	public boolean setInfoBubbleApplication(String name)
-	{
-		infobubble = this.serviceManager.getApplication(name);
-		
-		if(infobubble!=null)
-			return true;
-		else
-			return false;
-	}
-	
 	public void populateItems(List<String> content, String contentManager)
 	{
 		int contentLen = content.size();
@@ -52,7 +46,7 @@ public class InfoBubble
 		
     	for(int i=0; i<contentLen; i++)
     	{
-    		Vec infoBubblePosition = new Vec(infobubble.getPosition());
+    		Vec infoBubblePosition = new Vec(this.getPosition());
         	infoBubblePosition.add(0, 7.0f, 0);
         	DraggableText infoItem = new DraggableText(this.serviceManager);
 	        infoItem.setDragText(content.get(i));
@@ -63,7 +57,69 @@ public class InfoBubble
    		
     		items[i] = infoItem;
     	}
+	}
+	
+	@Override
+	public void servicePlaceFromLocation(Location location)
+	{
+		if (geoLocation == null)
+		{
+			geoLocation = new Location("LocationInfo");
+			if (this.getName().equals("MovieInfobubble"))
+			{
+				geoLocation.set(serviceManager.getApplication("MovieIcon").getGeoLocation());
+			}
+			else if (this.getName().equals("MusicInfobubble"))
+			{
+				geoLocation.set(serviceManager.getApplication("MusicIcon").getGeoLocation());
+			}
+		}
 		
+		float[] results= new float[3];
+		// The computed distance in meters is stored in results[0].
+		// If results has length 2 or greater, the initial bearing is stored in results[1].
+		// If results has length 3 or greater, the final bearing is stored in results[2].
+		Location.distanceBetween(location.getLatitude(), location.getLongitude(), this.geoLocation.getLatitude(), this.geoLocation.getLongitude(), results);
+		float bearing = (float)((360 + results[2]) % 360f);
+		
+		Log.i(LOG_TAG, "Bearing for application " + this.getName() + ": " + bearing);
+		
+		Vec pos = new Vec();
+		float z;
+		float x;
+		
+		if (this.getName().equals("MovieInfobubble"))
+		{
+			z = 38f * (float)Math.cos(Math.toRadians(bearing + 4));
+			x = 38f * (float)Math.sin(Math.toRadians(bearing + 4));
+							
+			Log.i(LOG_TAG, "position = " + x + ", " + z);
+			pos.setTo(x, 3, -z);
+			this.setPosition(pos);
+			
+			serviceManager.getMovieManager().positionInitialized();
+		}
+		else if (this.getName().equals("MusicInfobubble"))
+		{
+			z = 38f * (float)Math.cos(Math.toRadians(bearing + 6));
+			x = 38f * (float)Math.sin(Math.toRadians(bearing + 6));
+			
+			Log.i(LOG_TAG, "position = " + x + ", " + z);
+			pos.setTo(x, 3, -z);
+			this.setPosition(pos);
+			
+			serviceManager.getMusicManager().positionInitialized();
+		}
+	}
+	
+	@Override
+	public void attachToCamera(boolean attach)
+	{
+		super.attachToCamera(attach);
+		for (int i = 0; i < items.length; i++)
+		{
+			items[i].attachToCamera(attach);
+		}
 	}
 
 }

@@ -14,6 +14,7 @@ public class ServiceManager
 	private static final String LOG_TAG = "ServiceManager";
 	private ServiceFusionSetup setup;
 	private Vector<ServiceApplication> serviceApplications;
+	private Vector<InfoBubble> infobubbles;
 	private MovieManager movieManager;
 	private MusicManager musicManager;
 	private ServiceFusionCalendar calendar;
@@ -57,41 +58,71 @@ public class ServiceManager
 		sensors = new Sensors(this);
 		
 		SceneParser parser = new SceneParser();
-		serviceApplications = parser.parseFile(this, "serviceFusion.txt");
+		if (parser.parseFile(this, "serviceFusion.txt"))
+		{
+			serviceApplications = parser.getApplications();
+			infobubbles = parser.getInfobubbles();
+		}
 		movieManager = new MovieManager(this);
 		musicManager = new MusicManager(this);
 		calendar = new ServiceFusionCalendar(this);
 		
 	}
 	
+	/**
+	 * 
+	 * @param appName Application name
+	 * @return ServiceApplication if it is found, otherwise return null.
+	 */
 	public ServiceApplication getApplication(String appName)
 	{
+		// Check that serviceApplications have already been created and if not return null.
+		if (serviceApplications == null)
+			return null;
+		
 		ServiceApplication serviceApp = null;
 		
 		for(int i=0; i<serviceApplications.size(); i++)
 		{
 		    serviceApp = serviceApplications.elementAt(i);
 		    
-			if(serviceApplications.elementAt(i).getName().compareTo(appName)==0)
+			if(serviceApp.getName().equals(appName))
 		        return serviceApp;
-			else
-				serviceApp = null;
 		}
 		return serviceApp;
+	}
+	
+	/**
+	 * 
+	 * @param name InfoBubble name
+	 * @return InfoBubble if it is found, otherwise return null.
+	 */
+	public InfoBubble getInfobubble(String name)
+	{
+		// Check that infobubbles have already been created and if not return null.		
+		if (infobubbles == null)
+			return null;
+		
+		InfoBubble infobubble = null;
+		
+		for(int i=0; i < infobubbles.size(); i++)
+		{
+			infobubble = infobubbles.elementAt(i);
+		    
+			if(infobubble.getName().equals(name))
+		        return infobubble;
+		}
+		return infobubble;
 	}
 	
 	public void setVisibilityToAllApplications(boolean visible)
 	{
 		for(int i=0; i<serviceApplications.size(); i++)
 		{
-			if(serviceApplications.elementAt(i).getName().contains("Infobubble"))
-				continue;
-			
 			serviceApplications.elementAt(i).setvisible(visible);
 		}
-		
+
 		calendar.visible(visible);
-	
 	}
 	
 	public void geoLocationEstablished(Location location)
@@ -101,6 +132,11 @@ public class ServiceManager
 			for(int i=0; i<serviceApplications.size(); i++)
 			{
 				serviceApplications.elementAt(i).servicePlaceFromLocation(location);
+			}
+			for (int i = 0; i < infobubbles.size(); i++)
+			{
+				Log.i(LOG_TAG, "Settin infobubble locations");
+				infobubbles.elementAt(i).servicePlaceFromLocation(location);
 			}
 			previousLocation = new Location("PreviousGpsLocation");
 			previousLocation.set(location);
@@ -115,6 +151,11 @@ public class ServiceManager
 				for(int i=0; i<serviceApplications.size(); i++)
 				{
 					serviceApplications.elementAt(i).servicePlaceFromLocation(location);
+				}
+				for (int i = 0; i < infobubbles.size(); i++)
+				{
+					Log.i(LOG_TAG, "Settin infobubble locations");
+					infobubbles.elementAt(i).servicePlaceFromLocation(location);
 				}
 				previousLocation.set(location);
 			}
