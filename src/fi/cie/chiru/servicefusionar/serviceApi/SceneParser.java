@@ -23,19 +23,27 @@ public class SceneParser
 	private static final String LOG_TAG = "SceneParser";
 	String sceneContent;
 	private GDXLoader gdxLoader;
+	private ServiceManager serviceManager = null;
+	
+	Vector<ServiceApplication> serviceApplications = null;
+	Vector<InfoBubble> infoBubbles = null;
 
 	public SceneParser()
 	{
 		gdxLoader = new GDXLoader();
 	}
-	public Vector<ServiceApplication> parseFile(ServiceManager serviceManager, String fileName)
+	
+	public boolean parseFile(ServiceManager serviceManager, String fileName)
 	{
-		Vector<ServiceApplication> serviceApplications = new Vector<ServiceApplication>();
+		Log.i(LOG_TAG, "Scene parsing started!");
+		this.serviceManager = serviceManager;
+		serviceApplications = new Vector<ServiceApplication>();
+		infoBubbles = new Vector<InfoBubble>();
 		
 		InputStream in = null;
 		try 
 		{
-			in = serviceManager.getSetup().myTargetActivity.getAssets().open(fileName);
+			in = this.serviceManager.getSetup().myTargetActivity.getAssets().open(fileName);
 			sceneContent = IO.convertInputStreamToString(in);
 		} 
 		catch (IOException e) 
@@ -51,45 +59,38 @@ public class SceneParser
 			}
 		}
 		
+		// Create JSONObject from scene file.
 		JSONObject jsonObj = null;
-		try 
-		{
+		try {
 			jsonObj = new JSONObject(sceneContent);
-			
 		} catch (JSONException e) {
-			Log.e(LOG_TAG, "parsing failed");
+			Log.e(LOG_TAG, "Could not create JSONObject from file!");
 			e.printStackTrace();
 		}
-		JSONArray entries = null;
+		
+		JSONArray applicationsArray = null;
+		JSONArray infobubbleArray = null;
+		
+		// Try to read applications JSONArray
+        try {
+        	applicationsArray = jsonObj.getJSONArray("ServiceApplication");
+        } catch (JSONException e) {
+        	Log.e(LOG_TAG, e.toString());
+        }
+        
+        // Try to read info bubbles JSONArray 
+        try {
+        	infobubbleArray = jsonObj.getJSONArray("InfoBubble");
+        } catch (JSONException e) {
+        	Log.e(LOG_TAG, e.toString());
+        }
+        	
         try 
         {
-        	
-        	entries = jsonObj.getJSONArray("ServiceApplication");
-        	
-        	for(int i=0; i<entries.length(); i++)
+        	for(int i=0; i<applicationsArray.length(); i++)
         	{
-        		JSONObject ServiceAppObj = entries.getJSONObject(i);
-        		String name = ServiceAppObj.getString("name");
-        		
-        		ServiceApplication serviceApp = new ServiceApplication(serviceManager,name);
-        		
-        		String meshName = ServiceAppObj.getString("meshRef");
-        		String textureName = ServiceAppObj.getString("textRef");
-        		
-        		if(meshName!=null && textureName!=null)
-        		{
-        		    GDXMesh gdxMesh = gdxLoader.loadModelFromFile(meshName, textureName);
-        		    gdxMesh.enableMeshPicking();
-        		    serviceApp.setMesh(gdxMesh);
-        		    
-            		JSONObject posObj = ServiceAppObj.getJSONObject("position");
-            		JSONObject rotObj = ServiceAppObj.getJSONObject("rotation");
-            		JSONObject scaleObj = ServiceAppObj.getJSONObject("scale");
-            		
-        		    serviceApp.setPosition(new Vec((float)posObj.getDouble("x"), (float)posObj.getDouble("y"), (float)posObj.getDouble("z")));
-        		    serviceApp.setRotation(new Vec((float)rotObj.getDouble("x"), (float)rotObj.getDouble("y"), (float)rotObj.getDouble("z")));
-        		    serviceApp.setScale(new Vec((float)scaleObj.getDouble("x"), (float)scaleObj.getDouble("y"), (float)scaleObj.getDouble("z")));
-        		}
+        		JSONObject ServiceAppObj = applicationsArray.getJSONObject(i);
+        		ServiceApplication serviceApp = createApplication(ServiceAppObj);
         		
         		JSONObject geoLocation = null;
         		try {
@@ -107,15 +108,6 @@ public class SceneParser
         			serviceApp.setGeoLocation(latitude, longitude);
         		}
         		
-        		JSONObject commandObj = ServiceAppObj.getJSONObject("commands");
-        		String clickCommand = commandObj.getString("CLICK");
-        		String dropCommand = commandObj.getString("DROP");
-        		String longClickCommand = commandObj.getString("LONG_CLICK");
-
-        		serviceApp.setOnClickCommand(CommandFactory.createCommand(clickCommand, serviceManager, name));
-        		serviceApp.setOnDoubleClickCommand(CommandFactory.createCommand(dropCommand, serviceManager, name));
-        		serviceApp.setOnLongClickCommand(CommandFactory.createCommand(longClickCommand, serviceManager, name));
-        		
         		boolean visible = ServiceAppObj.getBoolean("visible");
         		
         		if(!visible)
@@ -126,15 +118,107 @@ public class SceneParser
         		
         		serviceManager.getSetup().world.add(serviceApp);
         		serviceApplications.add(serviceApp);
-
+        	}
+        	
+        	for (int i = 0; i < infobubbleArray.length(); i++)
+        	{
+        		JSONObject InfobubbleObj = infobubbleArray.getJSONObject(i);
+        		InfoBubble infobubble = createInfobubble(InfobubbleObj);
+        		
+        		serviceManager.getSetup().world.add(infobubble);
+        		infobubble.setvisible(false);
+        		infoBubbles.add(infobubble);
         	}
 			
 		} catch (JSONException e) {
 			Log.e(LOG_TAG, "parsing failed");
 			e.printStackTrace();
+			return false;
 		}
-		
-		return serviceApplications; 
+		return true; 
 	}
     
+	public Vector<InfoBubble> getInfobubbles()
+	{
+		return infoBubbles;
+	}
+	
+	public Vector<ServiceApplication> getApplications()
+	{
+		return serviceApplications;
+	}
+	
+	private ServiceApplication createApplication(JSONObject appData)
+	{
+		ServiceApplication serviceApp = null;
+		try
+		{
+			String name = appData.getString("name");
+			
+			serviceApp = new ServiceApplication(serviceManager, name);
+			
+			String meshName = appData.getString("meshRef");
+			String textureName = appData.getString("textRef");
+			
+			if(meshName!=null && textureName!=null)
+			{
+			    GDXMesh gdxMesh = gdxLoader.loadModelFromFile(meshName, textureName);
+			    gdxMesh.enableMeshPicking();
+			    serviceApp.setMesh(gdxMesh);
+			    
+	    		JSONObject posObj = appData.getJSONObject("position");
+	    		JSONObject rotObj = appData.getJSONObject("rotation");
+	    		JSONObject scaleObj = appData.getJSONObject("scale");
+	    		
+			    serviceApp.setPosition(new Vec((float)posObj.getDouble("x"), (float)posObj.getDouble("y"), (float)posObj.getDouble("z")));
+			    serviceApp.setRotation(new Vec((float)rotObj.getDouble("x"), (float)rotObj.getDouble("y"), (float)rotObj.getDouble("z")));
+			    serviceApp.setScale(new Vec((float)scaleObj.getDouble("x"), (float)scaleObj.getDouble("y"), (float)scaleObj.getDouble("z")));
+			}
+			JSONObject commandObj = appData.getJSONObject("commands");
+			String clickCommand = commandObj.getString("CLICK");
+			String dropCommand = commandObj.getString("DROP");
+			String longClickCommand = commandObj.getString("LONG_CLICK");
+	
+			serviceApp.setOnClickCommand(CommandFactory.createCommand(clickCommand, serviceManager, name));
+			serviceApp.setOnDoubleClickCommand(CommandFactory.createCommand(dropCommand, serviceManager, name));
+			serviceApp.setOnLongClickCommand(CommandFactory.createCommand(longClickCommand, serviceManager, name));
+		} catch (JSONException e){}
+		Log.i(LOG_TAG, "New service created!");
+		return serviceApp;
+	}
+	
+	private InfoBubble createInfobubble(JSONObject bubbleData)
+	{
+		InfoBubble infobubble = null;
+		try
+		{
+			String name = bubbleData.getString("name");
+			
+			infobubble = new InfoBubble(serviceManager, name);
+			
+			String meshName = bubbleData.getString("meshRef");
+			String textureName = bubbleData.getString("textRef");
+			
+			if(meshName!=null && textureName!=null)
+			{
+			    GDXMesh gdxMesh = gdxLoader.loadModelFromFile(meshName, textureName);
+			    gdxMesh.enableMeshPicking();
+			    infobubble.setMesh(gdxMesh);
+			    
+//	    		JSONObject posObj = bubbleData.getJSONObject("position");
+	    		JSONObject rotObj = bubbleData.getJSONObject("rotation");
+	    		JSONObject scaleObj = bubbleData.getJSONObject("scale");
+//	    		
+//			    infobubble.setPosition(new Vec((float)posObj.getDouble("x"), (float)posObj.getDouble("y"), (float)posObj.getDouble("z")));
+			    infobubble.setRotation(new Vec((float)rotObj.getDouble("x"), (float)rotObj.getDouble("y"), (float)rotObj.getDouble("z")));
+			    infobubble.setScale(new Vec((float)scaleObj.getDouble("x"), (float)scaleObj.getDouble("y"), (float)scaleObj.getDouble("z")));
+			}
+	
+		} catch (JSONException e){
+			Log.e(LOG_TAG, e.toString());
+		}
+		
+		Log.i(LOG_TAG, "New infobubble created!");
+		return infobubble;
+	}
 }

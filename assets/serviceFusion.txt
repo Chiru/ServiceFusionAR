@@ -126,42 +126,6 @@
             "attached" : "true" 
         },
         {
-            "name" : "MovieInfobubble",
-            "meshRef" : "infobuble.dae",
-            "textRef" : "lightgreytex.jpg",
-            "position" : 
-            {
-                "x" : "30.0", 
-                "y" : "5.0", 
-                "z" : "-25.0"
-            },
-            "rotation" : 
-            {
-                "x" : "270.0", 
-                "y" : "0.0", 
-                "z" : "0.0"
-            },
-             "scale" : 
-            {
-                "x" : "2.25", 
-                "y" : "2.0", 
-                "z" : "2.0"
-            },
-            "commands" :
-            {
-                "CLICK" : "",
-                "DROP" : "", 
-                "LONG_CLICK" : ""
-            },
-            "visible" : "false",
-            "attached" : "false", 
-            "geoLocation" :
-            {
-                "Latitude" : "65.011104",
-                "Longitude" : "25.465869"
-            } 
-        },
-         {
             "name" : "MovieIcon",
             "meshRef" : "movieicon.dae",
             "textRef" : "movie_icon_colorCompleteMap.png",
@@ -189,13 +153,13 @@
                 "DROP" : "", 
                 "LONG_CLICK" : ""
             },
-            "visible" : "true",
-            "attached" : "false", 
             "geoLocation" :
             {
-                "Latitude" : "65.011104",
-                "Longitude" : "25.465869"
-		    }
+                "Latitude" : "65.011394",
+                "Longitude" : "25.465515"
+            },
+            "visible" : "true",
+            "attached" : "false" 
         },
         {
             "name" : "PubIcon",
@@ -229,20 +193,17 @@
             "attached" : "false",
             "geoLocation" :
             {
-                "Latitude" : "65.067572",
-                "Longitude" : "25.492573"
+                "Latitude" : "65.061058",
+                "Longitude" : "25.468519"
             }
-        },
+        }
+    ], 
+    "InfoBubble" :
+    [
         {
-            "name" : "MusicInfobubble",
+            "name" : "MovieInfobubble",
             "meshRef" : "infobuble.dae",
             "textRef" : "lightgreytex.jpg",
-            "position" : 
-            {
-                "x" : "-20.0", 
-                "y" : "5.0", 
-                "z" : "-25.0"
-            },
             "rotation" : 
             {
                 "x" : "270.0", 
@@ -251,23 +212,27 @@
             },
              "scale" : 
             {
-                "x" : "2.0", 
+                "x" : "2.25", 
                 "y" : "2.0", 
                 "z" : "2.0"
-            },
-            "commands" :
+            }
+        },
+        {
+            "name" : "MusicInfobubble",
+            "meshRef" : "infobuble.dae",
+            "textRef" : "lightgreytex.jpg",
+            "rotation" : 
             {
-                "CLICK" : "",
-                "DROP" : "", 
-                "LONG_CLICK" : ""
+                "x" : "270.0", 
+                "y" : "0.0", 
+                "z" : "0.0"
             },
-            "visible" : "false",
-            "attached" : "false",
-            "geoLocation" :
+             "scale" : 
             {
-                "Latitude" : "65.067572",
-                "Longitude" : "25.492573"
-            } 
+                "x" : "2.25", 
+                "y" : "2.0", 
+                "z" : "2.0"
+            }
         }
     ]
 }
