@@ -16,8 +16,8 @@ import gl.scenegraph.MeshComponent;
 public class ServiceFusionCamera extends GLCamera
 {
 	private List<MeshComponent> attachedMeshes;
-	private float prevAngle;
-	private float currentAngle;
+	private float prevAngle = 0.0f;
+	private float currentAngle = 0.0f;
 	private boolean UImode = false;
 	private boolean deviceTilted = false;
 	ServiceManager serviceManager = null;
