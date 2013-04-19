@@ -21,7 +21,10 @@ public class ServiceApplication extends AbstractObj
 	private GDXMesh gdxMesh;
 	private String name;
 	protected boolean visible;
+	protected boolean isAttached = false;
 	protected Location geoLocation = null;
+	protected final float DISTANCE_LIMIT = 200f;
+	
 	private ServiceManager serviceManager; 
 	
 	public ServiceApplication(ServiceManager serviceManager, String name)
@@ -54,6 +57,10 @@ public class ServiceApplication extends AbstractObj
 	{
 		this.gdxMesh.setPosition(position);
 	}
+	public void setPosition(float x, float y, float z)
+	{
+		this.gdxMesh.setPosition(new Vec(x, y, z));
+	}
 
 	public void setRotation(Vec rotation) 
 	{
@@ -82,6 +89,7 @@ public class ServiceApplication extends AbstractObj
 	
 	public void attachToCamera(boolean attached)
 	{
+		this.isAttached = attached;
 		if(attached)
 		{
 			Log.d(LOG_TAG, "Attaching service " + this.name + " to camera");
@@ -114,32 +122,40 @@ public class ServiceApplication extends AbstractObj
 		return geoLocation;
 	}
 	
+	/**
+	 * 
+	 * @param angleInDegrees
+	 * @param radius
+	 * @return Position vector in 2D space
+	 */
+	protected Vec positionFromAngle(float angleInDegrees, float radius)
+	{
+		float x = radius * (float)Math.cos(Math.toRadians(angleInDegrees));
+		float z = radius * (float)Math.sin(Math.toRadians(angleInDegrees));
+		
+		Vec pos = new Vec();
+		pos.setTo(x, z);
+		return pos;
+	}
+	
 	public void servicePlaceFromLocation(Location location)
 	{
 		if (geoLocation != null)
 		{
-		
 			float[] results= new float[3];
 			// The computed distance in meters is stored in results[0].
 			// If results has length 2 or greater, the initial bearing is stored in results[1].
 			// If results has length 3 or greater, the final bearing is stored in results[2].
 			Location.distanceBetween(location.getLatitude(), location.getLongitude(), this.geoLocation.getLatitude(), this.geoLocation.getLongitude(), results);
+				
+			//Log.i(LOG_TAG, "Bearing for application " + this.getName() + ": " + bearing);
 			float bearing = (float)((360 + results[2]) % 360f);
+			Vec position = positionFromAngle(bearing, 20f);
 			
-			Log.i(LOG_TAG, "Bearing for application " + this.getName() + ": " + bearing);
-			
-			Vec pos = new Vec();
-			float z;
-			float x;
-			
-			z = 20f * (float)Math.cos(Math.toRadians(bearing));
-			x = 20f * (float)Math.sin(Math.toRadians(bearing));
-			
-			Log.i(LOG_TAG, "position = " + x + ", " + z);
-			pos.setTo(x, -4, -z);
-			this.setPosition(pos);
+			//Log.i(LOG_TAG, "position = " + position.x + ", " + position.y);
+			this.setPosition(position.x, -4, -position.y);
 			this.setvisible(true);
-
+			this.attachToCamera(false);
 		}
 	}
 
