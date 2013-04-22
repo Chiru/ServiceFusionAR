@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.microedition.khronos.opengles.GL10;
 import android.opengl.Matrix;
+import android.util.Log;
 import util.EfficientList;
 import util.Vec;
 import worldData.RenderableEntity;
@@ -15,7 +16,8 @@ import gl.scenegraph.MeshComponent;
 
 public class ServiceFusionCamera extends GLCamera
 {
-	private List<MeshComponent> attachedMeshes;
+	private final static String LOG_TAG = "ServiceFusionCamera";
+	private List<MeshComponent> attachedMeshes = null;
 	private float prevAngle = 0.0f;
 	private float currentAngle = 0.0f;
 	private boolean UImode = false;
@@ -31,7 +33,11 @@ public class ServiceFusionCamera extends GLCamera
 	
 	public void attachToCamera(MeshComponent mc)
 	{
-		attachedMeshes.add(mc);
+		if (mc == null)
+			return;
+		
+		if (!attachedMeshes.contains(mc))
+			attachedMeshes.add(mc);
 	}
 	
 	public void detachFromCamera(MeshComponent mc)
@@ -95,7 +101,7 @@ public class ServiceFusionCamera extends GLCamera
 		
 		for(int i = 0; i<attachedMeshes.size(); i++)
 		{
-			MeshComponent meshComp = attachedMeshes.get(i);
+			MeshComponent meshComp = attachedMeshes.get(i);			
 			Vec meshPos = meshComp.getPosition();
 			Vec camPos = this.getPosition();
 
