@@ -22,17 +22,18 @@ public class DraggableText
 	private String text;
 	private String manager;
 	private TextView tv;
-	private ServiceManager serviceManager;
-	private Vec position;
-	private boolean textVisible;
-	private boolean textCreated;
-	private MeshComponent textComponent;
+	private ServiceManager serviceManager = null;
+	private Vec position = null;
+	private boolean textVisible  = false;
+	private boolean textCreated  = false;
+	private boolean attachedToCamera = false;
+	private MeshComponent textComponent = null;
 
 	public DraggableText(ServiceManager serviceManager) 
 	{
 		this.serviceManager = serviceManager;
-		textVisible = false;
-		textCreated = false;
+		position = new Vec();
+
 	}
 	
 	public void  setDragText(String text)
@@ -47,7 +48,7 @@ public class DraggableText
 	
 	public void setPosition(Vec position)
 	{
-		this.position = position;
+		this.position.setToVec(position);
 	}
 	
 	public void visible() 
@@ -72,6 +73,13 @@ public class DraggableText
 	
 	public void attachToCamera(boolean attach)
 	{
+		this.attachedToCamera = attach;
+		if (textComponent == null)
+		{
+			Log.i(LOG_TAG, "TextComponent was NULL in attachToCamera function.");
+			return;
+		}
+		
 		if(attach)
 		{
 			serviceManager.getSetup().camera.attachToCamera(textComponent);
@@ -82,7 +90,7 @@ public class DraggableText
 		}
 	}
 	
-	private void createTextComponent()
+	public void createTextComponent()
 	{
 	    tv = new TextView(serviceManager.getSetup().myTargetActivity);
 	    tv.setId(generateUniqueId());
@@ -92,11 +100,14 @@ public class DraggableText
 	    tv.setTextSize(25);
 	    tv.setTypeface(Typeface.MONOSPACE);
 	    textComponent = GLFactory.getInstance().newTexturedSquare(this.text, IO.loadBitmapFromView(tv));
-	    serviceManager.getSetup().world.add(textComponent);
-	    textComponent.setPosition(new Vec(this.position));
+	    //serviceManager.getSetup().world.add(textComponent);
+	    
+	    textComponent.setPosition(this.position);
 	    textComponent.setRotation(new Vec(90.0f, 0.0f, 180.0f));
 	    textComponent.setScale(new Vec(0.5f, 1.0f, 1.0f));
 	    textComponent.setOnLongClickCommand(new DragTextPopUpObject(tv));
+	    
+	    attachToCamera(attachedToCamera);
 	}
 	
 	private int generateUniqueId()
