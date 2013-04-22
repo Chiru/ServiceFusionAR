@@ -22,6 +22,7 @@ public class ServiceApplication extends AbstractObj
 	private String name;
 	protected boolean visible;
 	protected boolean isAttached = false;
+	protected boolean initialized = false;
 	protected Location geoLocation = null;
 	protected final float DISTANCE_LIMIT = 200f;
 	
@@ -130,8 +131,8 @@ public class ServiceApplication extends AbstractObj
 	 */
 	protected Vec positionFromAngle(float angleInDegrees, float radius)
 	{
-		float x = radius * (float)Math.cos(Math.toRadians(angleInDegrees));
-		float z = radius * (float)Math.sin(Math.toRadians(angleInDegrees));
+		float z = radius * (float)Math.cos(Math.toRadians(angleInDegrees));
+		float x = radius * (float)Math.sin(Math.toRadians(angleInDegrees));
 		
 		Vec pos = new Vec();
 		pos.setTo(x, z);
@@ -147,13 +148,42 @@ public class ServiceApplication extends AbstractObj
 			// If results has length 2 or greater, the initial bearing is stored in results[1].
 			// If results has length 3 or greater, the final bearing is stored in results[2].
 			Location.distanceBetween(location.getLatitude(), location.getLongitude(), this.geoLocation.getLatitude(), this.geoLocation.getLongitude(), results);
+			
+			// Attach service to camera if device is located inside predefined circle radius from physical service location.
+			if (results[0] < DISTANCE_LIMIT)
+			{
+				// TODO This is a bad design and should be refactored if there is time for it.
 				
-			//Log.i(LOG_TAG, "Bearing for application " + this.getName() + ": " + bearing);
+				if (this.isAttached)
+					return;
+				
+				float angle = serviceManager.getSetup().getCamera().getRotation().y;
+				Log.i(LOG_TAG, "Within DISTANCE_LIMIT, angle: " + angle + "\n");
+
+				if (this.getName().equals("MovieIcon"))
+				{	
+					Vec position = positionFromAngle(angle, 25f);
+			    	this.setPosition(new Vec(position.x, -4.0f, -position.y));
+					//Log.i(LOG_TAG, this.getName() + " position: " + position.x + " " + position.y + "*****************************************");
+				}
+				else if (this.getName().equals("PubIcon"))
+				{
+					Vec position = positionFromAngle(angle, 25f);
+			    	this.setPosition(new Vec(position.x, -4.0f, -position.y));
+					//Log.i(LOG_TAG,  this.getName() + " position: " + position.x + " " + position.y + "*****************************************");	
+				}
+				
+				this.setvisible(true);
+				this.attachToCamera(true);
+				return;
+			}
+			
+			// Set service icon positions if service is further away than value of DISTANCE_LIMIT
 			float bearing = (float)((360 + results[2]) % 360f);
 			Vec position = positionFromAngle(bearing, 20f);
 			
 			//Log.i(LOG_TAG, "position = " + position.x + ", " + position.y);
-			this.setPosition(position.x, -4, -position.y);
+			this.setPosition(position.x, -4.0f, -position.y);
 			this.setvisible(true);
 			this.attachToCamera(false);
 		}

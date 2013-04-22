@@ -42,20 +42,29 @@ public class InfoBubble extends ServiceApplication
 	public void populateItems(List<String> content, String contentManager)
 	{
 		int contentLen = content.size();
+
+		// Limit maximum visible items to 11
+		if (contentLen > 10)
+			contentLen = 10;
+		
 		items = new DraggableText[contentLen];
 		
+		Vec infoBubblePosition = new Vec(this.getPosition());
+    	infoBubblePosition.add(0.0f, 7.0f, 0.0f);
     	for(int i=0; i<contentLen; i++)
-    	{
-    		Vec infoBubblePosition = new Vec(this.getPosition());
-        	infoBubblePosition.add(0, 7.0f, 0);
+    	{    		
         	DraggableText infoItem = new DraggableText(this.serviceManager);
 	        infoItem.setDragText(content.get(i));
 	        infoItem.setDragTextManager(contentManager);
-	        Vec itemPosition = new Vec(infoBubblePosition);
-    		itemPosition.add(0, -i*1.1f, 0);
-    		infoItem.setPosition(itemPosition);
+	        infoBubblePosition.add(0.0f, -1.1f, 0.0f);
+    		infoItem.setPosition(infoBubblePosition);
+    		infoItem.createTextComponent();
    		
     		items[i] = infoItem;
+    	}
+    	if (this.isAttached)
+    	{
+    		this.attachToCamera(true);
     	}
 	}
 	
@@ -67,10 +76,12 @@ public class InfoBubble extends ServiceApplication
 			geoLocation = new Location("LocationInfo");
 			if (this.getName().equals("MovieInfobubble"))
 			{
+				Log.d(LOG_TAG, "Getting geolocation from Movie service");
 				geoLocation.set(serviceManager.getApplication("MovieIcon").getGeoLocation());
 			}
 			else if (this.getName().equals("MusicInfobubble"))
 			{
+				Log.d(LOG_TAG, "Getting geolocation from Music service");
 				geoLocation.set(serviceManager.getApplication("MusicIcon").getGeoLocation());
 			}
 		}
@@ -80,45 +91,82 @@ public class InfoBubble extends ServiceApplication
 		// If results has length 2 or greater, the initial bearing is stored in results[1].
 		// If results has length 3 or greater, the final bearing is stored in results[2].
 		Location.distanceBetween(location.getLatitude(), location.getLongitude(), this.geoLocation.getLatitude(), this.geoLocation.getLongitude(), results);
-		float bearing = (float)((360 + results[2]) % 360f);
 		
-		Log.i(LOG_TAG, "Bearing for application " + this.getName() + ": " + bearing);
+		// Set static positions if service is within predefined range from device.
+		if (results[0] < DISTANCE_LIMIT)
+		{
+			// Recalculate positions only if InfoBubble is not already attached
+			if (this.isAttached)
+				return;
+
+			float angle = serviceManager.getSetup().getCamera().getRotation().y;
+			
+			if (this.getName().equals("MovieInfobubble"))
+				angle += 4.0f;			
+			else if (this.getName().equals("MusicInfobubble"))
+				angle += 8.0f;				
+
+			
+			Vec position = this.positionFromAngle(angle, 35.0f);
+			Log.i(LOG_TAG, "position = " + position.x + ", " + position.y);
+
+			this.setPosition(position.x, 4, -position.y);
+
+			if (!this.initialized)
+			{
+				if (this.getName().equals("MovieInfobubble"))
+					serviceManager.getMovieManager().positionInitialized();
+				else if (this.getName().equals("MusicInfobubble"))
+					serviceManager.getMusicManager().positionInitialized();
+				
+				this.initialized = true;
+			}
+
+			this.attachToCamera(true);
+			
+			// Don't calculate dynamic positions.
+			return;
+		}
 		
-		Vec pos = new Vec();
-		float z;
-		float x;
+		// Dynamic positions for services which are too far away to be attached to the camera.
+		float bearing = (float)((360 + results[2]) % 360f);		
 		
+		Vec position = new Vec();
 		if (this.getName().equals("MovieInfobubble"))
-		{
-			z = 38f * (float)Math.cos(Math.toRadians(bearing + 4));
-			x = 38f * (float)Math.sin(Math.toRadians(bearing + 4));
-							
-			Log.i(LOG_TAG, "position = " + x + ", " + z);
-			pos.setTo(x, 3, -z);
-			this.setPosition(pos);
-			
-			serviceManager.getMovieManager().positionInitialized();
-		}
+			bearing += 4.0f;
+
 		else if (this.getName().equals("MusicInfobubble"))
+			bearing += 6.0f;
+
+
+		Log.i(LOG_TAG, this.getName() + " position = " + position.x + ", " + position.y + " Bearing was: " + bearing);
+		position.setToVec(this.positionFromAngle(bearing, 35.0f));
+		this.setPosition(position.x, 3, -position.y);
+		
+		if (!this.initialized)
 		{
-			z = 38f * (float)Math.cos(Math.toRadians(bearing + 6));
-			x = 38f * (float)Math.sin(Math.toRadians(bearing + 6));
+			if (this.getName().equals("MovieInfobubble"))
+				serviceManager.getMovieManager().positionInitialized();
+			else if (this.getName().equals("MusicInfobubble"))
+				serviceManager.getMusicManager().positionInitialized();
 			
-			Log.i(LOG_TAG, "position = " + x + ", " + z);
-			pos.setTo(x, 3, -z);
-			this.setPosition(pos);
-			
-			serviceManager.getMusicManager().positionInitialized();
+			this.initialized = true;
 		}
+
+		//this.setvisible(true);
+		this.attachToCamera(false);
 	}
 	
 	@Override
 	public void attachToCamera(boolean attach)
 	{
 		super.attachToCamera(attach);
-		for (int i = 0; i < items.length; i++)
+		if (items != null)
 		{
-			items[i].attachToCamera(attach);
+			for (int i = 0; i < items.length; i++)
+			{
+				items[i].attachToCamera(attach);
+			}
 		}
 	}
 
