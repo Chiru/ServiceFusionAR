@@ -51,6 +51,7 @@ public class Orientator implements SensorEventListener, LocationListener
 	private float[] mrotationMatrixO = new float[16];
 	private float[] mGravity = new float[3];
 	private float[] mGeoMagnetic = new float[3];
+	private float tilt=0;
 	private float[] orientationValues = new float[3];
 
 	private final int MAGFIELD_TMOUT=(3600*10000); /* 10 minutes from msecs */
@@ -203,8 +204,10 @@ public class Orientator implements SensorEventListener, LocationListener
 			if(mGeoMagnetic==null) { // first run
 				mGeoMagnetic=values;
 			} else {
-				lowPassFilter(2.0f, 4.0f, values, mGeoMagnetic, mGeoMagnetic);
-				myListener.newResult("Geo_filtered", mGeoMagnetic);
+				if(tilt!=1) { // stay unchanged if tilted!
+					lowPassFilter(2.0f, 4.0f, values, mGeoMagnetic, mGeoMagnetic);
+					myListener.newResult("Geo_filtered", mGeoMagnetic);
+				}
 			}
 			break;
 		}
@@ -241,8 +244,8 @@ public class Orientator implements SensorEventListener, LocationListener
 				Display myDisplay = myWM.getDefaultDisplay();
 				myListener.newResult("Orientation Display",new float[] {(float)myDisplay.getRotation()});
 				*/
-				float tilt=(float)orientationValues[1];
-				tilt=(tilt<-1||tilt>1.20)?1:0;
+				tilt=(float)orientationValues[1];
+				tilt=(tilt<-1||tilt>1.10)?1:0;
 				//myListener.newResult("Tilt status", new float[] { tilt });
 				myListener.isTilt(tilt>0);
 				/** Display orientation only if not tilted */
