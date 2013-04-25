@@ -18,13 +18,14 @@ import worldData.Visitor;
 public class ServiceApplication extends AbstractObj 
 {
 	private static final String LOG_TAG = "ServiceApplication";
-	private GDXMesh gdxMesh;
+	private GDXMesh gdxMesh = null;
 	private String name;
-	protected boolean visible;
+	protected boolean visible = false;
 	protected boolean isAttached = false;
 	protected boolean initialized = false;
 	protected Location geoLocation = null;
 	protected final float DISTANCE_LIMIT = 200f;
+	private final float RADIUS = 25f;
 	
 	private ServiceManager serviceManager; 
 	
@@ -47,6 +48,7 @@ public class ServiceApplication extends AbstractObj
 	public void setMesh(GDXMesh gdxMesh) 
 	{
 		this.gdxMesh = gdxMesh;
+		this.gdxMesh.setVisible(visible);
 	}
 	
 	public Vec getPosition() 
@@ -84,6 +86,9 @@ public class ServiceApplication extends AbstractObj
 	}
 	public void setvisible(boolean visible)
 	{
+		if (this.visible == visible)
+			return;
+		
 		this.visible = visible;
 		gdxMesh.setVisible(this.visible);
 	}
@@ -160,27 +165,24 @@ public class ServiceApplication extends AbstractObj
 				float angle = serviceManager.getSetup().getCamera().getRotation().y;
 				Log.i(LOG_TAG, "Within DISTANCE_LIMIT, angle: " + angle + "\n");
 
-				if (this.getName().equals("MovieIcon"))
-				{	
-					Vec position = positionFromAngle(angle, 25f);
-			    	this.setPosition(new Vec(position.x, -4.0f, -position.y));
-					//Log.i(LOG_TAG, this.getName() + " position: " + position.x + " " + position.y + "*****************************************");
-				}
-				else if (this.getName().equals("PubIcon"))
-				{
-					Vec position = positionFromAngle(angle, 25f);
-			    	this.setPosition(new Vec(position.x, -4.0f, -position.y));
-					//Log.i(LOG_TAG,  this.getName() + " position: " + position.x + " " + position.y + "*****************************************");	
-				}
+				Vec position = null;
 				
+				if (this.getName().equals("MovieIcon"))
+					position = positionFromAngle(angle, RADIUS);
+
+				else if (this.getName().equals("PubIcon"))
+					position = positionFromAngle(angle, RADIUS);
+	
+				this.setPosition(new Vec(position.x, -4.0f, -position.y));			
 				this.setvisible(true);
 				this.attachToCamera(true);
+				
 				return;
 			}
 			
 			// Set service icon positions if service is further away than value of DISTANCE_LIMIT
 			float bearing = (float)((360 + results[2]) % 360f);
-			Vec position = positionFromAngle(bearing, 20f);
+			Vec position = positionFromAngle(bearing, RADIUS);
 			
 			//Log.i(LOG_TAG, "position = " + position.x + ", " + position.y);
 			this.setPosition(position.x, -4.0f, -position.y);
