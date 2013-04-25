@@ -109,9 +109,7 @@ public class SceneParser
         		}
         		
         		boolean visible = ServiceAppObj.getBoolean("visible");
-        		
-        		if(!visible)
-        			serviceApp.setvisible(false);
+       			serviceApp.setvisible(visible);
         		
         		boolean attached = ServiceAppObj.getBoolean("attached");
                 serviceApp.attachToCamera(attached);
