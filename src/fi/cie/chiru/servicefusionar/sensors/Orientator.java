@@ -26,13 +26,13 @@ public class Orientator implements SensorEventListener, LocationListener
 	Context myContext;
 
 	private final SensorManager mSensorManager;
-	private final Sensor mAll;
+	//private final Sensor mAll;
 	private final Sensor mAccelerometerSensor;
-	private final Sensor mLightSensor;
+	//private final Sensor mLightSensor;
 	private final Sensor mGyroscopeSensor;
 	private final Sensor mGravitySensor;
 	private final Sensor mMagneticFieldSensor;
-	private final Sensor mPressureSensor;
+	//private final Sensor mPressureSensor;
 	// Fussion Sensors
 	private final Sensor mLinearAccelerationSensor;
 	private final Sensor mRotationVectorSensor;
@@ -63,14 +63,14 @@ public class Orientator implements SensorEventListener, LocationListener
 
 		mSensorManager = (SensorManager)myContext.getSystemService(Context.SENSOR_SERVICE);
 		// We enable them all...
-		mAll = mSensorManager.getDefaultSensor(Sensor.TYPE_ALL);
+		//mAll = mSensorManager.getDefaultSensor(Sensor.TYPE_ALL);
 		// and separately...
 		mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+		//mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 		mGyroscopeSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 		mGravitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 		mMagneticFieldSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-		mPressureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
+		//mPressureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
 		// Fussion Sensors
 		mLinearAccelerationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 		mRotationVectorSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
@@ -115,13 +115,13 @@ public class Orientator implements SensorEventListener, LocationListener
 	private void Initialize()
 	{
 		myListener.newStatus(1, "Started initializing");
-		mSensorManager.registerListener(this, mAll, SensorManager.SENSOR_DELAY_NORMAL);
+		//mSensorManager.registerListener(this, mAll, SensorManager.SENSOR_DELAY_NORMAL);
 		mSensorManager.registerListener(this, mAccelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
-		mSensorManager.registerListener(this, mLightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		//mSensorManager.registerListener(this, mLightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		mSensorManager.registerListener(this, mGyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		mSensorManager.registerListener(this, mGravitySensor, SensorManager.SENSOR_DELAY_NORMAL);
 		mSensorManager.registerListener(this, mMagneticFieldSensor, SensorManager.SENSOR_DELAY_NORMAL);
-		mSensorManager.registerListener(this, mPressureSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		//mSensorManager.registerListener(this, mPressureSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		mSensorManager.registerListener(this, mLinearAccelerationSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		mSensorManager.registerListener(this, mRotationVectorSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		//mSensorManager.registerListener(this, mTemperatureSensor, SensorManager.SENSOR_DELAY_NORMAL);
