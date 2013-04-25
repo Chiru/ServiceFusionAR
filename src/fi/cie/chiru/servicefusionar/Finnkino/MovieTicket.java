@@ -84,7 +84,7 @@ public class MovieTicket
 //				if(camRot.y == 0.0f)
 //					camRot = serviceManager.getSetup().getCamera().getRotation();
 
-				float angle = (float)(camRot.y*(Math.PI/180));
+				float angle = (float)((camRot.y - 20f) * (Math.PI/180));
 				
 				float sin = (float)Math.sin(angle);
 				float cos = (float)Math.cos(angle);
