@@ -12,17 +12,20 @@ public class InfoBubble extends ServiceApplication
 	private final static String LOG_TAG = "InfoBubble"; 
 	private DraggableText items[] = null;
 	private ServiceManager serviceManager;
+	private final float RADIUS = 35f;
 	
 	public InfoBubble(ServiceManager serviceManager, String name)
 	{
 		super (serviceManager, name);
 		this.serviceManager = serviceManager;
-		visible = false;
 	}
 	
 	@Override
 	public void setvisible(boolean visible)
 	{
+		if (this.isVisible() == visible)
+			return;
+		
 	    super.setvisible(visible);
 	    if (items != null)
 	    {
@@ -107,7 +110,7 @@ public class InfoBubble extends ServiceApplication
 				angle += 8.0f;				
 
 			
-			Vec position = this.positionFromAngle(angle, 35.0f);
+			Vec position = this.positionFromAngle(angle, RADIUS);
 			Log.i(LOG_TAG, "position = " + position.x + ", " + position.y);
 
 			this.setPosition(position.x, 4, -position.y);
@@ -134,13 +137,11 @@ public class InfoBubble extends ServiceApplication
 		Vec position = new Vec();
 		if (this.getName().equals("MovieInfobubble"))
 			bearing += 4.0f;
-
 		else if (this.getName().equals("MusicInfobubble"))
 			bearing += 6.0f;
 
-
 		Log.i(LOG_TAG, this.getName() + " position = " + position.x + ", " + position.y + " Bearing was: " + bearing);
-		position.setToVec(this.positionFromAngle(bearing, 35.0f));
+		position.setToVec(this.positionFromAngle(bearing, RADIUS));
 		this.setPosition(position.x, 3, -position.y);
 		
 		if (!this.initialized)
@@ -153,7 +154,6 @@ public class InfoBubble extends ServiceApplication
 			this.initialized = true;
 		}
 
-		//this.setvisible(true);
 		this.attachToCamera(false);
 	}
 	
