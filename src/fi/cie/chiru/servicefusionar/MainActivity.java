@@ -88,53 +88,52 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onRestart() 
 	{
+		super.onRestart();
 		if (serviceFusionSetup != null)
 			serviceFusionSetup.onRestart(this);
-		super.onRestart();
 	}
 
 	@Override
 	protected void onResume() 
 	{
+		super.onResume();
 		if (serviceFusionSetup != null)
 			serviceFusionSetup.onResume(this);
-		super.onResume();
 	}
 
 	@Override
 	protected void onStart() 
 	{
+		super.onStart();
 		if (serviceFusionSetup != null)
 			serviceFusionSetup.onStart(this);
-		super.onStart();
 	}
 
 	@Override
 	protected void onStop() 
 	{
+		super.onStop();
 		if (serviceFusionSetup != null)
 			serviceFusionSetup.onStop(this);
-		super.onStop();
 	}
 
 	@Override
 	protected void onPause() 
 	{
+		super.onPause();
 		if (serviceFusionSetup != null)
 			serviceFusionSetup.onPause(this);
-		super.onPause();
 	}
     
     @Override
     protected void onDestroy() 
     {
+    	super.onDestroy();
     	if (serviceFusionSetup != null)
     	{
 	    	serviceFusionSetup.stopServer();
 			serviceFusionSetup.onDestroy(this);
     	}
-
-        super.onDestroy();
     }
     
     
