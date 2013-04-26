@@ -56,7 +56,6 @@ public class DraggableText
 		if(!textCreated)
 		{
 			createTextComponent();
-			textCreated = true;
 		}
 		
 		if(!textVisible)
@@ -107,6 +106,7 @@ public class DraggableText
 	    textComponent.setScale(new Vec(0.5f, 1.0f, 1.0f));
 	    textComponent.setOnLongClickCommand(new DragTextPopUpObject(tv));
 	    
+	    textCreated = true;
 	    attachToCamera(attachedToCamera);
 	}
 	
