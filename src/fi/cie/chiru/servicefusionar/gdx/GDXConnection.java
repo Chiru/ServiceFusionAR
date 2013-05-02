@@ -14,11 +14,11 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidFiles;
 import com.badlogic.gdx.backends.android.AndroidGL10;
 import com.badlogic.gdx.backends.android.AndroidGL11;
-import com.badlogic.gdx.backends.android.AndroidGLU;
+//import com.badlogic.gdx.backends.android.AndroidGLU;
 import com.badlogic.gdx.graphics.GL11;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GLCommon;
-import com.badlogic.gdx.graphics.GLU;
+//import com.badlogic.gdx.graphics.GLU;
 
 
 public class GDXConnection
@@ -113,11 +113,11 @@ public class GDXConnection
 				return 0;
 			}
 
-			@Override
-			public GLU getGLU() 
-			{
-				return null;
-			}
+//			@Override
+//			public GLU getGLU() 
+//			{
+//				return null;
+//			}
 
 			@Override
 			public GLCommon getGLCommon() 
@@ -254,7 +254,7 @@ public class GDXConnection
 			}
 		}
 
-		Gdx.glu = new AndroidGLU();
+		//Gdx.glu = new AndroidGLU();
 
 	}
 
